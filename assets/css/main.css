@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+  --primary-color: #3B82F6;
+  --secondary-color: #64748B;
+  --accent-color: #F59E0B;
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --error-color: #EF4444;
+  --background-color: #F7F7F7;
+  --card-background: #FFFFFF;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-tertiary: #94A3B8;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}
+
+.card {
+  background-color: var(--card-background);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2563EB;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
