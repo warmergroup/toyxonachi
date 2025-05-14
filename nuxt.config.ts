@@ -5,11 +5,11 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxt/eslint',
-    '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxt/ui',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxt/fonts'
   ],
   css: ['~/assets/css/main.css'],
   ui: {
@@ -23,6 +23,22 @@ export default defineNuxtConfig({
       },
     ],
   },
+  fonts: {
+    families: [
+      {
+        name: 'Inter',
+        provider: 'google',
+        weights: [400, 500, 700],
+        subsets: ['latin'],
+        display: 'swap'
+      }
+    ],
+    defaults: {
+      weights: [400, 500, 700],
+      subsets: ['latin'],
+      display: 'swap'
+    }
+  },
   app: {
     head: {
       title: 'Venue Finder',
@@ -31,11 +47,6 @@ export default defineNuxtConfig({
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},
         {name: 'description', content: 'Find the perfect venue for your event'},
       ],
-      link: [
-        {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
-        {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
-        {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'}
-      ]
     },
     rootAttrs: {
       'data-vaul-drawer-wrapper': '',
@@ -44,6 +55,6 @@ export default defineNuxtConfig({
   },
   devServer: {
     host: '0.0.0.0',
-    port: 3000, // Istalgan portni yozishingiz mumkin
+    port: 3000,
   }
 })

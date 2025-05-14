@@ -4,9 +4,8 @@ import {useToyxonalarStore} from "~/stores/toyxonalar.store.js";
 import {useGetToyxonalarQuery} from "~/query/getToyxonalar.js";
 
 const toyxonalarStore = useToyxonalarStore();
-const {isLoading, error, refetch} = useGetToyxonalarQuery()
-const toyxonalar = toyxonalarStore.data;
-console.log("to'yxonalar: ", toyxonalar);
+const {isLoading, error} = useGetToyxonalarQuery()
+const toyxonalar = toyxonalarStore;
 const venueStore = useVenueStore();
 const venues = venueStore.venues;
 </script>

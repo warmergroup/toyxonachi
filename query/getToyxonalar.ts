@@ -1,19 +1,22 @@
 import {useQuery} from '@tanstack/vue-query';
-import {useToyxonalarStore} from "~/stores/toyxonalar.store";
 import $axios from "~/http";
 
+import {useToyxonalarStore} from "~/stores/toyxonalar.store";
 
-export const useGetToyxonalarQuery = (currentPage: any, itemsPerpage: number, totalItems: any) => {
+export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number) => {
   const toyxonalarStore = useToyxonalarStore();
   return useQuery({
     queryKey: ['get-toyxonalar', currentPage],
     queryFn: async () => {
-      const {data} = await $axios.get('toyxonalar/get', {
-        params: currentPage.value,
-        limit: itemsPerpage,
+      const {data} = await $axios.get('toyxonalar/all', {
+        params: {
+          filter: '',
+          field: '',
+          start: currentPage,
+          limit: itemsPerpage
+        }
       });
       toyxonalarStore.setToyxonalar(data);
-      console.log("to'yxonalar: ", data);
       return data;
     },
   });
