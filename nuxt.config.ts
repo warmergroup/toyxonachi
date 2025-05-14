@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
   css: ['~/assets/css/main.css'],
+  ui: {
+    colorMode: false
+  },
   icon: {
     customCollections: [
       {
@@ -33,6 +36,14 @@ export default defineNuxtConfig({
         {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ''},
         {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'}
       ]
+    },
+    rootAttrs: {
+      'data-vaul-drawer-wrapper': '',
+      'class': 'bg-default'
     }
+  },
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000, // Istalgan portni yozishingiz mumkin
   }
 })
