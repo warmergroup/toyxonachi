@@ -1,7 +1,24 @@
+<script lang="ts" setup>
+import * as locales from '@nuxt/ui/locale'
+import { computed } from 'vue'
+
+const { locale } = useI18n()
+
+const lang = computed(() => locales[locale.value].code)
+const dir = computed(() => locales[locale.value].dir)
+
+useHead({
+  htmlAttrs: {
+    lang,
+    dir
+  }
+})
+</script>
+
 <template>
-  <div class="container mx-auto h-[100vh] w-full bg-[var(--ba)]" data-vaul-drawer-wrapper>
+  <UApp :locale="locales[locale]">
     <NuxtLayout>
-      <NuxtPage/>
+      <NuxtPage />
     </NuxtLayout>
-  </div>
+  </UApp>
 </template>

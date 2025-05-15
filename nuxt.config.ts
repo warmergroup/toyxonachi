@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: {enabled: true},
+  devtools: {enabled: false},
 
   modules: [
     '@nuxt/eslint',
@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/ui',
     '@pinia/nuxt',
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+    '@nuxtjs/i18n',
   ],
   css: ['~/assets/css/main.css'],
   ui: {
@@ -29,14 +30,12 @@ export default defineNuxtConfig({
         name: 'Inter',
         provider: 'google',
         weights: [400, 500, 700],
-        subsets: ['latin'],
-        display: 'swap'
+        subsets: ['latin']
       }
     ],
     defaults: {
       weights: [400, 500, 700],
-      subsets: ['latin'],
-      display: 'swap'
+      subsets: ['latin']
     }
   },
   app: {
@@ -56,5 +55,17 @@ export default defineNuxtConfig({
   devServer: {
     host: '0.0.0.0',
     port: 3000,
+  },
+  i18n: {
+    locales: [{
+      code: 'uz',
+      name: 'O\'zbek'
+    }, {
+      code: 'ru',
+      name: 'Русский'
+    }, {
+      code: 'en',
+      name: 'English'
+    }]
   }
 })

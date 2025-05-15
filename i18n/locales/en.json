@@ -1,0 +1,43 @@
+{
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "price": "Price",
+    "location": "Location",
+    "contact": "Contact",
+    "details": "Details",
+    "book": "Book",
+    "share": "Share",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "noResults": "No results found"
+  },
+  "venue": {
+    "title": "Venue",
+    "description": "Description",
+    "amenities": "Amenities",
+    "pricing": "Pricing",
+    "availability": "Availability",
+    "reviews": "Reviews",
+    "gallery": "Gallery",
+    "map": "Map",
+    "similar": "Similar Venues"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "welcome": "Welcome",
+  "description": "The best platform for finding wedding venues"
+} 

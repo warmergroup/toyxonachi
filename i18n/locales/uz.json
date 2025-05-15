@@ -1,0 +1,45 @@
+{
+  "common": {
+    "search": "Qidirish",
+    "filter": "Filtr",
+    "sort": "Saralash",
+    "view": "Ko'rinish",
+    "price": "Narx",
+    "location": "Manzil",
+    "contact": "Aloqa",
+    "details": "Batafsil",
+    "book": "Band qilish",
+    "share": "Ulashish",
+    "save": "Saqlash",
+    "edit": "Tahrirlash",
+    "delete": "O'chirish",
+    "cancel": "Bekor qilish",
+    "confirm": "Tasdiqlash",
+    "loading": "Yuklanmoqda...",
+    "error": "Xatolik yuz berdi",
+    "success": "Muvaffaqiyatli",
+    "noResults": "Natijalar topilmadi",
+    "currency": "so'm"
+  },
+  "venue": {
+    "title": "To'yxona",
+    "description": "Tavsif",
+    "amenities": "Qulayliklar",
+    "pricing": "Narxlar",
+    "availability": "Mavjudlik",
+    "reviews": "Fikrlar",
+    "gallery": "Galereya",
+    "map": "Xarita",
+    "similar": "O'xshash to'yxonalar",
+    "noAddress": "Manzil kiritilmagan"
+  },
+  "auth": {
+    "login": "Kirish",
+    "register": "Ro'yxatdan o'tish",
+    "logout": "Chiqish",
+    "profile": "Profil",
+    "settings": "Sozlamalar"
+  },
+  "welcome": "Xush kelibsiz",
+  "description": "To'yxona topish uchun eng yaxshi platforma"
+} 

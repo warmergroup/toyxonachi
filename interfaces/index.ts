@@ -15,4 +15,20 @@ export interface IToyxonalar {
   longitude: string;
   latitude: string;
   status: string;
+  rating: number;
+  reviewCount: number;
+  images: string[];
+  prices: Array<{
+    title: string;
+    amount: number;
+    currency: string;
+    description: string;
+  }>;
 }
+export interface Banner {
+  id: string;
+  photo: string;
+  name: string;
+  created_at: string;
+}
+

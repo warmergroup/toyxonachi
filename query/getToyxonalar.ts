@@ -8,16 +8,23 @@ export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number)
   return useQuery({
     queryKey: ['get-toyxonalar', currentPage],
     queryFn: async () => {
-      const {data} = await $axios.get('toyxonalar/all', {
-        params: {
-          filter: '',
-          field: '',
-          start: currentPage,
-          limit: itemsPerpage
+      try {
+        const {data} = await $axios.get('toyxonalar/all', {
+          params: {
+            filter: '',
+            field: '',
+            start: currentPage,
+            limit: itemsPerpage
+          }
+        });
+        if (data.status && data.data.toyxonalar) {
+          toyxonalarStore.setToyxonalar(data.data.toyxonalar);
+          return data.data;
         }
-      });
-      toyxonalarStore.setToyxonalar(data);
-      return data;
+        throw new Error(data.message || 'To\'yxonalarni yuklashda xatolik yuz berdi');
+      } catch (error) {
+        throw new Error('To\'yxonalarni yuklashda xatolik yuz berdi');
+      }
     },
   });
 };
