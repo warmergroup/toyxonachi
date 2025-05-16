@@ -45,7 +45,7 @@ export default defineNuxtConfig({
         {charset: 'utf-8'},
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},
         {name: 'description', content: 'Find the perfect venue for your event'},
-      ],
+      ]
     },
     rootAttrs: {
       'data-vaul-drawer-wrapper': '',
@@ -59,13 +59,21 @@ export default defineNuxtConfig({
   i18n: {
     locales: [{
       code: 'uz',
-      name: 'O\'zbek'
+      name: 'O\'zbek',
+      file: 'uz.json'
     }, {
       code: 'ru',
-      name: 'Русский'
+      name: 'Русский',
+      file: 'ru.json'
     }, {
       code: 'en',
-      name: 'English'
-    }]
+      name: 'English',
+      file: 'en.json'
+    }],
+    lazy: true,
+    langDir: 'locales',
+    defaultLocale: 'uz',
+    strategy: 'prefix',
+    detectBrowserLanguage: false
   }
 })

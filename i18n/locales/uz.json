@@ -1,45 +1,39 @@
 {
   "common": {
-    "search": "Qidirish",
-    "filter": "Filtr",
-    "sort": "Saralash",
-    "view": "Ko'rinish",
-    "price": "Narx",
-    "location": "Manzil",
-    "contact": "Aloqa",
-    "details": "Batafsil",
-    "book": "Band qilish",
-    "share": "Ulashish",
-    "save": "Saqlash",
-    "edit": "Tahrirlash",
-    "delete": "O'chirish",
-    "cancel": "Bekor qilish",
-    "confirm": "Tasdiqlash",
     "loading": "Yuklanmoqda...",
+    "currency": "so'm",
+    "venues": "To'yxonalar",
+    "search": "Qidirish",
+    "main": "Asosiy",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "searchPlaceholder": "Qidirish",
+    "profile": "Profil",
     "error": "Xatolik yuz berdi",
-    "success": "Muvaffaqiyatli",
-    "noResults": "Natijalar topilmadi",
-    "currency": "so'm"
+    "reviews": "Sharhlar",
+    "allReviews": "Barcha Sharhlarni ko'rish",
+    "reviewsCount": "sharh"
   },
   "venue": {
     "title": "To'yxona",
     "description": "Tavsif",
-    "amenities": "Qulayliklar",
     "pricing": "Narxlar",
-    "availability": "Mavjudlik",
-    "reviews": "Fikrlar",
-    "gallery": "Galereya",
-    "map": "Xarita",
-    "similar": "O'xshash to'yxonalar",
-    "noAddress": "Manzil kiritilmagan"
+    "contact": "Aloqa",
+    "noAddress": "Manzil kiritilmagan",
+    "notFound": "To'yxonalar topilmadi"
   },
   "auth": {
     "login": "Kirish",
     "register": "Ro'yxatdan o'tish",
-    "logout": "Chiqish",
-    "profile": "Profil",
-    "settings": "Sozlamalar"
-  },
-  "welcome": "Xush kelibsiz",
-  "description": "To'yxona topish uchun eng yaxshi platforma"
+    "email": "Email",
+    "password": "Parol",
+    "name": "Ism",
+    "phone": "Telefon",
+    "confirmPassword": "Parolni tasdiqlang",
+    "haveAccount": "Akkauntingiz bormi?",
+    "noAccount": "Akkauntingiz yo'qmi?",
+    "passwordsDoNotMatch": "Parollar mos kelmadi",
+    "loginError": "Kirishda xatolik yuz berdi",
+    "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi"
+  }
 } 

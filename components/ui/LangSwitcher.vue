@@ -1,53 +1,73 @@
 <script setup lang="ts">
-import type {DropdownMenuItem} from '@nuxt/ui'
-import {useLanguageStore} from '~/stores/language'
+import { computed, onMounted, ref } from 'vue'
+import { useLanguage } from '~/hooks/useLanguage'
+import { useLanguageStore } from '~/stores/language'
 
-type Locale = 'uz' | 'ru' | 'en'
-
-const {locale} = useI18n()
-const router = useRouter()
-const langStore = useLanguageStore()
-
-const currentLocale = computed(() => langStore.lang)
-
-const items = computed<DropdownMenuItem[]>(() => [
-  [
-    {
-      icon: 'i-custom:ru-flag',
-      click: () => switchLanguage('ru')
-    },
-    {
-      icon: 'i-custom:en-flag',
-      click: () => switchLanguage('en')
-    }
-  ]
-])
-
-const switchLanguage = (newLocale: Locale) => {
-  langStore.setLang(newLocale)
-  locale.value = newLocale as any
-  const path = `/${newLocale}${router.currentRoute.value.fullPath.replace(/^\/[a-z]{2}/, '')}`
-  router.push(path)
+type Language = {
+  code: 'uz' | 'ru' | 'en'
+  name: string
+  flag: string
 }
 
-// Set initial locale from localStorage if available
+const languages: Language[] = [
+  { code: 'uz', name: 'O\'zbek', flag: 'uz-flag' },
+  { code: 'ru', name: 'Русский', flag: 'ru-flag' },
+  { code: 'en', name: 'English', flag: 'en-flag' }
+]
+
+const { changeLanguage } = useLanguage()
+const langStore = useLanguageStore()
+const currentLang = computed(() => langStore.lang)
+const isOpen = ref(false)
+
+const handleLanguageChange = async (lang: Language['code']) => {
+  await changeLanguage(lang)
+  isOpen.value = false
+}
+
+const closeDropdown = () => {
+  isOpen.value = false
+}
+
 onMounted(() => {
-  const savedLocale = localStorage.getItem('selectedLang') as Locale
-  if (savedLocale && ['uz', 'ru', 'en'].includes(savedLocale)) {
-    switchLanguage(savedLocale)
-  }
+  document.addEventListener('click', closeDropdown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', closeDropdown)
 })
 </script>
 
 <template>
-  <UDropdownMenu
-    arrow
-    :items="items" :ui="{
-    content: 'w-12'
-  }">
-    <UButton
-      :icon="currentLocale === 'uz' ? 'custom:uz-flag' :
-      currentLocale === 'ru' ? 'custom:ru-flag' :
-        'custom:en-flag'" color="neutral" variant="outline"/>
-  </UDropdownMenu>
+  <div class="relative" @click.stop>
+    <button @click="isOpen = !isOpen" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+      <Icon :name="`custom:${currentLang}-flag`" class="w-6 h-6" />
+    </button>
+
+    <div v-if="isOpen"
+      class="absolute right-0 mt-2 w-36 rounded-lg bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800 py-1 z-50">
+      <button v-for="lang in languages" :key="lang.code" v-show="currentLang !== lang.code"
+        @click="handleLanguageChange(lang.code)"
+        class="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2">
+        <Icon :name="`custom:${lang.flag}`" class="w-5 h-5" />
+        <span>{{ lang.name }}</span>
+      </button>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.dropdown-menu {
+  min-width: 10px;
+  margin-top: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+</style>

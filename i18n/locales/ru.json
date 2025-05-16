@@ -1,43 +1,40 @@
 {
   "common": {
-    "search": "Поиск",
-    "filter": "Фильтр",
-    "sort": "Сортировка",
-    "view": "Вид",
-    "price": "Цена",
-    "location": "Расположение",
-    "contact": "Контакты",
-    "details": "Подробнее",
-    "book": "Забронировать",
-    "share": "Поделиться",
-    "save": "Сохранить",
-    "edit": "Редактировать",
-    "delete": "Удалить",
-    "cancel": "Отмена",
-    "confirm": "Подтвердить",
     "loading": "Загрузка...",
+    "currency": "сум",
+    "venues": "Банкетные залы",
+    "search": "Поиск",
+    "main": "Главная",
+    "about": "О нас",
+    "contact": "Контакты",
+    "searchPlaceholder": "Поиск",
+    "profile": "Профиль",
     "error": "Произошла ошибка",
-    "success": "Успешно",
-    "noResults": "Результаты не найдены"
+    "reviews": "Отзывы",
+    "allReviews": "Смотреть все отзывы",
+    "reviewsCount": "отзывов"
   },
   "venue": {
-    "title": "Банкетный зал",
+    "title": "Банкетные залы",
     "description": "Описание",
-    "amenities": "Удобства",
     "pricing": "Цены",
-    "availability": "Доступность",
-    "reviews": "Отзывы",
-    "gallery": "Галерея",
-    "map": "Карта",
-    "similar": "Похожие залы"
+    "contact": "Контакты",
+    "noAddress": "Адрес не указан",
+    "notFound": "Банкетные залы не найдены"
+    
   },
   "auth": {
     "login": "Вход",
     "register": "Регистрация",
-    "logout": "Выход",
-    "profile": "Профиль",
-    "settings": "Настройки"
-  },
-  "welcome": "Добро пожаловать",
-  "description": "Лучшая платформа для поиска свадебных залов"
+    "email": "Email",
+    "password": "Пароль",
+    "name": "Имя",
+    "phone": "Телефон",
+    "confirmPassword": "Подтвердите пароль",
+    "haveAccount": "У вас есть аккаунт?",
+    "noAccount": "У вас нет аккаунта?",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "loginError": "Ошибка входа",
+    "registerError": "Ошибка регистрации"
+  }
 } 

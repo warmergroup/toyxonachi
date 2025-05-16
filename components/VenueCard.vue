@@ -14,10 +14,9 @@ const props = defineProps<{
 }>();
 
 const {t} = useI18n();
-const router = useRouter();
 
 const navigateToVenue = () => {
-  router.push(`/venue/${props.toyxona.id}`);
+  navigateTo(`/venue/${props.toyxona.id}`);
 }
 </script>
 
@@ -26,9 +25,7 @@ const navigateToVenue = () => {
     <div class="relative overflow-hidden aspect-video">
       <NuxtImg
         class="w-full h-full aspect-video object-cover rounded-lg transition-transform duration-300"
-        loading="lazy"
-        :src="toyxona.image"
-        :alt="toyxona.name"/>
+        loading="lazy" :src="toyxona.image" :alt="toyxona.name"/>
     </div>
     <div class="p-2">
       <h2 class="text-base font-bold">{{ toyxona.name }}</h2>

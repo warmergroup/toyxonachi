@@ -1,43 +1,39 @@
 {
   "common": {
-    "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
-    "view": "View",
-    "price": "Price",
-    "location": "Location",
-    "contact": "Contact",
-    "details": "Details",
-    "book": "Book",
-    "share": "Share",
-    "save": "Save",
-    "edit": "Edit",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
     "loading": "Loading...",
+    "currency": "sum",
+    "venues": "Venues",
+    "search": "Search",
+    "main": "Main",
+    "about": "About",
+    "contact": "Contact",
+    "searchPlaceholder": "Search",
+    "profile": "Profile",
     "error": "An error occurred",
-    "success": "Success",
-    "noResults": "No results found"
+    "reviews": "Reviews",
+    "allReviews": "View all reviews",
+    "reviewsCount": "reviews"
   },
   "venue": {
-    "title": "Venue",
+    "title": "Venues",
     "description": "Description",
-    "amenities": "Amenities",
     "pricing": "Pricing",
-    "availability": "Availability",
-    "reviews": "Reviews",
-    "gallery": "Gallery",
-    "map": "Map",
-    "similar": "Similar Venues"
+    "contact": "Contact",
+    "noAddress": "No address provided",
+    "notFound": "No venues found"
   },
   "auth": {
     "login": "Login",
     "register": "Register",
-    "logout": "Logout",
-    "profile": "Profile",
-    "settings": "Settings"
-  },
-  "welcome": "Welcome",
-  "description": "The best platform for finding wedding venues"
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "confirmPassword": "Confirm password",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "loginError": "Login error",
+    "registerError": "Registration error"
+  }
 } 
