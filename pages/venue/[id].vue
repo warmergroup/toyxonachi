@@ -2,13 +2,14 @@
 import {useToyxonalarStore} from '~/stores/toyxonalar.store';
 import {useI18n} from 'vue-i18n';
 import type {IToyxonalar} from '~/interfaces';
+import {useScreenSize} from "~/hooks/useScreenSize";
 
+const {isLargeScreen} = useScreenSize()
 const {t} = useI18n();
 const route = useRoute();
 const toyxonalarStore = useToyxonalarStore();
 const toyxona = computed<IToyxonalar | undefined>(() => toyxonalarStore.getToyxonaById(route.params.id as string));
 const error = ref<string | null>(null);
-const selectedImage = ref<string | null>(null);
 
 // Sahifa yuklanganda ma'lumotlarni yuklash
 onMounted(async () => {
@@ -22,8 +23,8 @@ onMounted(async () => {
   }
 });
 
-
 </script>
+
 <template>
   <div v-if="error" class="flex items-center justify-center h-64">
     <p class="text-text-secondary">{{ error }}</p>
@@ -33,47 +34,26 @@ onMounted(async () => {
       <!-- Left Column - Gallery and Basic Info -->
       <div class="lg:col-span-2">
         <!-- Main Image -->
-        <div class="relative rounded-lg overflow-hidden mb-4">
-          <NuxtImg
-            :src="selectedImage || toyxona?.images?.[0]" :alt="toyxona.name" class="w-full aspect-video object-cover"
-            loading="lazy"/>
-          <div
-            class="absolute flex flex-col bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent m-2 lg:p-6">
-            <div class="flex gap-2 items-center">
-              <h1 class="text-3xl font-bold text-white">{{ toyxona.name }}</h1>
-            </div>
-            <div class="flex items-center">
-              <div class="text-white flex gap-5">
-                <span>{{ toyxona.address || 'Manzil kiritilmagan' }}</span>
-              </div>
-            </div>
+        <template v-if="isLargeScreen">
+          <UiThumbnailGallery :toyxona="toyxona"/>
+        </template>
+        <div class="relative w-full h-auto">
+          <UiCarousel v-if="!isLargeScreen" :items="toyxona.images || []"/>
+          <div class="absolute left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-lg w-[90%]">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iste ipsa similique iusto enim animi assumenda
+            labore
+            modi placeat vitae autem facilis reiciendis aut harum velit, dicta laboriosam at earum odio delectus
+            inventore
+            deserunt praesentium tenetur eveniet! Itaque, rerum explicabo cum fugiat et repudiandae labore adipisci
+            libero
+            distinctio impedit illo?
           </div>
-        </div>
-        <div class="grid grid-cols-4 gap-2 mb-8">
-          <div
-            v-for="(image, index) in toyxona.images"
-            :key="index"
-            class="rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200"
-            :class="selectedImage === image ? 'border-primary' : 'border-transparent'"
-            @click="selectedImage = image"
-          >
-            <img
-              :src="image"
-              :alt="`${toyxona?.name} - image ${index + 1}`"
-              class="w-full h-20 object-cover"
-            >
-          </div>
-        </div>
-
-        <div class="bg-white absolute">
-          info qismi
         </div>
       </div>
 
+
       <!-- Right Column - Pricing and Additional Info -->
       <div>
-
-
         <!-- Additional Info Section -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
           <h2 class="text-xl font-bold text-text-primary mb-4">Расположение</h2>
@@ -86,33 +66,28 @@ onMounted(async () => {
             </div>
           </div>
           <div class="flex items-center text-text-secondary mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-              <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
             <span>{{ toyxona.address }}</span>
           </div>
 
           <button
             class="w-full py-2 border border-primary text-primary font-medium rounded-lg hover:bg-primary/5 transition flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-              <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
             Построить маршрут
           </button>
+
         </div>
 
         <!-- Contact/Booking Section -->
@@ -131,12 +106,10 @@ onMounted(async () => {
             </button>
             <button
               class="flex-1 ml-2 py-2 border border-gray-300 rounded-lg text-text-secondary hover:bg-gray-50 transition flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
               </svg>
               Save
             </button>
@@ -170,7 +143,6 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -179,12 +151,3 @@ onMounted(async () => {
     <p class="text-text-secondary">{{ t('common.loading') }}</p>
   </div>
 </template>
-
-<!-- Thumbnail Gallery -->
-<!-- <div class="grid grid-cols-4 gap-2 mb-8">
-          <div v-for="(image, index) in toyxona.images" :key="index"
-            class="rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200"
-            :class="selectedImage === image ? 'border-primary' : 'border-transparent'" @click="selectedImage = image">
-            <NuxtImg :src="image" :alt="`${toyxona.name} - image ${index + 1}`" class="w-full h-20 object-cover" />
-          </div>
-        </div> -->
