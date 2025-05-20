@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type {IToyxonalar} from "~/interfaces";
 
+const localePath = useLocalePath()
 const props = defineProps<{
   toyxona: IToyxonalar;
 }>();
@@ -8,7 +9,7 @@ const props = defineProps<{
 const {t} = useI18n();
 
 const navigateToVenue = () => {
-  navigateTo(`/venue/${props.toyxona.id}`);
+  navigateTo(localePath(`/venue/${props.toyxona.id}`));
 }
 </script>
 
@@ -16,8 +17,8 @@ const navigateToVenue = () => {
   <div class="card overflow-hidden group cursor-pointer rounded-xl" @click="navigateToVenue">
     <div class="relative overflow-hidden aspect-video">
       <NuxtImg
-        class="w-full h-full aspect-video object-cover rounded-b-xl transition-transform duration-300" loading="lazy"
-        :src="toyxona.images?.[0]" :alt="toyxona.name"/>
+        class="w-full h-full aspect-video object-cover rounded-b-xl transition-transform duration-300"
+        loading="lazy" :src="toyxona.images?.[0]" :alt="toyxona.name"/>
     </div>
     <div class="p-2">
       <h2 class="text-base font-bold">{{ toyxona.name }}</h2>
