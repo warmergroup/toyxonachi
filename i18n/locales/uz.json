@@ -13,15 +13,17 @@
     "reviews": "Sharhlar",
     "allReviews": "Barcha Sharhlarni ko'rish",
     "reviewsCount": "sharh",
-    "distance": "uzoqlikda"
+    "fromYou": "uzoqlikda"
   },
   "venue": {
     "title": "To'yxona",
+    "tariffs": "Tariflar",
     "description": "Tavsif",
     "pricing": "Narxlar",
     "contact": "Aloqa",
     "noAddress": "Manzil kiritilmagan",
-    "notFound": "To'yxonalar topilmadi"
+    "notFound": "To'yxonalar topilmadi",
+    "people": "Kishi uchun"
   },
   "auth": {
     "login": "Kirish",

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useGetBannersQuery } from '~/query/getBanners'
 import { useInfiniteToyxonalarQuery } from '~/query/getToyxonalar'
+import { useCurrentPosition } from '~/hooks/useCurrentPosition'
+import { useLocationStore } from '~/stores/location.store'
 
 const infiniteScrollTrigger = ref<null | HTMLElement>(null)
 const { t } = useI18n()
@@ -18,6 +20,9 @@ const {
 
 const toyxonalar = computed(() => (data.value?.pages ? data.value.pages.flat() : []))
 
+const { getCurrentPosition, coords, error: positionError } = useCurrentPosition()
+const locationStore = useLocationStore()
+
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting && !isFetchingNextPage.value) {
@@ -29,6 +34,14 @@ onMounted(() => {
   }
   onUnmounted(() => {
     if (infiniteScrollTrigger.value) observer.unobserve(infiniteScrollTrigger.value)
+  })
+
+  getCurrentPosition()
+  watch(coords, (val) => {
+    if (val) locationStore.setCoords(val)
+  })
+  watch(positionError, (val) => {
+    if (val) locationStore.setError(val)
   })
 })
 </script>
