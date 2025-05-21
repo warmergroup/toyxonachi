@@ -26,6 +26,9 @@ export const useToyxonalarStore = defineStore("toyxonaStore", {
     removeToyxona(toyxonaId: string) {
       this.toyxonalar = this.toyxonalar.filter((p) => p.id !== toyxonaId);
     },
+    appendToyxonalar(newOnes: IToyxonalar[]) {
+      this.toyxonalar = [...this.toyxonalar, ...newOnes]
+    },
     setLoading(value: boolean) {
       this.isLoading = value;
     },

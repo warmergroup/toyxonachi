@@ -12,7 +12,8 @@
     "error": "An error occurred",
     "reviews": "Reviews",
     "allReviews": "View all reviews",
-    "reviewsCount": "reviews"
+    "reviewsCount": "reviews",
+    "distance": "far away"
   },
   "venue": {
     "title": "Venues",

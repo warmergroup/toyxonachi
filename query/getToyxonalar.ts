@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/vue-query';
+import {useInfiniteQuery, useQuery} from '@tanstack/vue-query';
 import $axios from "~/http";
 
 import {useToyxonalarStore} from "~/stores/toyxonalar.store";
@@ -28,3 +28,28 @@ export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number)
     },
   });
 };
+
+export const useInfiniteToyxonalarQuery = (itemsPerPage = 12) => {
+  return useInfiniteQuery({
+    queryKey: ['venues-infinite'],
+    queryFn: async ({pageParam = 0}) => {
+      const {data} = await $axios.get('toyxonalar/all', {
+        params: {
+          filter: '',
+          field: '',
+          start: pageParam,
+          limit: itemsPerPage
+        }
+      })
+      if (data.status && data.data.toyxonalar) {
+        return data.data.toyxonalar
+      }
+      return []
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage || lastPage.length < itemsPerPage) return undefined
+      return allPages.flat().length
+    },
+    initialPageParam: 0,
+  })
+}

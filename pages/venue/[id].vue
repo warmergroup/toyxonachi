@@ -46,13 +46,7 @@ onMounted(async () => {
         <div class="relative w-full h-auto">
           <UiCarousel v-if="!isLargeScreen" :items="toyxona.images || []"/>
           <div class="absolute left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-lg w-[90%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iste ipsa similique iusto enim animi assumenda
-            labore
-            modi placeat vitae autem facilis reiciendis aut harum velit, dicta laboriosam at earum odio delectus
-            inventore
-            deserunt praesentium tenetur eveniet! Itaque, rerum explicabo cum fugiat et repudiandae labore adipisci
-            libero
-            distinctio impedit illo?
+            <span>{{ toyxona.description }}</span>
           </div>
         </div>
       </div>
