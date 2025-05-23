@@ -22,8 +22,8 @@ export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number)
           return data.data;
         }
         throw new Error(data.message || 'To\'yxonalarni yuklashda xatolik yuz berdi');
-      } catch (error) {
-        throw new Error('To\'yxonalarni yuklashda xatolik yuz berdi');
+      } catch (error:any) {
+        throw new Error('To\'yxonalarni yuklashda xatolik yuz berdi', error);
       }
     },
   });

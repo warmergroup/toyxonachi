@@ -9,12 +9,20 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/ui',
     '@pinia/nuxt',
-    '@nuxt/fonts',
     '@nuxtjs/i18n',
   ],
   css: ['~/assets/css/main.css'],
   ui: {
     colorMode: false
+  },
+  runtimeConfig: {
+    // Server tomonida mavjud bo'lgan muhit o'zgaruvchilari
+    apiKey: process.env.NUXT_API_KEY,
+
+    // Client tomonida ham mavjud bo'lgan muhit o'zgaruvchilari
+    public: {
+      apiUrl: process.env.NUXT_PUBLIC_API_URL
+    }
   },
   icon: {
     customCollections: [

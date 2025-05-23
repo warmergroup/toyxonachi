@@ -17,18 +17,6 @@ export const useToyxonalarStore = defineStore("toyxonaStore", {
     addToyxona(toyxona: IToyxonalar) {
       this.toyxonalar.unshift(toyxona);
     },
-    updateToyxona(updatedToyxonalar: IToyxonalar) {
-      const index = this.toyxonalar.findIndex(
-        (p) => p.id === updatedToyxonalar.id
-      );
-      if (index !== -1) this.toyxonalar.splice(index, 1, updatedToyxonalar);
-    },
-    removeToyxona(toyxonaId: string) {
-      this.toyxonalar = this.toyxonalar.filter((p) => p.id !== toyxonaId);
-    },
-    appendToyxonalar(newOnes: IToyxonalar[]) {
-      this.toyxonalar = [...this.toyxonalar, ...newOnes]
-    },
     setLoading(value: boolean) {
       this.isLoading = value;
     },

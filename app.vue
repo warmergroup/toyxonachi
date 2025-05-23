@@ -4,7 +4,7 @@ import {computed, onMounted} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useLanguage} from '~/hooks/useLanguage'
 
-const {t, locale} = useI18n()
+const {locale} = useI18n()
 const {changeLanguage} = useLanguage()
 
 const lang = computed(() => locales[locale.value].code)
@@ -27,11 +27,11 @@ useHead({
 </script>
 
 <template>
-  <div class="container mx-auto w-full bg-[var(--background-color)]">
-    <UApp :locale="locales[locale]">
+  <UApp :locale="locales[locale]">
+    <div class="container mx-auto w-full min-h-[100vh] bg-[var(--background-color)]" data-vaul-drawer-wrapper>
       <NuxtLayout>
         <NuxtPage/>
       </NuxtLayout>
-    </UApp>
-  </div>
+    </div>
+  </UApp>
 </template>

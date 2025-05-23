@@ -1,5 +1,8 @@
-export interface IToyxonalar {
+export interface IWithId {
   id: string;
+}
+
+export interface IToyxonalar extends IWithId {
   admin_id: string;
   name: string;
   // image: string;
@@ -15,8 +18,6 @@ export interface IToyxonalar {
   longitude: string;
   latitude: string;
   status: string;
-  rating?: number; // ixtiyoriy
-  reviewCount?: number; // ixtiyoriy
   images?: string[]; // ixtiyoriy
   prices?: Array<{
     title: string;
@@ -26,8 +27,7 @@ export interface IToyxonalar {
   }>;
 }
 
-export interface IToyxona {
-  id: string;
+export interface IToyxona extends IWithId {
   name: string;
   image: string;
   description: string;
@@ -36,10 +36,31 @@ export interface IToyxona {
   address: string;
 }
 
-export interface Banner {
-  id: string;
+export interface Banner extends IWithId {
   photo: string;
   name: string;
   created_at: string;
 }
 
+export interface IUser extends IWithId {
+  name: string;
+  phone: string;
+  role: string;
+  status: string;
+}
+
+export type AuthType = "register" | "login" | "forgot_password";
+
+export interface ITarif {
+  id: string;
+  toyxona_id: string;
+  people_count: string;
+  total_price: string;
+  foods: Array<{
+    name: string;
+    image: string;
+    price: string;
+    category: string;
+  }>;
+  created_at: string;
+}

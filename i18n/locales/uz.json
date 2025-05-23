@@ -28,6 +28,7 @@
   "auth": {
     "login": "Kirish",
     "register": "Ro'yxatdan o'tish",
+    "registerPrompt": "Ilovaning barcha funksiyalaridan foydalanish uchun ro‘yxatdan o‘ting",
     "email": "Email",
     "password": "Parol",
     "name": "Ism",
