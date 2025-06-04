@@ -13,7 +13,11 @@
     "reviews": "Reviews",
     "allReviews": "View all reviews",
     "reviewsCount": "reviews",
-    "fromYou": "From You"
+    "fromYou": "From You",
+    "follow": "Follow",
+    "notifications": "Notifications",
+    "appLanguage": "App Language",
+    "aboutUs": "About Us"
   },
   "venue": {
     "title": "Venues",
@@ -21,9 +25,13 @@
     "pricing": "Pricing",
     "contact": "Contact",
     "noAddress": "No address provided",
-    "notFound": "No venues found"
+    "notFound": "No venues found",
+    "peopleCount": "for peoples",
+    "location": "Location",
+    "goDirection": "Get directions"
   },
-  "auth": {
+  "profile": {
+    "profile": "Profile",
     "login": "Login",
     "register": "Register",
     "registerPrompt": "Register to access all app features",

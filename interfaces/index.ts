@@ -50,6 +50,7 @@ export interface IUser extends IWithId {
 }
 
 export type AuthType = "register" | "login" | "forgot_password";
+export type DrawerType= "tarif" | "changeLanguage" | "editProfile" | "cancel";
 
 export interface ITarif {
   id: string;

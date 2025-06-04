@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import type { ITarif } from '~/interfaces';
+import {useI18n} from "vue-i18n";
+import type {ITarif} from '~/interfaces';
 
-const { t } = useI18n();
+const {t} = useI18n();
 const props = defineProps<{
   tarif: ITarif,
   onOpenDrawer?: (tarif: ITarif) => void
@@ -20,10 +20,10 @@ const openDrawer = () => {
     @click="openDrawer">
     <div>
       <div class="font-semibold">tarif nomi</div>
-      <div class="text-sm text-gray-500">{{ tarif.people_count }} {{ t('venue.people') }}
+      <div class="text-sm text-gray-500">{{ tarif.people_count }} {{ t('venue.peopleCount') }}
         {{ tarif.total_price }} so'm
       </div>
     </div>
-    <UIcon name="custom:chevron-right" />
+    <UIcon name="custom:chevron-right"/>
   </div>
 </template>

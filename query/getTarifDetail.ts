@@ -6,6 +6,7 @@ export const useGetTarifDetailQuery = (tarifId: string) => {
     queryKey: ['tarif-detail', tarifId],
     queryFn: async () => {
       const {data} = await $axios(`toyxonalar_tariflar/detail?id=${tarifId}`)
+      console.log("tariflar detail: ", data.data.toyxonalar_tariflar)
       return data.data.toyxonalar_tariflar
     }
   })

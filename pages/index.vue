@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useGetBannersQuery } from '~/query/getBanners'
 import { useInfiniteToyxonalarQuery } from '~/query/getToyxonalar'
 import { useCurrentPosition } from '~/hooks/useCurrentPosition'
 import { useLocationStore } from '~/stores/location.store'
+import { useScreenSize } from '~/hooks/useScreenSize';
+
+const { isLargeScreen } = useScreenSize();
 
 const infiniteScrollTrigger = ref<null | HTMLElement>(null)
 const { t } = useI18n()
@@ -22,6 +25,7 @@ const toyxonalar = computed(() => (data.value?.pages ? data.value.pages.flat() :
 
 const { getCurrentPosition, coords, error: positionError } = useCurrentPosition()
 const locationStore = useLocationStore()
+
 
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
@@ -47,27 +51,30 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="space-y-3 bg-[var(--background-color)]">
-    <client-only>
-      <UiCarousel v-if="banners && (banners as any[]).length > 0" :items="(banners as any[]).map(b => b.photo)" />
-      <USkeleton v-else-if="isBannersLoading && (!banners || (banners as any[]).length === 0)"
-        class="w-full aspect-video rounded-xl mb-4" />
-    </client-only>
+  <div>
+    <LayoutsMobileTopbar v-if="!isLargeScreen" class="" />
+    <section class="space-y-3 bg-[var(--background-color)] px-5 pt-20">
 
-    <h2 class="text-xl font-bold text-text-primary">{{ t('common.venues') }}</h2>
+      <div class="container mx-auto lg:px-10">
+        <UiCarousel v-if="banners && (banners as any[]).length > 0" :items="(banners as any[]).map(b => b.photo)"
+          :rounded="true" :isArrows="true" />
+        <USkeleton v-else-if="isBannersLoading && (!banners || (banners as any[]).length === 0)"
+          class="w-full aspect-video rounded-xl mb-4" />
+      </div>
 
-    <div v-if="isLoading" class="fixed w-full h-full flex flex-col items-center justify-center ">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
-      <p class="mt-4 text-lg text-gray-600">{{ t('common.loading') }}</p>
-    </div>
-    <div v-else-if="error" class="text-center text-red-500">{{ error.message }}</div>
-    <div v-else-if="toyxonalar.length === 0" class="text-center text-gray-500">
-      {{ t('venue.notFound') }}
-    </div>
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      <VenueCard v-for="toyxona in toyxonalar" :key="`wedding-${toyxona.id}`" :toyxona="toyxona" />
-    </div>
-    <div ref="infiniteScrollTrigger"></div>
-    <USkeleton v-if="isFetchingNextPage" class="w-full h-20 my-4" />
-  </section>
+      <h2 class="text-xl font-bold text-text-primary py-2">{{ t('common.venues') }}</h2>
+      <div v-if="error" class="text-center text-red-500">{{ error.message }}</div>
+      <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <UiCardPlaceholder v-for="n in 8" :key="`placeholder-${n}`" />
+      </div>
+      <div v-if="toyxonalar" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <VenueCard v-for="toyxona in toyxonalar" :key="`wedding-${toyxona.id}`" :toyxona="toyxona" />
+      </div>
+      <div v-if="toyxonalar.length === 0" class="text-center text-gray-500">
+        {{ t('venue.notFound') }}
+      </div>
+      <div ref="infiniteScrollTrigger" />
+      <USkeleton v-if="isFetchingNextPage" class="w-full h-20 my-4" />
+    </section>
+  </div>
 </template>

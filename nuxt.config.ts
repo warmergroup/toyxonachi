@@ -21,7 +21,8 @@ export default defineNuxtConfig({
 
     // Client tomonida ham mavjud bo'lgan muhit o'zgaruvchilari
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL
+      apiUrl: process.env.NUXT_PUBLIC_API_URL,
+      yandexMapsApiKey: process.env.YANDEX_MAPS_API_KEY
     }
   },
   icon: {
@@ -63,6 +64,10 @@ export default defineNuxtConfig({
   devServer: {
     host: '0.0.0.0',
     port: 3000,
+    https: {
+      key: './certs/localhost-key.pem',
+      cert: './certs/localhost-cert.pem',
+    },
   },
   i18n: {
     locales: [{
@@ -83,5 +88,5 @@ export default defineNuxtConfig({
     defaultLocale: 'uz',
     strategy: 'prefix',
     detectBrowserLanguage: false
-  }
+  },
 })

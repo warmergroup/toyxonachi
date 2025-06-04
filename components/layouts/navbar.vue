@@ -24,21 +24,13 @@ const route = useRoute();
         <span>{{ t('common.venues') }}</span>
       </NuxtLink>
 
-      <div class="relative w-[90%] md:w-full lg:w-fit">
-        <input type="text" :placeholder="t('common.searchPlaceholder')"
-          class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring focus:ring-gray-400">
-        <div class="absolute left-3 top-2.5 text-gray-400">
-          <Icon name="custom:search" />
-        </div>
-      </div>
+      <UiSearchPanel />
     </div>
 
     <div class="flex justify-between items-center gap-5 ">
       <UiLangSwitcher class="hidden lg:block" />
-      <div>
-        <Icon size="1rem" class="text-black" name="custom:bell" />
-      </div>
-      <NuxtLink :to="`/${locale}/profile/[id]`" class="hidden lg:block"
+      <UiNotification />
+      <NuxtLink :to="`/${locale}/profile`" class="hidden lg:block"
         :class="{ 'text-[var(--primary-color)]': route.path.startsWith(`/${locale}/profile`) }">
         <UIcon size="1.3rem" name="custom:person" />
       </NuxtLink>

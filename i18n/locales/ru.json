@@ -13,7 +13,11 @@
     "reviews": "Отзывы",
     "allReviews": "Смотреть все отзывы",
     "reviewsCount": "отзывов",
-    "fromYou": "от вас"
+    "fromYou": "от вас",
+    "follow": "Подписаться",
+    "notifications": "Уведомления",
+    "appLanguage": "Язык приложения",
+    "aboutUs": "О нас"
   },
   "venue": {
     "title": "Банкетные залы",
@@ -21,9 +25,13 @@
     "pricing": "Цены",
     "contact": "Контакты",
     "noAddress": "Адрес не указан",
-    "notFound": "Банкетные залы не найдены"
+    "notFound": "Банкетные залы не найдены",
+    "peopleCount": "на человека",
+    "location": "Расположение",
+    "goDirection": "Построить маршрут"
   },
-  "auth": {
+  "profile": {
+    "profile": "Профиль",
     "login": "Вход",
     "register": "Регистрация",
     "registerPrompt": "Зарегистрируйтесь, чтобы получить доступ ко всем функциям приложения",

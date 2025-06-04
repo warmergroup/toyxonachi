@@ -1,15 +1,20 @@
-import {defineStore} from 'pinia';
+import {defineStore} from "pinia";
+import type {DrawerType, IToyxona} from "~/interfaces";
 
-export const useCollapseStore = defineStore('isOpen', {
+export const openState = defineStore("openDrawer", {
   state: () => ({
-    isOpenState: true, // State nomini o'zgartiramiz
+    isOpen: false,
+    drawerType: null as DrawerType | null,
+    toyxonalar: [] as IToyxona[],
   }),
   actions: {
-    toggleOpen() {
-      this.isOpenState = !this.isOpenState;
+    onOpen(type: DrawerType) {
+      this.drawerType = type;
+      this.isOpen = true;
     },
-  },
-  getters: {
-    isOpen: (state) => state.isOpenState, // Getter nomi o'zgarmaydi
+    onClose() {
+      this.isOpen = false;
+      this.drawerType = null;
+    },
   },
 });

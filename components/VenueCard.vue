@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 import { useLocationStore } from '~/stores/location.store'
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
 import { useLocalePath } from "#i18n";
+import { useRouter } from 'vue-router';
 
 const localePath = useLocalePath();
 const props = defineProps<{
@@ -12,10 +13,12 @@ const props = defineProps<{
 
 const { t } = useI18n();
 const locationStore = useLocationStore()
+const router = useRouter();
 
 const navigateToVenue = () => {
-  navigateTo(localePath(`/venue/${props.toyxona.id}`));
-}
+  const path = localePath(`/venue/${props.toyxona.id}`);
+  router.push(path);
+};
 
 const distance = computed(() => {
   if (
@@ -40,6 +43,7 @@ const distance = computed(() => {
       <template v-if="toyxona.images && toyxona.images.length > 0">
         <NuxtImg class="w-full h-full aspect-video object-cover rounded-b-xl transition-transform duration-300"
           loading="lazy" :src="toyxona.images?.[0]" :alt="toyxona.name" />
+        <!-- <UiCarousel /> -->
       </template>
       <template v-else>
         <USkeleton class="w-full h-full aspect-video rounded-b-xl" />
@@ -48,7 +52,7 @@ const distance = computed(() => {
     <div class="p-4">
       <h2 class="text-base font-bold">{{ toyxona.name }}</h2>
       <div class="flex gap-2 items-center text-[var(--text-secondary)]">
-        <UIcon class="w-[14px] h-[14px]" name="custom:location" />
+        <UIcon class="size-5" name="custom:location" />
         <span class="text-sm">{{ toyxona.address || t('venue.noAddress') }}</span>
       </div>
       <div class="flex gap-2 items-center text-[var(--text-secondary)]">

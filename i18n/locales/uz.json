@@ -13,7 +13,11 @@
     "reviews": "Sharhlar",
     "allReviews": "Barcha Sharhlarni ko'rish",
     "reviewsCount": "sharh",
-    "fromYou": "uzoqlikda"
+    "fromYou": "uzoqlikda",
+    "follow": "Obuna bo'lish",
+    "notifications": "Bildirishnomalar",
+    "appLanguage": "Ilova tili",
+    "aboutUs": "Biz haqimizda"
   },
   "venue": {
     "title": "To'yxona",
@@ -23,9 +27,12 @@
     "contact": "Aloqa",
     "noAddress": "Manzil kiritilmagan",
     "notFound": "To'yxonalar topilmadi",
-    "people": "Kishi uchun"
+    "peopleCount": "Kishi",
+    "location": "manzil",
+    "goDirection": "yo'l ko'rsatish"
   },
-  "auth": {
+  "profile": {
+    "profile": "Profil",
     "login": "Kirish",
     "register": "Ro'yxatdan o'tish",
     "registerPrompt": "Ilovaning barcha funksiyalaridan foydalanish uchun ro‘yxatdan o‘ting",

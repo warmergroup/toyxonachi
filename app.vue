@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import * as locales from '@nuxt/ui/locale'
-import {computed, onMounted} from 'vue'
-import {useI18n} from 'vue-i18n'
-import {useLanguage} from '~/hooks/useLanguage'
+import { computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useLanguage } from '~/hooks/useLanguage'
 
-const {locale} = useI18n()
-const {changeLanguage} = useLanguage()
+const { locale } = useI18n()
+const { changeLanguage } = useLanguage()
 
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
@@ -27,11 +27,13 @@ useHead({
 </script>
 
 <template>
-  <UApp :locale="locales[locale]">
-    <div class="container mx-auto w-full min-h-[100vh] bg-[var(--background-color)]" data-vaul-drawer-wrapper>
-      <NuxtLayout>
-        <NuxtPage/>
-      </NuxtLayout>
-    </div>
-  </UApp>
+  <div class="h-full w-full bg-[var(--background-color)]">
+    <UApp :locale="locales[locale]">
+      <div class="container mx-auto w-full min-h-[100vh] " data-vaul-drawer-wrapper>
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+      </div>
+    </UApp>
+  </div>
 </template>
