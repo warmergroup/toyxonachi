@@ -2,14 +2,14 @@
 @import "@nuxt/ui";
 
 :root {
-  --primary-color: #3B82F6;
+  --primary-color: #0E73F6;
   --secondary-color: #64748B;
   --accent-color: #F59E0B;
   --success-color: #10B981;
   --warning-color: #F59E0B;
   --error-color: #EF4444;
   --background-color: #F7F7F7;
-  --secondary-background-color: #F2F4F7;
+  --secondary-background-color: #F2F3F7;
   --card-background: #FFFFFF;
   --text-primary: #1E293B;
   --text-secondary: #64748B;

@@ -122,9 +122,9 @@ onMounted(async () => {
               class="absolute w-full h-full top-0 left-0 p-3 inset-0 bg-gradient-to-b from-black to-transparent opacity-30">
               <div class="flex items-center justify-between">
                 <span
-                  class="w-[36px] h-[36px] backdrop-blur-md bg-black/50 rounded-full p-2 cursor-pointer flex items-center justify-center border border-white"
+                  class="w-[36px] h-[36px] backdrop-blur-md bg-white/50 rounded-full p-2 cursor-pointer flex items-center justify-center border border-white"
                   @click="goback()">
-                  <Icon name="custom:arrow-back" />
+                  <Icon class="text-white" name="custom:arrow-back" />
                 </span>
 
                 <span
@@ -149,7 +149,7 @@ onMounted(async () => {
           <h2 class="font-medium text-lg text-text-primary mb-4">{{ t('venue.tariffs') }}</h2>
           <UiTarifCard v-for="tarif in tariflar || []" :key="tarif.id" :tarif="tarif"
             @open-drawer="(tarif) => { selectedTarif = tarif; isDrawerOpen = true; }" />
-          <UiTarifDrawer v-if="selectedTarif" :open="isDrawerOpen" :tarif="selectedTarif" :drawerType="'tarif'"
+          <UiTarifDrawer v-if="selectedTarif" :open="isDrawerOpen" :tarif="selectedTarif" :drawer-type="'tarif'"
             @update:open="isDrawerOpen = $event" @close="isDrawerOpen = false" />
           <div class="">
             <h2 class="font-medium text-lg">{{ t('venue.description') }}</h2>

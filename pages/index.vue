@@ -58,8 +58,6 @@ onMounted(() => {
       <div class="container mx-auto lg:px-10">
         <UiCarousel v-if="banners && (banners as any[]).length > 0" :items="(banners as any[]).map(b => b.photo)"
           :rounded="true" :isArrows="true" />
-        <USkeleton v-else-if="isBannersLoading && (!banners || (banners as any[]).length === 0)"
-          class="w-full aspect-video rounded-xl mb-4" />
       </div>
 
       <h2 class="text-xl font-bold text-text-primary py-2">{{ t('common.venues') }}</h2>
@@ -76,5 +74,7 @@ onMounted(() => {
       <div ref="infiniteScrollTrigger" />
       <USkeleton v-if="isFetchingNextPage" class="w-full h-20 my-4" />
     </section>
+    
   </div>
+
 </template>

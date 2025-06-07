@@ -16,9 +16,15 @@
     "fromYou": "From You",
     "follow": "Follow",
     "notifications": "Notifications",
+    "noNotifications": "No new notifications",
     "appLanguage": "App Language",
     "changeLanguage": "Select Language",
-    "aboutUs": "About Us"
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "about": {
+    "aboutUs": "About Us",
+    "description": "We are the largest venue platform in Uzbekistan. With our platform, you can choose a venue, compare prices, and book it."
   },
   "venue": {
     "title": "Venues",

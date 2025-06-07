@@ -2,20 +2,20 @@
 import { DialogContent, DialogTitle } from 'reka-ui';
 import { useScreenSize } from '~/hooks/useScreenSize';
 import { openState } from '~/stores/isOpen.store';
-import type { DrawerType } from '~/interfaces';
+import type { ComponentType } from '~/interfaces';
 
 const { isLargeScreen } = useScreenSize();
 const open = openState();
 const props = defineProps<{
   open: boolean;
-  drawerType: DrawerType;
+  componentType: ComponentType;
   tarif: Record<string, any>;
 }>();
 
 const emit = defineEmits(['update:open', 'close']);
 
 const isLocalOpen = computed({
-  get: () => open.isOpen && open.drawerType === props.drawerType,
+  get: () => open.isOpen && open.componentType === props.componentType,
   set: (value) => open.isOpen = value
 })
 

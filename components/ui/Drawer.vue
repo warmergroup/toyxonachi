@@ -1,11 +1,3 @@
-<template>
-    <UDrawer :open="isOpen" :title="title" @close="closeDrawer">
-        <template #body>
-            <slot />
-        </template>
-    </UDrawer>
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
     title: {
@@ -24,3 +16,10 @@ function closeDrawer() {
     emit("close");
 }
 </script>
+<template>
+    <UDrawer :open="isOpen" :title="title" >
+        <template #body>
+            <slot />
+        </template>
+    </UDrawer>
+</template>

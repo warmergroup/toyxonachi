@@ -18,6 +18,7 @@ const languages: Language[] = [
 const { changeLanguage } = useLanguage()
 const langStore = useLanguageStore()
 const currentLang = computed(() => langStore.lang)
+console.log('Current Language:', currentLang.value)
 const isOpen = ref(false)
 
 const handleLanguageChange = async (lang: Language['code']) => {

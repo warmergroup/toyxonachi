@@ -5,6 +5,6 @@ const { t } = useI18n();
 
 <template>
     <div>
-        <p>{{ t('common.noNotifications') }}</p>
+        <p>{{t('about.description')}}</p>
     </div>
 </template>

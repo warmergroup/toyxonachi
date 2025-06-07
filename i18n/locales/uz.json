@@ -16,9 +16,15 @@
     "fromYou": "uzoqlikda",
     "follow": "Obuna bo'lish",
     "notifications": "Bildirishnomalar",
+    "noNotifications": "Yangi bildirishnomalar yo'q",
     "appLanguage": "Ilova tili",
     "changeLanguage": "Tilni tanlang",
-    "aboutUs": "Biz haqimizda"
+    "save": "Saqlash",
+    "cancel": "Bekor qilish"
+  },
+  "about": {
+    "aboutUs": "Biz haqimizda",
+    "description": "Biz O'zbekistonning eng yirik to'yxonalar platformasimiz. Bizning platformamiz orqali siz o'zingizga yoqqan to'yxonani tanlashingiz, narxlarni solishtirish va band qilishingiz mumkin."
   },
   "venue": {
     "title": "To'yxona",
@@ -48,4 +54,4 @@
     "loginError": "Kirishda xatolik yuz berdi",
     "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi"
   }
-} 
+}

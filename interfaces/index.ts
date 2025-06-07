@@ -1,3 +1,4 @@
+import { componentNames } from './../.nuxt/components.d';
 export interface IWithId {
   id: string;
 }
@@ -50,7 +51,7 @@ export interface IUser extends IWithId {
 }
 
 export type AuthType = "register" | "login" | "forgot_password";
-export type DrawerType= "tarif" | "changeLanguage" | "editProfile" | "cancel";
+export type ComponentType= "tarif" | "changeLanguage" | "editProfile" | "cancel" | "notification" | "about";
 
 export interface ITarif {
   id: string;
