@@ -1,6 +1,7 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import {useRuntimeConfig} from '#app';
+import MarkerIcon from '~/assets/icons/custom/location_pin.svg' // SVG faylni inline olish
 
 const props = defineProps({
   center: {
@@ -20,17 +21,14 @@ const error = ref(null);
 
 onMounted(() => {
   if (typeof ymaps3 !== 'undefined') {
-    // console.log('Yandex Maps API 3.0 already loaded.');
     initMap();
   } else {
-    // console.log('Loading Yandex Maps API 3.0...');
     const script = document.createElement('script');
     script.src = `https://api-maps.yandex.ru/v3/?apikey=${apiKey}&lang=ru_RU`;
     script.async = true;
     script.defer = true;
 
     script.onload = () => {
-      // console.log('Yandex Maps API 3.0 loaded successfully.');
       initMap();
     };
 
@@ -45,7 +43,6 @@ onMounted(() => {
 async function initMap() {
   try {
     await ymaps3.ready;
-    // console.log('Yandex Maps API 3.0 is ready.');
 
     const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapDefaultFeaturesLayer} = ymaps3;
 
@@ -57,7 +54,7 @@ async function initMap() {
 
     const map = new YMap(mapElement, {
       location: {
-        center: [props.center.lat, props.center.lng],
+        center: [props.center.lng, props.center.lat],
         zoom: 18,
       },
     });
@@ -65,14 +62,22 @@ async function initMap() {
     map.addChild(new YMapDefaultSchemeLayer());
     map.addChild(new YMapDefaultFeaturesLayer());
 
-    const marker = new YMapMarker({
-      coordinates: [props.center.lng, props.center.lat],
-      title: props.title,
-    });
+    // 🔽 SVG marker element yaratish
+    const markerElement = document.createElement('div');
+    markerElement.innerHTML = `
+      <div style="transform: translate(-50%, -100%); width: 32px; height: 32px;" title="${props.title}">
+        ${MarkerIcon}
+      </div>
+    `;
+
+    const marker = new YMapMarker(
+      {
+        coordinates: [props.center.lng, props.center.lat],
+      },
+      markerElement
+    );
 
     map.addChild(marker);
-
-    // console.log('Map and marker initialized successfully.');
   } catch (e) {
     error.value = 'Xarita ishga tushmadi.';
     console.error(e);
