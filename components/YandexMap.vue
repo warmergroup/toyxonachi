@@ -1,7 +1,6 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import {useRuntimeConfig} from '#app';
-import MarkerIcon from '~/assets/icons/custom/location_pin.svg' // SVG faylni inline olish
 
 const props = defineProps({
   center: {
@@ -55,7 +54,7 @@ async function initMap() {
     const map = new YMap(mapElement, {
       location: {
         center: [props.center.lng, props.center.lat],
-        zoom: 18,
+        zoom: 15,
       },
     });
 
@@ -65,8 +64,8 @@ async function initMap() {
     // 🔽 SVG marker element yaratish
     const markerElement = document.createElement('div');
     markerElement.innerHTML = `
-      <div style="transform: translate(-50%, -100%); width: 32px; height: 32px;" title="${props.title}">
-        ${MarkerIcon}
+      <div style="transform: translate(-50%, -100%); width: 12px; height: 12px;" title="${props.title}">
+          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1a9.002 9.002 0 0 0-6.366 15.362c1.63 1.63 5.466 3.988 5.693 6.465.034.37.303.673.673.673.37 0 .64-.303.673-.673.227-2.477 4.06-4.831 5.689-6.46A9.002 9.002 0 0 0 12 1z" fill="#F43"></path><path d="M12 13.079a3.079 3.079 0 1 1 0-6.158 3.079 3.079 0 0 1 0 6.158z" fill="#fff"></path></svg>
       </div>
     `;
 
