@@ -58,7 +58,7 @@ async function initMap() {
     const map = new YMap(mapElement, {
       location: {
         center: [props.center.lat, props.center.lng],
-        zoom: 16,
+        zoom: 18,
       },
     });
 

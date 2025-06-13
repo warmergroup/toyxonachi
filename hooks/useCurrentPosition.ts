@@ -1,5 +1,5 @@
 import {ref} from 'vue'
-import {useLocationStore} from "~/stores/location.store";
+import {useLocationStore} from '~/stores/location.store'
 
 const coords = ref<{ latitude: number; longitude: number } | null>(null)
 const error = ref<string | null>(null)
@@ -18,11 +18,12 @@ export function useCurrentPosition() {
     }
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        coords.value = {
+        const currentCoords = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }
-        locationStore.setCoords(coords.value)
+        coords.value = currentCoords
+        locationStore.setCoords(currentCoords)
         loading.value = false
       },
       (err) => {
