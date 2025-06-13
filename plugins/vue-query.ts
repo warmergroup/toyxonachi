@@ -3,7 +3,7 @@ import {dehydrate, hydrate, QueryClient, VueQueryPlugin,} from "@tanstack/vue-qu
 import {defineNuxtPlugin, useState} from "#imports";
 
 export default defineNuxtPlugin((nuxt) => {
-  const vueQueryState = useState<DehydratedState | null>("vue-query");
+  const vueQueryState = useState<DehydratedState | null>("vue-api");
 
   const queryClient = new QueryClient({
     defaultOptions: {queries: {staleTime: 5000}},

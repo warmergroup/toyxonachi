@@ -8,7 +8,7 @@ const { isLargeScreen } = useScreenSize();
 <template>
   <div class="">
     <LayoutsNavbar v-if="isLargeScreen" />
-    <section class="pb-24">
+    <section>
       <slot />
     </section>
     <LayoutsMobileNavbar v-if="!isLargeScreen" class="lg:hidden" />

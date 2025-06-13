@@ -1,108 +1,93 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useGetTarifDetailQuery } from '~/api/getTarifDetail'
 
-const props = defineProps<{ foods?: string }>()
+const props = defineProps<{ tarifId?: number | string }>()
 
-// Mock data for testing
-const mockFoods = JSON.stringify([
-    { name: 'Palov', image: '/logo-splash.svg', price: '25000', category: 'Taom' },
-    { name: 'Palov', image: '/logo-splash.svg', price: '25000', category: 'Taom' },
-    { name: 'Palov', image: '/logo-splash.svg', price: '25000', category: 'Taom' },
-    { name: 'Palov', image: '/logo-splash.svg', price: '25000', category: 'Taom' },
-    { name: 'Palov', image: '/logo-splash.svg', price: '25000', category: 'Taom' },
-    { name: 'Palov', image: '/logo-splash.svg', price: '25000', category: 'Taom' },
-    { name: 'Olivye salat', image: '/logo-splash.svg', price: '15000', category: 'Salat' },
-    { name: 'Shashlik', image: '/logo-splash.svg', price: '30000', category: 'Taom' },
-    { name: 'Mastava', image: '/logo-splash.svg', price: '20000', category: 'Sho‘rva' },
-    { name: 'Somsa', image: '/logo-splash.svg', price: '10000', category: 'Shirinlik' },
-    { name: 'Kofe', image: '/logo-splash.svg', price: '7000', category: 'Ichimlik' },
-    { name: 'Salat', image: '/logo-splash.svg', price: '12000', category: 'Salat' },
-    { name: 'Manti', image: '/logo-splash.svg', price: '18000', category: 'Salat' },
-    { name: 'Chuchvara', image: '/logo-splash.svg', price: '16000', category: 'Taom' },
-    { name: 'Kebab', image: '/logo-splash.svg', price: '35000', category: 'Taom' },
-    { name: 'Tuxum', image: '/logo-splash.svg', price: '8000', category: 'Non' },
-    { name: 'Baliq', image: '/logo-splash.svg', price: '40000', category: 'Taom' },
-    { name: 'Pirog', image: '/logo-splash.svg', price: '12000', category: 'Non' },
-    { name: 'Qaymoq', image: '/logo-splash.svg', price: '6000', category: 'Ichimlik' }
-])
+// Tarif detailni olish
+const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''));
 
-// Use mock data if foods prop is not provided
-const foodsArr = computed<any[]>(() => {
-    try {
-        return JSON.parse(props.foods || mockFoods) as any[]
-    } catch {
-        return []
-    }
-})
+// Foydalanuvchiga ko'rsatiladigan label
+// console.log('TARIF TYPE DETAIL:', tarifDetail?.value.tariff_types)
 
-// Get unique categories
-const categories = computed((): string[] => {
-    const cats = foodsArr.value.map((f) => String(f.category))
-    return [...new Set(cats)]
-})
+// Faqat kerakli turlar
+const types = ['meals', 'salads', 'wedding_table', 'bonuses'] as const;
+type TypeKey = typeof types[number];
+const menuLabels: Record<TypeKey, string> = {
+  meals: 'Taomlar',
+  salads: 'Salatlar',
+  wedding_table: "To'y dasturxoni",
+  bonuses: 'Bonuslar'
+};
 
-// Foods by category
-function foodsByCategory(category: string) {
-    return foodsArr.value.filter((f) => f.category === category)
-}
-
-const tabItems = computed(() =>
-    categories.value.map((cat) => ({
-        label: cat,
-        slot: cat
-    }))
+// Kategoriyalarni faqat kerakli turlarga ajratamiz
+const categories = computed(() =>
+  (tarifDetail.value?.categories || []).filter((cat: any) => types.includes(cat.type))
 )
 
-const selectedTab = ref(categories.value[0]) // Default tab
+// Tanlangan asosiy tur
+const selectedType = ref('meals')
 
-function selectTab(category: string) {
-    selectedTab.value = category
-}
+// Tanlangan turga mos kategoriyalar
+const filteredCategories = computed(() =>
+  categories.value.filter((cat: any) => cat.type === selectedType.value)
+)
+
+// Har doim birinchi tur tanlansin
+watch(categories, (cats: any[]) => {
+  if (cats.length) selectedType.value = types.find((t) => cats.some((c: any) => c.type === t)) || 'meals'
+}, { immediate: true })
 </script>
 
 <template>
-    <div class="">
-        <!-- Tab buttons -->
-        <div class="flex gap-3 overflow-auto whitespace-nowrap">
-            <button v-for="category in categories" :key="category" @click="selectTab(category)"
-                class="px-3 py-2 rounded-md" :class="{
-                    'bg-[var(--primary-color)] text-white': selectedTab === category,
-                    'bg-white text-gray-700': selectedTab !== category
-                }">
-                {{ category }}
-            </button>
-        </div>
+  <div>
+    <div v-if="isLoading">Yuklanmoqda...</div>
+    <div v-else-if="error">Xatolik: {{ error.message }}</div>
+    <div v-else>
 
-        <!-- Tab content -->
-        <div class="h-[60vh] overflow-auto">
-            <h3 class="font-semibold text-lg my-2">
-                {{ foodsByCategory(selectedTab).length }} {{ selectedTab.toLowerCase() }}
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                <div v-for="food in foodsByCategory(selectedTab)" :key="food.name" class="rounded-xl bg-white p-2">
-                    <NuxtImg :src="food.image" :alt="food.name"
-                        class="rounded-lg w-full aspect-square object-cover mb-2" />
-                    <div class="absolute bg-gradient-to-t from-black/70 to-transparent"></div>
-                    <div class="font-semibold text-base">{{ food.name }}</div>
-                    <div class="text-muted text-sm">{{ food.price }} so'm</div>
-                </div>
-            </div>
+      <!-- <div v-if="tarifDetail.value && tarifDetail.value.tariff_types && tarifDetail.value.tariff_types.length">
+        <div class="mb-4 p-6 bg-white rounded-2xl">
+          <h1 class="font-bold text-2xl mb-4">{{ tarifDetail.value.name }}</h1>
+          <div v-for="type in tarifDetail.value.tariff_types" :key="type.id"
+            class="flex justify-between items-center mb-2">
+            <span class="text-gray-500 text-lg">{{ type.person_count }} kishi</span>
+            <span class="font-bold text-2xl">{{ Number(type.price).toLocaleString('ru-RU') }} so'm</span>
+          </div>
         </div>
+      </div> -->
+      <!-- <div v-else>
+        <p>Tarif turlari topilmadi</p>
+      </div> -->
+
+      <!-- Asosiy filter tugmalari -->
+      <div class="flex gap-3 lg:gap-1 overflow-auto whitespace-nowrap mb-2">
+        <button v-for="t in types" :key="t" class="px-3 md:px-2 py-2 md:py-1 rounded-md" :class="{
+          'bg-[var(--primary-color)] text-white': selectedType === t,
+          'bg-white text-gray-700': selectedType !== t
+        }" @click="selectedType = t">
+          {{ menuLabels[t] }}
+        </button>
+      </div>
+
+      <!-- Kategoriyalar va mahsulotlar -->
+      <div v-if="filteredCategories.length">
+        <div v-for="cat in filteredCategories" :key="cat.id" class="mb-6">
+          <h3 class="font-bold text-base my-2">{{ cat.name }}</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div v-for="prod in cat.products" :key="prod.id" class="rounded-xl bg-white p-2">
+              <NuxtImg :src="prod.image_url" :alt="prod.name"
+                class="rounded-lg w-full aspect-square object-cover mb-2" />
+              <div class="font-medium text-base">{{ prod.name }}</div>
+              <div class="text-muted text-sm">{{ prod.description }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <p>Kategoriya yoki mahsulotlar yo‘q</p>
+      </div>
     </div>
+  </div>
 </template>
 
-<style scoped>
-::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-</style>
+<style scoped></style>

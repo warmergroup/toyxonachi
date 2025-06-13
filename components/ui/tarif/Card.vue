@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import {useI18n} from "vue-i18n";
-import type {ITarif} from '~/interfaces';
+import { useI18n } from "vue-i18n";
 
-const {t} = useI18n();
-const props = defineProps<{
-  tarif: ITarif,
-  onOpenDrawer?: (tarif: ITarif) => void
-}>();
-const emit = defineEmits(['openDrawer']);
+const { t } = useI18n();
 
-const openDrawer = () => {
-  emit('openDrawer', props.tarif);
-};
+defineProps<{
+  tarif: {
+    name: string
+    tariff_types: {
+      id: number | string
+      person_count: string
+      price: string
+    }[]
+  }
+}>()
+
 </script>
 
 <template>
-  <div
-    class="flex justify-between items-center mb-2 p-3 rounded-lg bg-[var(--secondary-background-color)] cursor-pointer"
-    @click="openDrawer">
+  <div class="flex justify-between items-center p-3 rounded-lg bg-[var(--secondary-background-color)] cursor-pointer">
     <div>
-      <div class="font-semibold">tarif nomi</div>
-      <div class="text-sm text-gray-500">{{ tarif.people_count }} {{ t('venue.peopleCount') }}
-        {{ tarif.total_price }} so'm
+      <div class="font-semibold">{{ tarif.name }}</div>
+      <div class="text-sm text-gray-500">
+        <div v-for="type in tarif.tariff_types" :key="type.id">
+          {{ type.person_count }} {{ t('venue.peopleCount') }} {{ type.price }} so'm
+        </div>
       </div>
     </div>
-    <UIcon name="custom:chevron-right"/>
+    <UIcon name="custom:chevron-right" />
   </div>
 </template>

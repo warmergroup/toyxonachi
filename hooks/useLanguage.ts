@@ -12,8 +12,6 @@ export const useLanguage = () => {
 
   const changeLanguage = async (lang: Language) => {
     try {
-      console.log('Changing language to:', lang)
-      console.log('Current route:', route.fullPath)
       
       await setLocale(lang)
       langStore.setLang(lang)
@@ -22,13 +20,11 @@ export const useLanguage = () => {
       // Faqat boshqa sahifaga o'tishda router.replace ni ishlatamiz
       const currentPath = route.fullPath
       if (currentPath.startsWith('/' + lang)) {
-        console.log('Already in correct language path')
         return
       }
 
       const newPath = currentPath.replace(/^\/[a-z]{2}/, `/${lang}`)
-      console.log('New path will be:', newPath)
-      
+    
       await router.replace({
         path: newPath,
         query: route.query,

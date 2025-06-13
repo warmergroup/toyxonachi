@@ -36,22 +36,31 @@
     "notFound": "To'yxonalar topilmadi",
     "peopleCount": "Kishi",
     "location": "manzil",
-    "goDirection": "yo'l ko'rsatish"
+    "goDirection": "yo'l ko'rsatish",
+    "discount": "Chegirmalar"
   },
   "profile": {
     "profile": "Profil",
     "login": "Kirish",
+    "logout": "Chiqish",
     "register": "Ro'yxatdan o'tish",
     "registerPrompt": "Ilovaning barcha funksiyalaridan foydalanish uchun ro‘yxatdan o‘ting",
     "email": "Email",
     "password": "Parol",
     "name": "Ism",
+    "namePlaceholder": "To'liq ismingizni kiriting",
     "phone": "Telefon",
     "confirmPassword": "Parolni tasdiqlang",
     "haveAccount": "Akkauntingiz bormi?",
     "noAccount": "Akkauntingiz yo'qmi?",
     "passwordsDoNotMatch": "Parollar mos kelmadi",
     "loginError": "Kirishda xatolik yuz berdi",
-    "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi"
+    "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi",
+    "myVenues": "Mening to'yxonalarim"
+  },
+  "validation": {
+    "nameRequired": "Ism kiritish majburiy",
+    "phoneRequired": "Telefon raqami kiritish majburiy",
+    "phoneInvalid": "Telefon raqami noto'g'ri formatda"
   }
 }

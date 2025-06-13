@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useToyxonalarStore} from "~/stores/toyxonalar.store";
-import {useGetToyxonalarQuery} from "~/query/getToyxonalar";
+import {useGetToyxonalarQuery} from "~/api/getToyxonalar";
 import {useI18n} from 'vue-i18n';
 
 const {isLoading, error} = useGetToyxonalarQuery(0, 10);
@@ -11,12 +11,12 @@ const {t} = useI18n()
 
 </script>
 
-  
+
 <template>
   <section class="space-y-3 bg-[var(--background-color)]">
     <h2 class="text-xl font-bold text-text-primary">{{ t('common.venues') }}</h2>
     <div v-if="isLoading" class="fixed w-full h-full flex flex-col items-center justify-center ">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"/>
       <p class="mt-4 text-lg text-gray-600">{{ t('common.loading') }}</p>
     </div>
     <div v-else-if="error" class="text-center text-red-500">{{ error.message }}</div>

@@ -4,7 +4,8 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <div>
-        <p>{{t('about.description')}}</p>
+    <div class="space-y-4">
+        <NuxtImg src="/aboutImage.png" class="w-full rounded-xl" />
+        <p>{{ t('about.description') }}</p>
     </div>
 </template>

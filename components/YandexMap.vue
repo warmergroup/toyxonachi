@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRuntimeConfig } from '#app';
+import {onMounted, ref} from 'vue';
+import {useRuntimeConfig} from '#app';
 
 const props = defineProps({
   center: {
@@ -20,17 +20,17 @@ const error = ref(null);
 
 onMounted(() => {
   if (typeof ymaps3 !== 'undefined') {
-    console.log('Yandex Maps API 3.0 already loaded.');
+    // console.log('Yandex Maps API 3.0 already loaded.');
     initMap();
   } else {
-    console.log('Loading Yandex Maps API 3.0...');
+    // console.log('Loading Yandex Maps API 3.0...');
     const script = document.createElement('script');
     script.src = `https://api-maps.yandex.ru/v3/?apikey=${apiKey}&lang=ru_RU`;
     script.async = true;
     script.defer = true;
 
     script.onload = () => {
-      console.log('Yandex Maps API 3.0 loaded successfully.');
+      // console.log('Yandex Maps API 3.0 loaded successfully.');
       initMap();
     };
 
@@ -45,9 +45,9 @@ onMounted(() => {
 async function initMap() {
   try {
     await ymaps3.ready;
-    console.log('Yandex Maps API 3.0 is ready.');
+    // console.log('Yandex Maps API 3.0 is ready.');
 
-    const { YMap, YMapDefaultSchemeLayer, YMapMarker, YMapDefaultFeaturesLayer } = ymaps3;
+    const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapDefaultFeaturesLayer} = ymaps3;
 
     const mapElement = document.getElementById('yandex-map');
     if (!mapElement) {
@@ -57,8 +57,8 @@ async function initMap() {
 
     const map = new YMap(mapElement, {
       location: {
-        center: [props.center.lng, props.center.lat],
-        zoom: 12,
+        center: [props.center.lat, props.center.lng],
+        zoom: 16,
       },
     });
 
@@ -72,7 +72,7 @@ async function initMap() {
 
     map.addChild(marker);
 
-    console.log('Map and marker initialized successfully.');
+    // console.log('Map and marker initialized successfully.');
   } catch (e) {
     error.value = 'Xarita ishga tushmadi.';
     console.error(e);
@@ -85,7 +85,7 @@ async function initMap() {
     <div v-if="error" class="text-red-500 border border-red-400 bg-red-50 p-2 rounded">
       {{ error }}
     </div>
-    <div v-else id="yandex-map" class="w-full aspect-square"></div>
+    <div v-else id="yandex-map" class="w-full aspect-square"/>
   </div>
 </template>
 

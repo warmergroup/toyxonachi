@@ -1,25 +1,42 @@
-import { componentNames } from './../.nuxt/components.d';
 export interface IWithId {
-  id: string;
+  id: string | number;
 }
 
 export interface IToyxonalar extends IWithId {
-  admin_id: string;
+  user_id: string;
   name: string;
-  // image: string;
   description: string;
-  tarif_count: string;
-  min_price: string;
-  max_price: string;
-  phone1: string;
-  phone2: string;
-  telegram_link: string;
-  instagram_link: string;
-  address: string;
+  status: string;
   longitude: string;
   latitude: string;
-  status: string;
-  images?: string[]; // ixtiyoriy
+  address: string;
+  tariff_count: string;
+  region_id: null | string;
+  district_id: null | string;
+  quarter_id: null | string;
+  phone1: null | string;
+  phone2: null | string;
+  telegram: null | string;
+  instagram: null | string;
+  reject_reason: null | string;
+  created_at: string;
+  updated_at: string;
+  wedding_hall_pictures: Array<{
+    id: number;
+    wedding_hall_id: string;
+    image_url: string;
+    created_at: string;
+    updated_at: string;
+  }>;
+  tariffs: ITarif;
+  // Eski API formati uchun qo'shimcha maydonlar (qiymatlar bo'lmasa ham xato bermasligi uchun)
+  telegram_link?: string;
+  instagram_link?: string;
+  min_price?: string;
+  max_price?: string;
+  admin_id?: string;
+  tarif_count?: string;
+  images?: string[];
   prices?: Array<{
     title: string;
     amount: number;
@@ -28,13 +45,12 @@ export interface IToyxonalar extends IWithId {
   }>;
 }
 
-export interface IToyxona extends IWithId {
-  name: string;
-  image: string;
-  description: string;
-  min_price: string;
-  max_price: string;
-  address: string;
+export interface ITarif {
+    id: number;
+    name: string;
+    wedding_hall_id: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface Banner extends IWithId {
@@ -51,18 +67,18 @@ export interface IUser extends IWithId {
 }
 
 export type AuthType = "register" | "login" | "forgot_password";
-export type ComponentType= "tarif" | "changeLanguage" | "editProfile" | "cancel" | "notification" | "about";
+export type ComponentType =
+  "tarif"
+  | "changeLanguage"
+  | "showTariff"
+  | "editProfile"
+  | "register"
+  | "cancel"
+  | "notification"
+  | "about"
+  | "myVenues"
+  | "admins"
+  | "discounts"
+  | "addLocation"
+  | "selectLocation";
 
-export interface ITarif {
-  id: string;
-  toyxona_id: string;
-  people_count: string;
-  total_price: string;
-  foods: Array<{
-    name: string;
-    image: string;
-    price: string;
-    category: string;
-  }>;
-  created_at: string;
-}

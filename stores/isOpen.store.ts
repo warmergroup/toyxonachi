@@ -1,11 +1,11 @@
 import {defineStore} from "pinia";
-import type {ComponentType, IToyxona} from "~/interfaces";
+import type {ComponentType, IToyxonalar} from "~/interfaces";
 
 export const openState = defineStore("openDrawer", {
   state: () => ({
     isOpen: false,
     componentType: null as ComponentType | null,
-    toyxonalar: [] as IToyxona[],
+    toyxonalar: [] as IToyxonalar[],
   }),
   actions: {
     onOpen(type: ComponentType) {

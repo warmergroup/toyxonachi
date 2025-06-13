@@ -28,6 +28,7 @@
   },
   "venue": {
     "title": "Банкетные залы",
+    "tariffs": "Тарифы",
     "description": "Описание",
     "pricing": "Цены",
     "contact": "Контакты",
@@ -35,11 +36,13 @@
     "notFound": "Банкетные залы не найдены",
     "peopleCount": "на человека",
     "location": "Расположение",
-    "goDirection": "Построить маршрут"
+    "goDirection": "Построить маршрут",
+    "discount": "Скидки"
   },
   "profile": {
     "profile": "Профиль",
     "login": "Вход",
+    "logout": "Выход",
     "register": "Регистрация",
     "registerPrompt": "Зарегистрируйтесь, чтобы получить доступ ко всем функциям приложения",
     "email": "Email",
@@ -51,6 +54,7 @@
     "noAccount": "У вас нет аккаунта?",
     "passwordsDoNotMatch": "Пароли не совпадают",
     "loginError": "Ошибка входа",
-    "registerError": "Ошибка регистрации"
+    "registerError": "Ошибка регистрации",
+    "myVenues": "Мои банкетные залы"
   }
 } 

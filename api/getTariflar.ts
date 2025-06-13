@@ -1,24 +1,17 @@
 import {useQuery} from '@tanstack/vue-query'
 import $axios from '~/http'
 
-export const useGetTariflarQuery = (toyxonaId: string) => {
-  console.log("Toyxona ID: ", toyxonaId);
+export const useGetTariflarQuery = (wedding_hall_id: string) => {
   return useQuery({
-    queryKey: ['get-tariflar', toyxonaId],
+    queryKey: ['get-tariflar', wedding_hall_id],
     queryFn: async () => {
       try {
-        const { data } = await $axios.get('toyxonalar_tariflar/all', {
-          params: {
-            filter: toyxonaId,
-            field: 'toyxona_id',
-            start: 0,
-          },
-        });
-        console.log("Tariflar data: ", data);
+        const {data} = await $axios.get(`tariffs/${wedding_hall_id}`);
+        // console.log("Tariflar data: ", data);
 
         // Tariflarni to'g'ri qaytarish
         if (data.status && Array.isArray(data.data)) {
-          console.log("Barcha tariflar: ", data);
+          // console.log("Barcha tariflar: ", data);
           return data.data; // `data.data` massivni qaytaradi
         }
 

@@ -28,6 +28,7 @@
   },
   "venue": {
     "title": "Venues",
+    "tariffs":"Tariffs",
     "description": "Description",
     "pricing": "Pricing",
     "contact": "Contact",
@@ -35,11 +36,13 @@
     "notFound": "No venues found",
     "peopleCount": "for peoples",
     "location": "Location",
-    "goDirection": "Get directions"
+    "goDirection": "Get directions",
+    "discount": "Discounts"
   },
   "profile": {
     "profile": "Profile",
     "login": "Login",
+    "logout": "Logout",
     "register": "Register",
     "registerPrompt": "Register to access all app features",
     "email": "Email",
@@ -51,6 +54,7 @@
     "noAccount": "Don't have an account?",
     "passwordsDoNotMatch": "Passwords do not match",
     "loginError": "Login error",
-    "registerError": "Registration error"
+    "registerError": "Registration error",
+    "myVenues": "My Venues"
   }
 } 
