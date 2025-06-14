@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { IUser } from '~/interfaces';
+import type { IUser, Role } from '~/interfaces';
 
 interface RegisterData {
     name: string;
@@ -17,6 +17,24 @@ export const useAuthStore = defineStore('authStore', {
         isAuth: false,
         isLoading: false,
     }),
+    getters: {
+        // Foydalanuvchi rolini tekshirish
+        hasRole: (state) => (role: Role) => {
+            return state.user?.role === role;
+        },
+        // Admin ekanligini tekshirish
+        isAdmin(): boolean {
+            return this.hasRole('admin');
+        },
+        // Super admin ekanligini tekshirish
+        isSuperAdmin(): boolean {
+            return this.hasRole('super_admin');
+        },
+        // Oddiy foydalanuvchi ekanligini tekshirish
+        isUser(): boolean {
+            return this.hasRole('user');
+        }
+    },
     actions: {
         setUser(user: IUser | null) {
             this.user = user;

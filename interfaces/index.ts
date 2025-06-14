@@ -67,6 +67,7 @@ export interface IUser extends IWithId {
 }
 
 export type AuthType = "register" | "login" | "forgot_password";
+export type Role = "user" | "admin" | "super_admin";
 export type ComponentType =
   "tarif"
   | "changeLanguage"

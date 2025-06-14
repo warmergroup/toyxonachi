@@ -2,7 +2,7 @@
 import {useQuery} from '@tanstack/vue-query'
 import $axios from '~/http'
 
-export const getDisCounts = () => {
+export const getDiscounts = () => {
   return useQuery({
     queryKey: ['banners'],
     queryFn: async () => {
