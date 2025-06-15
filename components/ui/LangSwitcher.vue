@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
-import {useLanguage} from '~/hooks/useLanguage'
+
 import {useLanguageStore} from '~/stores/language'
 
 type Language = {
@@ -45,12 +44,12 @@ onUnmounted(() => {
     </button>
 
     <div
-v-if="isOpen"
-         class="absolute right-0 mt-2 w-36 rounded-lg bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800 py-1 z-50">
+      v-if="isOpen"
+      class="absolute right-0 mt-2 w-36 rounded-lg bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800 py-1 z-50">
       <button
-v-for="lang in languages" v-show="currentLang !== lang.code" :key="lang.code"
-              class="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
-              @click="handleLanguageChange(lang.code)">
+        v-for="lang in languages" v-show="currentLang !== lang.code" :key="lang.code"
+        class="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
+        @click="handleLanguageChange(lang.code)">
         <Icon :name="`custom:${lang.flag}`" class="w-5 h-5"/>
         <span>{{ lang.name }}</span>
       </button>

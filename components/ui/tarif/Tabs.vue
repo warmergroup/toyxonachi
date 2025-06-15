@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useGetTarifDetailQuery } from '~/api/getTarifDetail'
+import {computed, ref, watch} from 'vue'
+import {useGetTarifDetailQuery} from '~/api/tariffs'
 
 const props = defineProps<{ tarifId?: number | string }>()
 
 // Tarif detailni olish
-const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''));
+const {data: tarifDetail, isLoading, error} = useGetTarifDetailQuery(String(props.tarifId || ''));
 
 // Foydalanuvchiga ko'rsatiladigan label
 // console.log('TARIF TYPE DETAIL:', tarifDetail?.value.tariff_types)
@@ -36,7 +36,7 @@ const filteredCategories = computed(() =>
 // Har doim birinchi tur tanlansin
 watch(categories, (cats: any[]) => {
   if (cats.length) selectedType.value = types.find((t) => cats.some((c: any) => c.type === t)) || 'meals'
-}, { immediate: true })
+}, {immediate: true})
 </script>
 
 <template>
@@ -61,7 +61,8 @@ watch(categories, (cats: any[]) => {
 
       <!-- Asosiy filter tugmalari -->
       <div class="flex gap-3 lg:gap-1 overflow-auto whitespace-nowrap mb-2">
-        <button v-for="t in types" :key="t" class="px-3 md:px-2 py-2 md:py-1 rounded-md" :class="{
+        <button
+v-for="t in types" :key="t" class="px-3 md:px-2 py-2 md:py-1 rounded-md" :class="{
           'bg-[var(--primary-color)] text-white': selectedType === t,
           'bg-white text-gray-700': selectedType !== t
         }" @click="selectedType = t">
@@ -75,8 +76,9 @@ watch(categories, (cats: any[]) => {
           <h3 class="font-bold text-base my-2">{{ cat.name }}</h3>
           <div class="grid grid-cols-2 gap-3">
             <div v-for="prod in cat.products" :key="prod.id" class="rounded-xl bg-white p-2">
-              <NuxtImg :src="prod.image_url" :alt="prod.name"
-                class="rounded-lg w-full aspect-square object-cover mb-2" />
+              <NuxtImg
+:src="prod.image_url" :alt="prod.name"
+                       class="rounded-lg w-full aspect-square object-cover mb-2"/>
               <div class="font-medium text-base">{{ prod.name }}</div>
               <div class="text-muted text-sm">{{ prod.description }}</div>
             </div>

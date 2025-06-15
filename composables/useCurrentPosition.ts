@@ -1,4 +1,3 @@
-import {ref} from 'vue'
 import {useLocationStore} from '~/stores/location.store'
 
 const coords = ref<{ latitude: number; longitude: number } | null>(null)

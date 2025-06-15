@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import {ref} from 'vue';
-import {useLanguage} from '~/hooks/useLanguage';
 import {useLanguageStore} from '~/stores/language';
 import {openState} from '~/stores/isOpen.store';
 

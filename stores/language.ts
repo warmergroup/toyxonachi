@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 
 export const useLanguageStore = defineStore('language', {
   state: () => ({
-    lang: 'uz' // Default language is Uzbek
+    lang: 'uz'
   }),
   actions: {
     setLang(lang: string) {

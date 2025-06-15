@@ -1,7 +1,4 @@
 <script setup>
-import {useRoute} from 'vue-router';
-import {useI18n} from 'vue-i18n';
-import {useLocalePath} from '#i18n';
 import {openState} from '~/stores/isOpen.store';
 
 const {t} = useI18n();

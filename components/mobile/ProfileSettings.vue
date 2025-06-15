@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { openState } from '~/stores/isOpen.store';
-import { useScreenSize } from '~/hooks/useScreenSize';
+
 const { isLargeScreen } = useScreenSize();
 
 const { t } = useI18n();

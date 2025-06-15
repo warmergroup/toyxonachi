@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DialogContent, DialogTitle } from 'reka-ui';
-import { useScreenSize } from '~/hooks/useScreenSize';
+
 import { openState } from '~/stores/isOpen.store';
 import type { ComponentType } from '~/interfaces';
 

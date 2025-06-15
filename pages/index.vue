@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import { useInfiniteToyxonalarQuery } from '~/api/toyxonalar'
-import { useCurrentPosition } from '~/hooks/useCurrentPosition'
 import { useLocationStore } from '~/stores/location.store'
 import { useToyxonalarStore } from '~/stores/toyxonalar.store'
-import { useScreenSize } from '~/hooks/useScreenSize'
 import { getDiscounts } from "~/api/discounts"
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const router = useRouter()
-const { isLargeScreen } = useScreenSize()
 const toyxonalarStore = useToyxonalarStore()
-const { fetchNextPage, isFetchingNextPage, error: queryError } = useInfiniteToyxonalarQuery(12)
-const infiniteScrollTrigger = ref<null | HTMLElement>(null)
-const { getCurrentPosition } = useCurrentPosition()
 const locationStore = useLocationStore()
+const { fetchNextPage, isFetchingNextPage, error: queryError } = useInfiniteToyxonalarQuery(12)
 const { data: banners, isLoading: isBannersLoading } = getDiscounts()
+
+const infiniteScrollTrigger = ref<null | HTMLElement>(null)
 const toyxonalar = computed(() => toyxonalarStore.toyxonalar)
 const isLoading = computed(() => toyxonalarStore.isLoading)
 const error = computed(() => queryError.value || toyxonalarStore.error)
+const { isLargeScreen } = useScreenSize();
 
 const carouselItems = computed(() =>
   (banners.value as any[] || []).map(b => ({
@@ -37,6 +33,7 @@ function handleBannerClick(item: { wedding_hall_id?: string | number }) {
 
 
 onMounted(() => {
+  const { getCurrentPosition } = useCurrentPosition()
   getCurrentPosition()
 
   const observer = new IntersectionObserver((entries) => {

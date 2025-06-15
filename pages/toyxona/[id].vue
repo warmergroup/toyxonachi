@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import type { ITarif, IToyxonalar } from '~/interfaces';
-import { useScreenSize } from '~/hooks/useScreenSize';
 import { useLocationStore } from '~/stores/location.store';
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
 import { useGetTariflarQuery } from "~/api/tariffs";
-import { useRouter } from 'vue-router';
 import { getToyxonaById } from '~/api/toyxonalar';
 import type { UseQueryReturnType } from '@tanstack/vue-query';
 import { openState } from '~/stores/isOpen.store';
@@ -16,10 +12,10 @@ const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const { isLargeScreen } = useScreenSize();
+const locationStore = useLocationStore()
 const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
 const { data: tariflar } = useGetTariflarQuery(route.params.id as string) as UseQueryReturnType<ITarif, Error>;
 const error = ref<string | null>(null);
-const locationStore = useLocationStore()
 const selectedTarif = ref<any | null>(null);
 
 const goback = () => {

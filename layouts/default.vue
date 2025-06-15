@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useScreenSize } from '~/hooks/useScreenSize';
 
 const { isLargeScreen } = useScreenSize();
 

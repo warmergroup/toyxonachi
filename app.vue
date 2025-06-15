@@ -2,7 +2,6 @@
 import * as locales from '@nuxt/ui/locale'
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLanguage } from '~/hooks/useLanguage'
 
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()

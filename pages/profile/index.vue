@@ -1,5 +1,4 @@
 <script setup>
-import { useScreenSize } from '~/hooks/useScreenSize';
 import { openState } from '~/stores/isOpen.store';
 const { isLargeScreen } = useScreenSize();
 const { t } = useI18n();

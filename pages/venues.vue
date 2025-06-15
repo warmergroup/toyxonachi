@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import {useToyxonalarStore} from "~/stores/toyxonalar.store";
-import {useI18n} from 'vue-i18n';
-import {useScreenSize} from "~/hooks/useScreenSize";
 
 const {isLargeScreen} = useScreenSize()
 // const {isLoading, error} = useGetToyxonalarQuery(0, 10);
