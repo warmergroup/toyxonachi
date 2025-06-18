@@ -12,7 +12,6 @@ export const useGetMeQuery = () => {
         throw new Error('User data not found');
       }
       authStore.setUser(data);
-      console.log("getMe data: ", data)
       return data;
     }
   });

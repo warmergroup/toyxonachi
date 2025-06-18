@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useRegister } from '~/api';
+import { useRegister } from '~/data';
 import { useAuthStore } from '~/stores/auth.store';
 import { useRegisterValidation } from '~/composables/useFormValidation';
 import { openState } from '~/stores/isOpen.store'

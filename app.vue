@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import * as locales from '@nuxt/ui/locale'
-import { useGetMeQuery } from '~/api/auth';
+import { useGetMeQuery } from '~/data/auth';
 
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()

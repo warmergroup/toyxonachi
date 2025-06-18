@@ -2,8 +2,8 @@
 import type { ITarif, IToyxonalar } from '~/interfaces';
 import { useLocationStore } from '~/stores/location.store';
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
-import { useGetTariflarQuery } from "~/api/tariffs";
-import { getToyxonaById } from '~/api/toyxonalar';
+import { useGetTariflarQuery } from "~/data/tariffs";
+import { getToyxonaById } from '~/data/toyxonalar';
 import type { UseQueryReturnType } from '@tanstack/vue-query';
 import { openState } from '~/stores/isOpen.store';
 

@@ -15,9 +15,8 @@ export const useRegister = () => {
 
   return useMutation({
     mutationKey: ['register'],    mutationFn: async (formData: RegisterFormData) => {
-      console.log('Sending registration request:', formData);      try {
+      try {
         const response = await $axios.post<IRegisterResponse>('register', formData);
-        console.log('Registration response:', response.data);
         return response.data;
       } catch (error: any) {
         console.error('Registration error:', error.response || error);
