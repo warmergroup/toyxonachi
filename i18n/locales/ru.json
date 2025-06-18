@@ -55,6 +55,27 @@
     "passwordsDoNotMatch": "Пароли не совпадают",
     "loginError": "Ошибка входа",
     "registerError": "Ошибка регистрации",
-    "myVenues": "Мои банкетные залы"
+    "myVenues": "Мои банкетные залы",
+    "status": "Статус",
+    "role": "Роль",
+    "user": "Пользователь",
+    "admin": "Администратор",
+    "superAdmin": "Супер администратор"
+  },
+  "validation": {
+    "registerSuccess": "Регистрация прошла успешно",
+    "loginSuccess": "Вы успешно вошли в систему",
+    "registerError": "Ошибка регистрации",
+    "loginError": "Ошибка входа",
+    "nameRequired": "Имя обязательно",
+    "phoneRequired": "Телефон обязателен",
+    "phoneInvalid": "Неверный формат телефона"
+  },
+  "form": {
+    "nameField": "П.И.Б.",
+    "phoneField": "Телефон",
+    "saveButton": "Сохранить",
+    "cancelButton": "Отмена"
   }
+
 } 

@@ -55,6 +55,26 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "loginError": "Login error",
     "registerError": "Registration error",
-    "myVenues": "My Venues"
+    "myVenues": "My Venues",
+    "status": "Status",
+    "role": "Role",
+    "user": "User",
+    "admin": "Admin",
+    "superAdmin": "Super Admin"
+  },
+  "validation": {
+    "registerSuccess": "Registration successful",
+    "loginSuccess": "Login successful",
+    "registerError": "Registration error",
+    "loginError": "Login error",
+    "nameRequired": "Name is required",
+    "phoneRequired": "Phone number is required",
+    "phoneInvalid": "Invalid phone number format"
+  },
+  "form":{
+    "nameField": "Full Name",
+    "phoneField": "Phone Number",
+    "saveButton": "save",
+    "cancelButton": "cancel"
   }
 } 

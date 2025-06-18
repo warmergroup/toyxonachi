@@ -2,3 +2,4 @@
 export * from './toyxonalar'
 export * from './tariffs'
 export * from './discounts'
+export * from './auth'

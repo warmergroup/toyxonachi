@@ -1,12 +1,15 @@
 <script setup>
 import { openState } from '~/stores/isOpen.store';
+import { useAuthStore } from '~/stores/auth.store';
 const { isLargeScreen } = useScreenSize();
+const authStore = useAuthStore();
+const user = computed(() => authStore.user);
 const { t } = useI18n();
 const openComponent = openState();
-
 const onClose = () => {
     openComponent.onClose();
 }
+
 
 </script>
 <template>
@@ -17,8 +20,9 @@ const onClose = () => {
 
         <div class="w-full lg:w-1/3 px-4 flex flex-col justify-between gap-4">
             <div class="w-full flex flex-col gap-4">
-                <UiUserBox />
-                <UiRegisterPrompt />
+                <UiUserBox v-if="user" :name="user.name" :phone="user.phone" :status="user.status" :role="user.role"
+                    :avatar="user.avatar" />
+                <UiRegisterPrompt v-if="!user" />
                 <MobileProfileSettings />
             </div>
 

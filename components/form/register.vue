@@ -1,125 +1,103 @@
 <script lang="ts" setup>
-import {useAuthStore} from '~/stores/auth.store';
+import { useRegister } from '~/api';
+import { useAuthStore } from '~/stores/auth.store';
+import { useRegisterValidation } from '~/composables/useFormValidation';
+import { openState } from '~/stores/isOpen.store'
+import { vMaska } from 'maska/vue';
 
-const {t} = useI18n();
+const openComponent = openState()
+const { t } = useI18n();
+const toast = useToast();
 const authStore = useAuthStore();
-const router = useRouter();
 
-const form = ref({
+const phonePrefix = '+998';
+console.log("user by authStore: ", authStore.user)
+
+const state = reactive({
   name: '',
   phone: '',
 });
 
-const phonePrefix = '+998';
+const fullPhoneNumber = computed(() => phonePrefix + state.phone.replace(/\D/g, ''));
 
-const errors = ref({
-  name: '',
-  phone: ''
-});
+// Registratsiya mutatsiyasi
+const { mutate, isPending } = useRegister();
 
-// Telefon raqamini formatlab ko'rsatish
-const formattedPhone = computed(() => {
-  const phone = form.value.phone;
-  if (!phone) return '';
+// Forma yuborilganda
+const onSubmit = (event: SubmitEvent) => {
+  event.preventDefault();
+  console.log('Form submission started');
 
-  const parts = [];
-  let current = 0;
-
-  // Operator kodi (2 raqam)
-  if (phone.length > 0) {
-    parts.push(phone.slice(0, Math.min(2, phone.length)));
-    current = 2;
-  }
-
-  // O'rta raqamlar (3 raqam)
-  if (phone.length > 2) {
-    parts.push(phone.slice(current, Math.min(current + 3, phone.length)));
-    current += 3;
-  }
-
-  // Keyingi 2 raqam
-  if (phone.length > 5) {
-    parts.push(phone.slice(current, Math.min(current + 2, phone.length)));
-    current += 2;
-  }
-
-  // Oxirgi 2 raqam
-  if (phone.length > 7) {
-    parts.push(phone.slice(current));
-  }
-
-  return parts.join(' ');
-});
-
-const validateForm = () => {
-  let isValid = true;
-  errors.value.name = '';
-  errors.value.phone = '';
-
-  if (!form.value.name.trim()) {
-    errors.value.name = t('validation.nameRequired');
-    isValid = false;
-  }
-
-  if (!form.value.phone.trim()) {
-    errors.value.phone = t('validation.phoneRequired');
-    isValid = false;
-  } else if (!/^\d{9}$/.test(form.value.phone)) {
-    errors.value.phone = t('validation.phoneInvalid');
-    isValid = false;
-  }
-
-  return isValid;
-};
-
-const handleSubmit = async () => {
-  if (!validateForm()) return;
-
-  try {
-    await authStore.register({
-      name: form.value.name,
-      phone: phonePrefix + form.value.phone // Raqamni to'liq formatda yuborish
+  if (!state.name || !state.phone) {
+    toast.add({
+      title: t('error.validation'),
+      description: t('error.fillAllFields'),
+      color: 'error',
     });
-    router.push('/profile');
-  } catch (error) {
-    console.error('Registration error:', error);
+    return;
   }
-};
 
-const handlePhoneInput = (event: Event) => {
-  const input = event.target as HTMLInputElement;
-  // Faqat raqamlarni qoldirish
-  const numbers = input.value.replace(/\D/g, '');
-  form.value.phone = numbers.slice(0, 9); // Maximum 9 raqam
+  const formData = {
+    name: state.name.trim(),
+    phone: fullPhoneNumber.value,
+    status: 'active',
+    role: 1,
+  };
+
+  console.log('Submitting form data:', formData);
+
+  mutate(
+    {
+      name: state.name.trim(),
+      phone: fullPhoneNumber.value,
+      status: 'active',
+      role: 1,
+    },
+    {
+      onSuccess: (data) => {
+        // Auth store'ga user ma'lumotlarini saqlash
+        authStore.setUser(data.user);
+        toast.add({
+          title: t('success.registered'),
+          description: t('success.welcomeMessage', { name: state.name }),
+          color: 'success',
+        });
+        openComponent.onClose();
+      },
+      onError: (err: any) => {
+        toast.add({
+          title: t('error.title'),
+          description: err?.response?.data?.message || t('error.unknown'),
+          color: 'error',
+        });
+      },
+    }
+  );
 };
 </script>
 
 <template>
-  <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-    <!-- FIO -->
-    <div class="flex flex-col gap-2">
-      <label for="name" class="text-sm font-medium text-gray-700">{{ t('profile.name') }}</label>
-      <input
-id="name" v-model="form.name" type="text"
-             class="px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-             :placeholder="t('profile.namePlaceholder')">
-      <span v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</span>
-    </div>
+  <UForm @submit.prevent="onSubmit" :state="state" class="w-full flex flex-col gap-4">
+    <!-- Name Field -->
+    <UFormField class="w-full" :label="t('form.nameField')" name="name">
+      <UInput v-model="state.name" class="w-full" type="text" size="xl" :placeholder="t('form.nameField')"
+        color="secondary" :disabled="isPending" />
+    </UFormField>
 
-    <!-- Telefon raqami -->
-    <div class="flex flex-col gap-2">
-      <label for="phone" class="text-sm font-medium text-gray-700">{{ t('profile.phone') }}</label>
-      <div class="relative flex items-center">
-        <span class="absolute left-4 text-gray-500">{{ phonePrefix }}</span>
-        <input
-id="phone" type="tel" :value="formattedPhone" class="pl-16 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-               placeholder="88 990 41 51"
-               @input="handlePhoneInput">
+    <!-- Phone Field -->
+    <UFormField class="w-full" :label="t('form.phoneField')" name="phone">
+      <div class="relative bg-white border border-gray-300 rounded-lg">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+          {{ phonePrefix }}
+        </span>
+        <UInput v-model="state.phone" v-maska="'## ### ## ##'" class="pl-20 w-full" size="xl" type="text"
+          placeholder="90 123 45 67" color="secondary" :disabled="isPending" />
       </div>
-      <span v-if="errors.phone" class="text-red-500 text-sm">{{ errors.phone }}</span>
-    </div>
-
-    <!-- Submit button -->
-    <UiMainButton type="submit" :label="t('profile.register')" class="w-full mt-2"/>
-  </form>
+    </UFormField>
+    <!-- Submit Button -->
+    <button type="submit"
+      class="w-full bg-[var(--primary-color)] text-white rounded-lg py-3 text-lg font-semibold transition-colors duration-200">
+      {{ t('form.saveButton') }}
+    </button>
+  </UForm>
 </template>

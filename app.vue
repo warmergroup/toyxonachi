@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import * as locales from '@nuxt/ui/locale'
-import { computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useGetMeQuery } from '~/api/auth';
 
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
@@ -11,10 +10,17 @@ const dir = computed(() => locales[locale.value].dir)
 
 onMounted(() => {
   const savedLang = localStorage.getItem('selectedLang')
+  const token = localStorage.getItem('token')
+
   if (savedLang && savedLang !== locale.value) {
     changeLanguage(savedLang as 'uz' | 'ru' | 'en')
   }
 
+  // Agar token mavjud bo'lsa, foydalanuvchi ma'lumotlarini olamiz
+  if (token) {
+    const { refetch } = useGetMeQuery()
+    refetch()
+  }
 })
 
 useHead({
@@ -28,7 +34,7 @@ useHead({
 <template>
   <div class="h-full w-full bg-[var(--background-color)]">
     <UApp :locale="locales[locale]">
-      <div class="container mx-auto w-full min-h-[100vh] " data-vaul-drawer-wrapper>
+      <div class="container mx-auto w-full min-h-[100vh]" data-vaul-drawer-wrapper>
         <NuxtLayout>
           <NuxtPage />
         </NuxtLayout>

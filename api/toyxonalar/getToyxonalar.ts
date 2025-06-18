@@ -1,8 +1,6 @@
 import {useQuery} from '@tanstack/vue-query';
 import $axios from "~/http";
 
-import {useToyxonalarStore} from "~/stores/toyxonalar.store";
-
 export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number) => {
   const toyxonalarStore = useToyxonalarStore();
   return useQuery({

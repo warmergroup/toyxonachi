@@ -56,11 +56,27 @@
     "passwordsDoNotMatch": "Parollar mos kelmadi",
     "loginError": "Kirishda xatolik yuz berdi",
     "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi",
-    "myVenues": "Mening to'yxonalarim"
+    "myVenues": "Mening to'yxonalarim",
+    "status": "Holat",
+    "role": "Rol",
+    "user": "Foydalanuvchi",
+    "admin": "Admin",
+    "superAdmin": "Super Admin"
   },
   "validation": {
+    "registerSuccess": "Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi",
+    "loginSuccess": "Kirish muvaffaqiyatli amalga oshirildi",
+    "registerError": "Ro'yxatdan o'tishda xatolik",
+    "loginError": "Kirishda xatolik",
     "nameRequired": "Ism kiritish majburiy",
     "phoneRequired": "Telefon raqami kiritish majburiy",
     "phoneInvalid": "Telefon raqami noto'g'ri formatda"
+  },
+  "form":{
+    "nameField": "F.I.SH",
+    "phoneField": "Telefon raqami",
+    "saveButton": "Saqlash",
+    "cancelButton": "Bekor qilish",
+    "submitting": "Yuborilmoqda..."    
   }
 }

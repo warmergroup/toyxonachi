@@ -1,9 +1,9 @@
-import { useGetToyxonalarQuery } from './getToyxonalar';
-import {useInfiniteToyxonalarQuery} from './getInfiniteToyxonalar';
-import { getToyxonaById } from './getToyxonaById';
+import {useGetToyxonalarQuery} from '~/api/toyxonalar/getToyxonalar';
+import {useInfiniteToyxonalarQuery} from '~/api/toyxonalar/getInfiniteToyxonalar';
+import {getToyxonaById} from '~/api/toyxonalar/getToyxonaById';
 
 export {
-    useGetToyxonalarQuery,
-    useInfiniteToyxonalarQuery,
-    getToyxonaById
+  useGetToyxonalarQuery,
+  useInfiniteToyxonalarQuery,
+  getToyxonaById
 };

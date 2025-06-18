@@ -1,5 +1,5 @@
 export interface IWithId {
-  id: string | number;
+  id: string;
 }
 
 export interface IToyxonalar extends IWithId {
@@ -59,13 +59,6 @@ export interface Banner extends IWithId {
   created_at: string;
 }
 
-export interface IUser extends IWithId {
-  name: string;
-  phone: string;
-  role: string;
-  status: string;
-}
-
 export type AuthType = "register" | "login" | "forgot_password";
 export type Role = "user" | "admin" | "super_admin";
 export type ComponentType =
@@ -82,4 +75,38 @@ export type ComponentType =
   | "discounts"
   | "addLocation"
   | "selectLocation";
+
+export interface IRoleInfo {
+  id: number;
+  name: string;
+  guard_name: string;
+  created_at: string;
+  updated_at: string;
+  pivot?: {
+    model_type: string;
+    model_id: string;
+    role_id: string;
+  };
+}
+
+export interface IUser {
+  id: string;
+  name: string;
+  phone: string;
+  status: string;
+  avatar?: string;
+  role: Role;
+  roles?: IRoleInfo[];
+}
+
+export interface IRegisterResponse {
+  user: IUser;
+  token: string;
+  role: Role;
+}
+
+export interface ILoginResponse {
+  user: IUser;
+  token: string;
+}
 
