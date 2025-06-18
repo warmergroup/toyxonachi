@@ -77,6 +77,28 @@
     "phoneField": "Telefon raqami",
     "saveButton": "Saqlash",
     "cancelButton": "Bekor qilish",
-    "submitting": "Yuborilmoqda..."    
+    "submitting": "Yuborilmoqda..." 
+  },
+  "login": {
+    "loginTitle": "Kirish",
+    "toastMessage": "Kirish muvaffaqiyatli amalga oshirildi",
+    "loginPending": "Kirish jarayoni davom etmoqda...",
+    "loginButton": "Kirish",
+    "loginError": "Kirishda xatolik. Iltimos, qayta urinib ko'ring."
+  },
+  "register": {
+    "registerTitle": "Ro'yxatdan o'tish",
+    "toastMessage": "Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi",
+    "registerPending": "Ro'yxatdan o'tish jarayoni davom etmoqda...",
+    "registerButton": "Ro'yxatdan o'tish",
+    "registerError": "Ro'yxatdan o'tishda xatolik. Iltimos, qayta urinib ko'ring.",
+    "alreadyHaveAccount": "Allaqachon akkauntingiz bormi? Kirish"
+  },
+  "logout": {
+    "logoutTitle": "Chiqish",
+    "toastMessage": "Siz tizimdan chiqdingiz",
+    "logoutPending": "Chiqish jarayoni davom etmoqda...",
+    "logoutButton": "Chiqish",
+    "logoutError": "Chiqishda xatolik. Iltimos, qayta urinib ko'ring."
   }
 }

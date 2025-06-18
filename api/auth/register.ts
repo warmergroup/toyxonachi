@@ -33,10 +33,8 @@ export const useRegister = () => {
           status: data.user.status,
           role: data.role,
         });
-        console.log('User registered successfully:', data.user);
         localStorage.setItem('token', data.token);
       } catch (error) {
-        console.error('Error processing registration response:', error);
         toast.add({
           title: 'Xatolik',
           description: 'Ro\'yxatdan o\'tishda xatolik yuz berdi',

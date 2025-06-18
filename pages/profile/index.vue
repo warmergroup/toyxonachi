@@ -22,7 +22,7 @@ const onClose = () => {
             <div class="w-full flex flex-col gap-4">
                 <UiUserBox v-if="user" :name="user.name" :phone="user.phone" :status="user.status" :role="user.role"
                     :avatar="user.avatar" />
-                <UiRegisterPrompt v-if="!user" />
+                <UiRegisterPrompt v-else />
                 <MobileProfileSettings />
             </div>
 
