@@ -1,34 +1,42 @@
 import { useMutation } from '@tanstack/vue-query';
 import $authApi from '~/http/authApi';
 
+interface LogoutResponse {
+    message: string;
+}
+
 export const useLogout = () => {
     const toast = useToast();
-    const {t} = useI18n();
+    const { t } = useI18n();
+    const authStore = useAuthStore();
+    const router = useRouter();
+
     return useMutation({
         mutationKey: ['logout'],
         mutationFn: async () => {
-            const { data } = await $authApi.post('logout');
+            const { data } = await $authApi.post<LogoutResponse>('users/logout');
             return data;
         },
         onSuccess: () => {
-            const authStore = useAuthStore();
-            authStore.setUser(null);
+            // Clear auth store
+            authStore.logout();
+            // Remove token from localStorage
             localStorage.removeItem('token');
+            
+            // Show success message
             toast.add({
-                title: 'Chiqish',
-                description: 'Siz tizimdan chiqdingiz',
-                color: 'warning',
-                icon: 'i-heroicons-check-circle-20-solid',
+                title: t('logout.title'),
+                description: t('logout.successMessage'),
+                color: 'success',
             });
+            
         },
-        onError: (error: Error) => {
+        onError: (error: unknown) => {
             console.error('Logout error:', error);
-            const toast = useToast();
             toast.add({
-                title: 'Xatolik',
-                description: error.message || 'Chiqishda xatolik yuz berdi',
+                title: t('logout.error'),
+                description: t('logout.logoutError'),
                 color: 'error',
-                icon: 'i-heroicons-x-mark-20-solid',
             });
         }
     });

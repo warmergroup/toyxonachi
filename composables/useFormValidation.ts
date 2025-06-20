@@ -1,67 +1,80 @@
 import { z } from 'zod';
 import type { FormError } from '#ui/types';
 
-// Validatsiya schemalari
-export const useSchemas = () => {
-  const { t } = useI18n();
-
-  const phoneSchema = z.string()
-    .min(1, t('validation.phoneRequired'))
-    .regex(/^[0-9]{9}$/, t('validation.phoneInvalid'));
-
-  return {
-    // Registratsiya: ism va telefon
-    register: z.object({
-      name: z.string().min(1, t('validation.nameRequired')),
-      phone: phoneSchema,
-    }),
-    
-    // Login: faqat telefon
-    login: z.object({
-      phone: phoneSchema,
-    }),
-  };
+/**
+ * Create phone validation schema
+ */
+const createPhoneSchema = (t: ReturnType<typeof useI18n>['t']) => {
+    return z.string()
+        .min(1, t('validation.phoneRequired'))
+        .transform((value) => value.replace(/\D/g, ''))  // Raqam bo'lmagan belgilarni olib tashlash
+        .refine(
+            (value) => value.length === 9,
+            t('validation.phoneInvalid')
+        );
 };
 
-// Zod xatolarini UForm xatolariga o'girish
-const zodErrorsToFormErrors = (error: z.ZodError): FormError[] => {
-  return error.errors.map(err => ({
-    path: err.path.join('.'),
-    message: err.message,
-  }));
+/**
+ * Create login form schema
+ */
+const createLoginSchema = (t: ReturnType<typeof useI18n>['t']) => {
+    return z.object({
+        phone: createPhoneSchema(t),
+    });
 };
 
-// Validatsiya funksiyasi
-const validate = <T extends z.ZodType>(schema: T) => {
-  return (state: z.infer<T>): FormError[] => {
-    const result = schema.safeParse(state);
-    return result.success ? [] : zodErrorsToFormErrors(result.error);
-  };
+/**
+ * Create register form schema
+ */
+const createRegisterSchema = (t: ReturnType<typeof useI18n>['t']) => {
+    return z.object({
+        name: z.string()
+            .min(1, t('validation.nameRequired'))
+            .transform((value) => value.trim()),
+        phone: createPhoneSchema(t),
+    });
 };
 
-// Validatsiya hook'lari
-export const useRegisterValidation = () => {
-  const schemas = useSchemas();
-  return validate(schemas.register);
+/**
+ * Hook to get login schema
+ */
+export const useLoginSchema = () => {
+    const { t } = useI18n();
+    return createLoginSchema(t);
 };
 
-export const useLoginValidation = () => {
-  const schemas = useSchemas();
-  return validate(schemas.login);
+/**
+ * Hook to get register schema
+ */
+export const useRegisterSchema = () => {
+    const { t } = useI18n();
+    return createRegisterSchema(t);
 };
 
-// Backend xatolarini qayta ishlash
+/**
+ * Convert Zod errors to form errors
+ */
+export const zodErrorsToFormErrors = (error: z.ZodError): FormError[] => {
+    return error.errors.map(err => ({
+        path: err.path.join('.'),
+        message: err.message,
+    }));
+};
+
+/**
+ * Extract error message from various error types
+ */
 export const extractErrorMessage = (error: unknown): string => {
-  const { t } = useI18n();
-  
-  if (error instanceof z.ZodError) {
-    return error.errors[0].message;
-  }
-  
-  if (error && typeof error === 'object') {
-    const err = error as any;
-    return err.response?.data?.message || t('error.unknown');
-  }
-  
-  return t('error.unknown');
+    const { t } = useI18n();
+    
+    if (error instanceof z.ZodError) {
+        return error.errors[0].message;
+    }
+    
+    if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        return err.response?.data?.message || t('error.unknown');
+    }
+    
+    return t('error.unknown');
 };

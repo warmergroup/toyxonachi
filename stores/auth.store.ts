@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null as IUser | null,
         isAuth: false,
-        isLoading: true
+        isLoading: true as boolean,
     }),
 
     getters: {
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', {
             return this.hasRole('admin');
         },
         isSuperAdmin(): boolean {
-            return this.hasRole('super_admin');
+            return this.hasRole('superadmin');
         },
         isUser(): boolean {
             return this.hasRole('user');
@@ -28,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         setUser(user: IUser | null) {
             this.user = user;
+            this.isLoading = false;
         },
         setIsAuth(isAuth: boolean) {
             this.isAuth = isAuth;
@@ -47,7 +48,6 @@ export const useAuthStore = defineStore('auth', {
         logout() {
             this.user = null;
             this.isAuth = false;
-            removeToken();
         }
     }
 });

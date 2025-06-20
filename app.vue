@@ -8,19 +8,21 @@ const { changeLanguage } = useLanguage()
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
+onBeforeMount(() => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    const { refetch } = useGetMeQuery()
+    refetch()
+  }
+})
+
 onMounted(() => {
   const savedLang = localStorage.getItem('selectedLang')
-  const token = localStorage.getItem('token')
 
   if (savedLang && savedLang !== locale.value) {
     changeLanguage(savedLang as 'uz' | 'ru' | 'en')
   }
 
-  // Agar token mavjud bo'lsa, foydalanuvchi ma'lumotlarini olamiz
-  if (token) {
-    const { refetch } = useGetMeQuery()
-    refetch()
-  }
 })
 
 useHead({

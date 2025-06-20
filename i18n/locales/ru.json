@@ -56,11 +56,27 @@
     "loginError": "Ошибка входа",
     "registerError": "Ошибка регистрации",
     "myVenues": "Мои банкетные залы",
+    "allVenues": "Все банкетные залы",
     "status": "Статус",
     "role": "Роль",
     "user": "Пользователь",
     "admin": "Администратор",
-    "superAdmin": "Супер администратор"
+    "superAdmin": "Супер админ"
+  },
+  "admin": {
+    "myWeddingHalls": "Мои банкетные залы"
+  },
+  "profileActions": {
+    "myProfile": "Мой профиль",
+    "myVenues": "Мои банкетные залы",
+    "admins": "Администраторы",
+    "allVenues": "Все банкетные залы",
+    "discounts": "Скидки",
+    "editProfile": "Редактировать профиль",
+    "viewProfile": "Просмотреть профиль",
+    "changePassword": "Изменить пароль",
+    "deleteAccount": "Удалить аккаунт",
+    "accountSettings": "Настройки аккаунта"
   },
   "validation": {
     "registerSuccess": "Регистрация прошла успешно",
@@ -76,6 +92,29 @@
     "phoneField": "Телефон",
     "saveButton": "Сохранить",
     "cancelButton": "Отмена"
+  },
+  "login": {
+    "loginTitle": "Вход",
+    "successMessage": "Вы успешно вошли в систему",
+    "loginPending": "Процесс входа в систему...",
+    "loginButton": "Войти",
+    "loginError": "Ошибка входа. Пожалуйста, попробуйте еще раз.",
+    "noAccount": "Нет аккаунта?"
+  },
+  "register": {
+    "registerTitle": "Регистрация",
+    "successMessage": "Вы успешно зарегистрированы",
+    "registerPending": "Процесс регистрации...",
+    "registerButton": "Зарегистрироваться",
+    "registerError": "Ошибка регистрации. Пожалуйста, попробуйте еще раз.",
+    "alreadyHaveAccount": "Уже есть аккаунт?"
+  },
+  "logout": {
+    "logoutTitle": "Выход",
+    "successMessage": "Вы успешно вышли из системы",
+    "logoutPending": "Процесс выхода из системы...",
+    "logoutButton": "Выйти",
+    "logoutError": "Ошибка выхода. Пожалуйста, попробуйте еще раз."
   }
 
 } 

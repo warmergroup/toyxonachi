@@ -1,13 +1,13 @@
 import {defineStore} from "pinia";
 import type {AuthType} from "~/interfaces";
 
-export const useAuth = defineStore("authstate", {
+export const useAuthType = defineStore("authType", {
   state: () => ({
-    authState: "login" as AuthType,
+    authType: "login" as AuthType,
   }),
   actions: {
-    setAuth(authState: AuthType) {
-      this.authState = authState;
+    setAuthType(authType: AuthType) {
+      this.authType = authType;
     },
   },
 });

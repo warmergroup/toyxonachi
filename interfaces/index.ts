@@ -2,6 +2,14 @@ export interface IWithId {
   id: string;
 }
 
+export interface IProfileAction {
+  id: string;
+  label: string;
+  icon: string;
+  component: ComponentType; // string o'rniga ComponentType ishlatamiz
+  roles: string[];
+}
+
 export interface IToyxonalar extends IWithId {
   user_id: string;
   name: string;
@@ -60,19 +68,21 @@ export interface Banner extends IWithId {
 }
 
 export type AuthType = "register" | "login" | "forgot_password";
-export type Role = "user" | "admin" | "super_admin";
+export type Role = "user" | "admin" | "superadmin";
 export type ComponentType =
   "tarif"
   | "changeLanguage"
   | "showTariff"
   | "editProfile"
-  | "register"
+  | "auth"
   | "cancel"
   | "notification"
   | "about"
-  | "myVenues"
+  | "adminToyxonalar"
+  | "allVenues"
   | "admins"
   | "discounts"
+  | "superDiscounts"
   | "addLocation"
   | "selectLocation";
 

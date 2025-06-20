@@ -56,11 +56,27 @@
     "loginError": "Login error",
     "registerError": "Registration error",
     "myVenues": "My Venues",
+    "allVenues": "All Venues",
     "status": "Status",
     "role": "Role",
     "user": "User",
     "admin": "Admin",
     "superAdmin": "Super Admin"
+  },
+  "admin": {
+    "myWeddingHalls": "My Wedding Halls"
+  },
+  "profileActions": {
+    "myProfile": "My Profile",
+    "myVenues": "My Venues",
+    "admins": "Admins",
+    "allVenues": "All Venues",
+    "discounts": "Discounts",
+    "editProfile": "Edit Profile",
+    "viewProfile": "View Profile",
+    "changePassword": "Change Password",
+    "deleteAccount": "Delete Account",
+    "accountSettings": "Account Settings"
   },
   "validation": {
     "registerSuccess": "Registration successful",
@@ -76,5 +92,29 @@
     "phoneField": "Phone Number",
     "saveButton": "save",
     "cancelButton": "cancel"
+  },
+  "login": {
+    "loginTitle": "Login",
+    "successMessage": "Login successful",
+    "loginPending": "Login in progress...",
+    "loginWelcomeBack": "Welcome back",
+    "loginButton": "Login",
+    "loginError": "Login error. Please try again.",
+    "noAccount": "Don't have an account?"
+  },
+  "register": {
+    "registerTitle": "Register",
+    "successMessage": "Registration successful",
+    "registerPending": "Registration in progress...",
+    "registerButton": "Register",
+    "registerError": "Registration error. Please try again.",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "logout": {
+    "logoutTitle": "Logout",
+    "successMessage": "Logout successful",
+    "logoutPending": "Logging out...",
+    "logoutButton": "Logout",
+    "logoutError": "Logout error. Please try again."
   }
 } 

@@ -1,3 +1,4 @@
+import $authApi  from '~/http/authApi';
 import { useMutation } from '@tanstack/vue-query';
 import $axios from '~/http';
 import type { IRegisterResponse } from '~/interfaces';
@@ -9,18 +10,19 @@ interface RegisterFormData {
   role: number;
 }
 
-export const useRegister = () => {
+export const useUpdateProfile = (userId:string) => {
   return useMutation({
-    mutationKey: ['register'],
+    mutationKey: ['updateProfile'],
     mutationFn: async (formData: RegisterFormData) => {
       try {
-        const response = await $axios.post<IRegisterResponse>('register', formData);
+        const response = await $authApi.put<IRegisterResponse>(`users/update/${userId}`, formData);
         return response.data;
       } catch (error: any) {
         // API error handling
         const errorMessage = error.response?.data?.message || 'Registration failed';
+        console.error('Update Profile Error:', error);
         throw new Error(errorMessage);
       }
-    }
+    } 
   });
 };

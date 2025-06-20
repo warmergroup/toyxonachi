@@ -56,12 +56,27 @@
     "passwordsDoNotMatch": "Parollar mos kelmadi",
     "loginError": "Kirishda xatolik yuz berdi",
     "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi",
-    "myVenues": "Mening to'yxonalarim",
+    "allVenues": "Barcha to'yxonalar",
     "status": "Holat",
     "role": "Rol",
     "user": "Foydalanuvchi",
     "admin": "Admin",
     "superAdmin": "Super Admin"
+  },
+  "admin": {
+    "myWeddingHalls": "Mening to'yxonalarim",
+  },
+  "profileActions": {
+    "myProfile": "Mening profilim",
+    "myVenues": "Mening to'yxonalarim",
+    "admins": "Adminlar",
+    "allVenues": "Barcha to'yxonalar",
+    "discounts": "Chegirmalar",
+    "editProfile": "Profilni tahrirlash",
+    "viewProfile": "Profilni ko'rish",
+    "changePassword": "Parolni o'zgartirish",
+    "deleteAccount": "Hisobni o'chirish",
+    "accountSettings": "Hisob sozlamalari"
   },
   "validation": {
     "registerSuccess": "Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi",
@@ -81,10 +96,12 @@
   },
   "login": {
     "loginTitle": "Kirish",
-    "toastMessage": "Kirish muvaffaqiyatli amalga oshirildi",
     "loginPending": "Kirish jarayoni davom etmoqda...",
+    "successMessage": "Kirish muvaffaqiyatli amalga oshirildi",
+    "welcomeBack": "Xush kelibsiz",
     "loginButton": "Kirish",
-    "loginError": "Kirishda xatolik. Iltimos, qayta urinib ko'ring."
+    "loginError": "Kirishda xatolik. Iltimos, qayta urinib ko'ring.",
+    "noAccount": "Akkauntingiz yo'qmi?"
   },
   "register": {
     "registerTitle": "Ro'yxatdan o'tish",
@@ -92,11 +109,12 @@
     "registerPending": "Ro'yxatdan o'tish jarayoni davom etmoqda...",
     "registerButton": "Ro'yxatdan o'tish",
     "registerError": "Ro'yxatdan o'tishda xatolik. Iltimos, qayta urinib ko'ring.",
-    "alreadyHaveAccount": "Allaqachon akkauntingiz bormi? Kirish"
+    "alreadyHaveAccount": "Allaqachon akkauntingiz bormi?"
   },
   "logout": {
     "logoutTitle": "Chiqish",
-    "toastMessage": "Siz tizimdan chiqdingiz",
+    "confirmMessage": "Siz tizimdan chiqmoqchimisiz?",
+    "successMessage": "Siz tizimdan chiqdingiz",
     "logoutPending": "Chiqish jarayoni davom etmoqda...",
     "logoutButton": "Chiqish",
     "logoutError": "Chiqishda xatolik. Iltimos, qayta urinib ko'ring."

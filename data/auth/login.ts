@@ -10,8 +10,14 @@ export const useLogin = () => {
     return useMutation({
         mutationKey: ['login'],
         mutationFn: async (formData: LoginFormData) => {
-            const { data } = await $authApi.post<ILoginResponse>('login', formData);
-            return data;
+            try {
+                const { data } = await $authApi.post<ILoginResponse>('login', formData);
+                return data;
+            } catch (error: any) {
+                // API error handling
+                const errorMessage = error.response?.data?.message || 'Login failed';
+                throw new Error(errorMessage);
+            }
         }
     });
 };

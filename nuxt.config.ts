@@ -83,6 +83,9 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'uz',
     strategy: 'prefix',
-    detectBrowserLanguage: false
+    detectBrowserLanguage: false,
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
   },
 })

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import {openState} from "~/stores/isOpen.store";
+import { openState } from "~/stores/isOpen.store";
 
 const props = defineProps({
   title: {
     type: String,
-    required: true,
   },
   isOpen: {
     type: Boolean,
@@ -25,16 +24,19 @@ const onClose = () => {
 </script>
 
 <template>
-  <USlideover :open="isOpen" :title="title" :close="false" class="bg-[var(--secondary-background-color)]">
+  <USlideover :open="isOpen" :title="title" class="bg-[var(--secondary-background-color)]"
+    @close="closeSlieOver">
     <template #header>
       <div class="w-full flex items-center justify-between">
-        <Icon name="custom:back" size="16px" @click="onClose"/>
+        <div class="w-20 h-10 flex items-center justify-start ">
+          <Icon name="custom:back" size="16px" @click="onClose" />
+        </div>
         <h2 class="text-lg font-semibold">{{ title }}</h2>
-        <div/>
+        <div />
       </div>
     </template>
     <template #body>
-      <slot/>
+      <slot />
     </template>
   </USlideover>
 </template>
