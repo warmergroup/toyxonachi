@@ -15,6 +15,7 @@ export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number)
             limit: itemsPerpage
           }
         });
+        console.log("getToyxonalar response: ", data)
         // console.log("getToyxonalar data: ", data.data)
         if (data.status && data.data) {
           toyxonalarStore.setToyxonalar(data.data);

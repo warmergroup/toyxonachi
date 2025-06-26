@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { useInfiniteToyxonalarQuery } from '~/data/toyxonalar'
-import { useToyxonalarStore } from '~/stores/toyxonalar.store'
-import { getDiscounts } from "~/data/discounts"
-
+import { useInfiniteToyxonalarQuery } from '~/data'
+import { getDiscounts } from "~/data"
+useHead({
+  title: 'Toyxonachi — Eng yaxshi to‘yxonalar va banket zallari',
+  meta: [
+    { name: 'description', content: 'O‘zbekistondagi eng yaxshi to‘yxonalar, narxlar, joylashuv va chegirmalar. Toyxonachi bilan orzuingizdagi to‘yxonani toping!' },
+    { name: 'keywords', content: 'toyxona, banket zali, to‘yxonalar, narxlar, chegirma, uzbekistan, tashkent, Samarqand', },
+    { property: 'og:title', content: 'Toyxonachi — Eng yaxshi to‘yxonalar' },
+    { property: 'og:description', content: 'O‘zbekistondagi eng yaxshi to‘yxonalar va narxlar.' },
+    { property: 'og:image', content: '/logo-splash.svg' },
+    { property: 'og:url', content: 'https://toyxonachi.uz/' },
+    { name: 'twitter:card', content: 'summary_large_image' }
+  ]
+})
+const { isLargeScreen } = useScreenSize();
 const { t } = useI18n()
 const router = useRouter()
-const toyxonalarStore = useToyxonalarStore()
-const { fetchNextPage, isFetchingNextPage, error: queryError } = useInfiniteToyxonalarQuery(12)
+const { data: toyxonalarData, isLoading: toyxonaLoading, fetchNextPage, isFetchingNextPage, error } = useInfiniteToyxonalarQuery()
 const { data: banners, isLoading: isBannersLoading } = getDiscounts()
-
 const infiniteScrollTrigger = ref<null | HTMLElement>(null)
-const toyxonalar = computed(() => toyxonalarStore.toyxonalar)
-const isLoading = computed(() => toyxonalarStore.isLoading)
-const error = computed(() => queryError.value || toyxonalarStore.error)
-const { isLargeScreen } = useScreenSize();
+const toyxonalar = computed(() => (toyxonalarData.value?.pages || []).flat())
 
 const carouselItems = computed(() =>
   (banners.value as any[] || []).map(b => ({
@@ -54,32 +60,36 @@ onMounted(() => {
   <div class="pb-20">
     <LayoutsMobileTopbar v-if="!isLargeScreen" />
     <section class="space-y-3 bg-[var(--background-color)] px-5 pt-20">
+      <USkeleton v-if="isBannersLoading" class="w-full aspect-video lg:h-80 my-4 bg-gray-500" />
       <div v-if="carouselItems.length" class="container mx-auto lg:px-10">
         <UiCarousel :items="carouselItems" :rounded="true" :arrows="true" :is-loading="isBannersLoading"
           :on-item-click="handleBannerClick" />
       </div>
 
-      <h2 class="text-xl font-bold text-text-primary py-2">{{ t('common.venues') }}</h2>
+      <h2 v-if="!toyxonaLoading && toyxonalar && toyxonalar.length > 0"
+        class="text-xl font-bold text-text-primary py-2">{{ t('common.venues') }}</h2>
 
       <div v-if="error" class="text-center text-red-500">
         {{ error?.message || t('common.error') }}
       </div>
 
-      <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div v-if="toyxonaLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <UiCardPlaceholder v-for="n in 8" :key="`placeholder-${n}`" />
       </div>
 
-      <div v-if="toyxonalar && toyxonalar.length > 0 && !isLoading"
+      <div v-if="toyxonalar && toyxonalar.length > 0 && !toyxonaLoading"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <VenueCard v-for="toyxona in toyxonalar" :key="`wedding-${toyxona.id}`" :toyxona="toyxona" />
       </div>
 
-      <div v-else-if="!isLoading && (!toyxonalar || toyxonalar.length === 0)" class="text-center text-gray-500 py-10">
+      <div v-else-if="!toyxonaLoading && (!toyxonalar || toyxonalar.length === 0)"
+        class="text-center text-gray-500 py-10">
         {{ t('venue.notFound') }}
       </div>
 
-      <div ref="infiniteScrollTrigger" />
-      <USkeleton v-if="isFetchingNextPage" class="w-full h-20 my-4" />
+      <div ref="infiniteScrollTrigger">
+        <USkeleton v-if="isFetchingNextPage" class="w-full h-20 my-4" />
+      </div>
     </section>
   </div>
 </template>

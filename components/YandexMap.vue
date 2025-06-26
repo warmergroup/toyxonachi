@@ -1,7 +1,9 @@
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+
 const props = defineProps({
   center: {
-    type: Object,
+    type: Object as () => { lat: number; lng: number },
     required: true,
   },
   title: {
@@ -13,86 +15,92 @@ const props = defineProps({
 const config = useRuntimeConfig();
 const apiKey = config.public.yandexMapsApiKey;
 
-const error = ref(null);
+const mapContainer = ref<HTMLElement | null>(null);
+const error = ref<string | null>(null);
+let yandexMap: any = null;
 
-onMounted(() => {
-  if (typeof ymaps3 !== 'undefined') {
-    initMap();
-  } else {
-    const script = document.createElement('script');
-    script.src = `https://api-maps.yandex.ru/v3/?apikey=${apiKey}&lang=ru_RU`;
-    script.async = true;
-    script.defer = true;
-
-    script.onload = () => {
-      initMap();
-    };
-
-    script.onerror = () => {
-      error.value = 'Xarita yuklanmadi. Iltimos, API kalitni tekshiring.';
-    };
-
-    document.head.appendChild(script);
-  }
-});
-
-async function initMap() {
-  try {
-    await ymaps3.ready;
-
-    const {YMap, YMapDefaultSchemeLayer, YMapMarker, YMapDefaultFeaturesLayer} = ymaps3;
-
-    const mapElement = document.getElementById('yandex-map');
-    if (!mapElement) {
-      error.value = 'Xarita elementi topilmadi.';
+function loadYandexMapsScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (window.ymaps) {
+      resolve();
       return;
     }
+    if (document.getElementById('ymaps-script')) {
+      const check = setInterval(() => {
+        if (window.ymaps) {
+          clearInterval(check);
+          resolve();
+        }
+      }, 100);
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'ymaps-script';
+    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU`;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Yandex Maps API yuklanmadi'));
+    document.head.appendChild(script);
+  });
+}
 
-    const map = new YMap(mapElement, {
-      location: {
-        center: [props.center.lng, props.center.lat],
-        zoom: 15,
-      },
+const initializeMap = async () => {
+  if (!mapContainer.value) return;
+
+  try {
+    await loadYandexMapsScript();
+    await new Promise<void>((resolve) => {
+      window.ymaps.ready(() => resolve());
     });
 
-    map.addChild(new YMapDefaultSchemeLayer());
-    map.addChild(new YMapDefaultFeaturesLayer());
+    yandexMap = new window.ymaps.Map(mapContainer.value, {
+      center: [props.center.lat, props.center.lng],
+      zoom: 15,
+      controls: ['zoomControl', 'typeSelector'],
+    });
 
-    // 🔽 SVG marker element yaratish
-    const markerElement = document.createElement('div');
-    markerElement.innerHTML = `
-      <div style="transform: translate(-50%, -100%); width: 12px; height: 12px;" title="${props.title}">
-          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1a9.002 9.002 0 0 0-6.366 15.362c1.63 1.63 5.466 3.988 5.693 6.465.034.37.303.673.673.673.37 0 .64-.303.673-.673.227-2.477 4.06-4.831 5.689-6.46A9.002 9.002 0 0 0 12 1z" fill="#F43"></path><path d="M12 13.079a3.079 3.079 0 1 1 0-6.158 3.079 3.079 0 0 1 0 6.158z" fill="#fff"></path></svg>
-      </div>
-    `;
-
-    const marker = new YMapMarker(
+    const placemark = new window.ymaps.Placemark(
+      [props.center.lat, props.center.lng],
       {
-        coordinates: [props.center.lng, props.center.lat],
+        hintContent: props.title,
+        balloonContent: props.title,
       },
-      markerElement
+      {
+        preset: 'islands#greenDotIcon',
+        iconColor: '#22c55e',
+      }
     );
 
-    map.addChild(marker);
-  } catch (e) {
-    error.value = 'Xarita ishga tushmadi.';
-    console.error(e);
+    yandexMap.geoObjects.add(placemark);
+  } catch (err) {
+    console.error('Xarita ishga tushmadi', err);
+    error.value = 'Xarita yuklanmadi';
   }
-}
+};
+
+onMounted(() => {
+  setTimeout(() => {
+    initializeMap();
+  }, 300);
+});
+
+onUnmounted(() => {
+  if (yandexMap) yandexMap.destroy();
+});
 </script>
 
 <template>
-  <div>
-    <div v-if="error" class="text-red-500 border border-red-400 bg-red-50 p-2 rounded">
-      {{ error }}
+  <div class="w-full max-w-md mx-auto">
+    <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+      <div ref="mapContainer" class="relative w-full h-72 bg-gray-100 flex items-center justify-center">
+        <div v-if="error" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10 text-red-600">
+          {{ error }}
+        </div>
+      </div>
+      <div class="p-5 bg-white">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-2 text-left">{{ title }}</h2>
+        <p class="text-sm text-gray-500">Joylashuv marker ko‘rinishida belgilangan.</p>
+      </div>
     </div>
-    <div v-else id="yandex-map" class="w-full aspect-square"/>
   </div>
 </template>
-
-<style>
-#yandex-map {
-  width: 100%;
-  height: 100%;
-}
-</style>

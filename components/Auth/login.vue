@@ -6,7 +6,6 @@ import { vMaska } from 'maska/vue';
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
 
-const validateEvents: FormInputEvent[] = ['submit'];
 
 const authType = useAuthType();
 const openComponent = openState();
@@ -74,6 +73,7 @@ const { mutate, isPending } = useLogin();
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     const formData = {
         phone: phoneCode + event.data.phone.replace(/\D/g, ''),
+        
     };
 
     mutate(formData, {
@@ -94,7 +94,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 <template>
     <div>
         <h2 class="text-3xl font-bold mb-4">{{ t('login.loginTitle') }}</h2>
-        <UForm :schema="schema" :state="state" class="w-full flex flex-col gap-4" :validate-on="['submit']"
+        <UForm :schema="schema" :state="state" class="w-full flex flex-col gap-4" 
             @submit="onSubmit">
             <!-- Phone Field -->
             <UFormField class="w-full" :label="t('form.phoneField')" name="phone">

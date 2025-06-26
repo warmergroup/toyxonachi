@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { openState } from '~/stores/isOpen.store';
 import { PROFILE_ACTIONS } from '~/constants/profileActions';
-import type { IProfileAction, ComponentType } from '~/interfaces';
 
 const { isLargeScreen } = useScreenSize();
-console.log('isLargeScreen:', isLargeScreen.value); // Add this line to debug
 const { t } = useI18n();
 const openComponent = openState();
 
-// Define valid user roles
 type UserRole = 'user' | 'admin' | 'superadmin' | undefined;
 
 const props = defineProps<{

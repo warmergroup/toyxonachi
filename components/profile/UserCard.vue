@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { openState } from '~/stores/isOpen.store';
 
+const { formatPhone } = useFormat();
 const openComponent = openState();
 const { t } = useI18n();
 interface Props {
@@ -22,7 +23,7 @@ const roleText = computed(() => {
     case 'admin':
       return t('profile.admin');
     case 'superadmin':
-      return t('profile.superAdmin');
+      return t('profile.superadmin');
     default:
       return t('profile.user');
   }
@@ -47,7 +48,7 @@ const image = computed(() => {
       <div class="relative w-16 md:w-20 lg:w-24 h-16 md:h-20 lg:h-24 flex items-center justify-center rounded-full">
         <NuxtImg v-if="image" :src="image" loading="lazy" alt="User Avatar"
           class="w-full rounded-full aspect-square object-cover" />
-        <NuxtImg v-else src="/avatar.jpg" />
+        <NuxtImg v-else src="/avatar.jpg" alt="user avatar" class="w-full rounded-full aspect-square object-cover" />
         <div @click=""
           class="absolute right-0 bottom-0 z-10 w-6 h-6 flex items-center justify-center overflow-hidden bg-gray-200 border border-gray-400 rounded-full">
           <div class="flex items-center p-1 justify-center w-full">
@@ -56,8 +57,8 @@ const image = computed(() => {
         </div>
       </div>
       <div class="flex flex-col gap-1.5">
-        <h2 class="text-lg font-semibold">{{ name }}</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400">{{ phone }}</p>
+        <h2 class="text-lg font-semibold capitalize">{{ name }}</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400">+{{ formatPhone(phone) }}</p>
         <span class="bg-[var(--success-color)] py-1.5 px-3 rounded-full text-white text-sm">
           {{ t('profile.role') }} : {{ roleText }}
         </span>

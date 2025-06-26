@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { IToyxonalar } from "~/interfaces";
-import { useI18n } from "vue-i18n";
 import { useLocationStore } from '~/stores/location.store'
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
-import { useLocalePath } from "#i18n";
-import { useRouter } from 'vue-router';
 
 const props = defineProps<{ toyxona: IToyxonalar }>();
 const { t } = useI18n();

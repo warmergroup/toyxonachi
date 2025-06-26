@@ -37,7 +37,25 @@
     "peopleCount": "на человека",
     "location": "Расположение",
     "goDirection": "Построить маршрут",
-    "discount": "Скидки"
+    "discounts": "Скидки"
+  },
+  "toyxonaStatus":{
+    "all": "Все",
+    "new": "Новый",
+    "active": "Активный",
+    "review": "На рассмотрении",
+    "rejected": "Отклонено",
+    "moderation": "Модерация",
+    "arxiv": "Архив",
+    "inactive": "Не активировано",
+    "notModerated": "Не модерируется"
+  },
+  "users": {
+    "all": "Все",
+    "user": "Пользователь",
+    "users": "Пользователи",
+    "admin": "Админ",
+    "superadmin": "Суперадмин"
   },
   "profile": {
     "profile": "Профиль",
@@ -60,23 +78,31 @@
     "status": "Статус",
     "role": "Роль",
     "user": "Пользователь",
-    "admin": "Администратор",
-    "superAdmin": "Супер админ"
+    "admin": "Админ",
+    "superadmin": "Суперадмин"
   },
   "admin": {
-    "myWeddingHalls": "Мои банкетные залы"
+    "myWeddingHalls": "Мои банкетные залы",
+    "tarifCount": "количество тарифов",
+    "minPrice" : "минимальная цена",
+    "maxPrice" : "максимальная цена"
+  },
+  "superadmin": {
+    "allWeddingHalls": "Все банкетные залы",
+    "allUsers": "Все пользователи"
   },
   "profileActions": {
     "myProfile": "Мой профиль",
     "myVenues": "Мои банкетные залы",
-    "admins": "Администраторы",
+    "adminList": "Администраторы",
     "allVenues": "Все банкетные залы",
     "discounts": "Скидки",
     "editProfile": "Редактировать профиль",
     "viewProfile": "Просмотреть профиль",
     "changePassword": "Изменить пароль",
     "deleteAccount": "Удалить аккаунт",
-    "accountSettings": "Настройки аккаунта"
+    "accountSettings": "Настройки аккаунта",
+    "addAdmin": "Добавить администратора"
   },
   "validation": {
     "registerSuccess": "Регистрация прошла успешно",
@@ -90,6 +116,7 @@
   "form": {
     "nameField": "П.И.Б.",
     "phoneField": "Телефон",
+    "roleField": "Роль",
     "saveButton": "Сохранить",
     "cancelButton": "Отмена"
   },
@@ -115,6 +142,41 @@
     "logoutPending": "Процесс выхода из системы...",
     "logoutButton": "Выйти",
     "logoutError": "Ошибка выхода. Пожалуйста, попробуйте еще раз."
+  },
+  "error": {
+    "title": "Произошла ошибка",
+    "message": "Пожалуйста, попробуйте еще раз",
+    "notFound": "Страница не найдена",
+    "serverError": "Ошибка сервера",
+    "unauthorized": "Неавторизованный доступ",
+    "forbidden": "Доступ запрещен",
+    "badRequest": "Неверный запрос",
+    "networkError": "Ошибка сети",
+    "unknownError": "Неизвестная ошибка",
+    "retry": "Повторить попытку",
+    "goBack": "Вернуться назад",
+    "userNotFound": "Пользователь не найден",
+    "userAlreadyExists": "Пользователь уже существует",
+    "venueNotFound": "Банкетный зал не найден", 
+    "venueAlreadyExists": "Банкетный зал уже существует",
+    "venueCreationError": "Ошибка создания банкетного зала",
+    "venueUpdateError": "Ошибка обновления банкетного зала",
+    "venueDeletionError": "Ошибка удаления банкетного зала",
+    "venueListError": "Ошибка получения списка банкетных залов"
+  },
+  "modal": {
+    "archiveOrDelete": "Вы уверены, что хотите удалить или архивировать банкетный зал?",
+    "activeOrDelete": "Вы уверены, что хотите активировать или удалить банкетный зал?"
+  },
+  "toyxonaForm":{
+    "nameField": "Название",
+    "descriptionField": "Описание",
+    "addressField": "Адрес",
+    "tariffsField": "Количество тарифов",
+    "phone1Field": "Номер телефона",
+    "phone2Field": "Дополнительный номер",
+    "telegramField": "Telegram",
+    "instagramField": "Instagram",
+    "weddingHallPictures": "Расположение банкетного зала"
   }
-
-} 
+}

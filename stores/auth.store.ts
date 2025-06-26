@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import type { IUser, Role } from '~/interfaces';
-import { setToken, removeToken } from '~/utils/auth';
+import { setToken } from '~/utils/auth';
 
 
 export const useAuthStore = defineStore('auth', {

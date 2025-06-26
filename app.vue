@@ -29,7 +29,21 @@ useHead({
   htmlAttrs: {
     lang,
     dir
-  }
+  },
+  link: [
+    { rel: 'icon', type: 'image/png', href: '/logo-splash.svg' }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Toyxonachi",
+        "url": "https://toyxonachi.uz/"
+      })
+    }
+  ]
 })
 </script>
 

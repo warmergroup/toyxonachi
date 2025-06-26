@@ -1,5 +1,3 @@
 import { getDiscounts } from './getDiscounts';
 
-export {
-    getDiscounts
-};
+export { getDiscounts };

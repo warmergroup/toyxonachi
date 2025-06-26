@@ -157,7 +157,7 @@ const openTarifSlide = (tarif: any) => {
         <div class="bg-white lg:rounded-lg shadow-sm p-4">
           <h2 class="text-xl font-bold text-text-primary mb-4 capitalize ">{{ t('venue.location') }}</h2>
           <div class="bg-gray-100 rounded-lg overflow-hidden mb-4">
-            <YandexMap :center="{ lat: toyxona.latitude, lng: toyxona.longitude }" :title="toyxona.name"
+            <YandexMap :center="{ lat: Number(toyxona.latitude), lng: Number(toyxona.longitude) }" :title="toyxona.name"
               class="w-full h-48" />
             <!-- {{ toyxona.latitude }}, {{ toyxona.longitude }} -->
           </div>

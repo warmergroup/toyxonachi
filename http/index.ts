@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = 'https://toyxonachi.uz'
+export const API_URL = 'http://api.toyxonachi.uz'
 
 const $axios = axios.create({
     baseURL: `${API_URL}/api`,

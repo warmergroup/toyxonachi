@@ -23,13 +23,6 @@ export const PROFILE_ACTIONS: IProfileAction[] = [  // Har qanday holatda ko'rin
     component: 'adminToyxonalar',
     roles: ['admin']
   },
-  {
-    id: 'discounts',
-    label: 'venue.discount',
-    icon: 'discount',
-    component: 'discounts',
-    roles: ['admin']
-  },
   // Superadmin uchun maxsus actionlar
   {
     id: 'allVenues',
@@ -40,16 +33,18 @@ export const PROFILE_ACTIONS: IProfileAction[] = [  // Har qanday holatda ko'rin
   },
   {
     id: 'admins',
-    label: 'profileActions.admins',
+    label: 'profileActions.adminList',
     icon: 'person',
     component: 'admins',
     roles: ['superadmin']
   },
+
+  // ham superadmin, ham admin uchun ko'rinadigan actionlar
   {
-    id: 'superDiscounts',
-    label: 'venue.discount',
-    icon: 'discount',
-    component: 'superDiscounts',
-    roles: ['superadmin']
-  }
+    id: 'discounts',
+    label: 'venue.discounts',
+    icon: 'discounts',
+    component: 'discounts',
+    roles: ['admin', 'superadmin']
+  },
 ];

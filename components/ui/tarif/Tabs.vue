@@ -4,11 +4,7 @@ import { useGetTarifDetailQuery } from '~/data/tariffs'
 
 const props = defineProps<{ tarifId?: number | string }>()
 
-// Tarif detailni olish
 const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''));
-
-// Foydalanuvchiga ko'rsatiladigan label
-// console.log('TARIF TYPE DETAIL:', tarifDetail?.value.tariff_types)
 
 // Faqat kerakli turlar
 const types = ['meals', 'salads', 'wedding_table', 'bonuses'] as const;
@@ -20,23 +16,25 @@ const menuLabels: Record<TypeKey, string> = {
   bonuses: 'Bonuslar'
 };
 
-// Kategoriyalarni faqat kerakli turlarga ajratamiz
-const categories = computed(() =>
-  (tarifDetail.value?.categories || []).filter((cat: any) => types.includes(cat.type))
-)
-
 // Tanlangan asosiy tur
 const selectedType = ref('meals')
 
 // Tanlangan turga mos kategoriyalar
-const filteredCategories = computed(() =>
-  categories.value.filter((cat: any) => cat.type === selectedType.value)
+const filteredProducts = computed(() =>
+  (tarifDetail.value?.tariff_products || []).filter((prod: any) => prod.type === selectedType.value)
 )
 
 // Har doim birinchi tur tanlansin
-watch(categories, (cats: any[]) => {
-  if (cats.length) selectedType.value = types.find((t) => cats.some((c: any) => c.type === t)) || 'meals'
-}, { immediate: true })
+watch(
+  () => tarifDetail.value?.tariff_products,
+  (products: any[]) => {
+    if (products?.length) {
+      const firstType = types.find((t) => products.some((p: any) => p.type === t))
+      if (firstType) selectedType.value = firstType
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -45,7 +43,7 @@ watch(categories, (cats: any[]) => {
     <div v-else-if="error">Xatolik: {{ error.message }}</div>
     <div v-else>
 
-      <!-- <div v-if="tarifDetail.value && tarifDetail.value.tariff_types && tarifDetail.value.tariff_types.length">
+      <div v-if="tarifDetail.value && tarifDetail.value.tariff_types && tarifDetail.value.tariff_types.length">
         <div class="mb-4 p-6 bg-white rounded-2xl">
           <h1 class="font-bold text-2xl mb-4">{{ tarifDetail.value.name }}</h1>
           <div v-for="type in tarifDetail.value.tariff_types" :key="type.id"
@@ -54,12 +52,8 @@ watch(categories, (cats: any[]) => {
             <span class="font-bold text-2xl">{{ Number(type.price).toLocaleString('ru-RU') }} so'm</span>
           </div>
         </div>
-      </div> -->
-      <!-- <div v-else>
-        <p>Tarif turlari topilmadi</p>
-      </div> -->
+      </div>
 
-      <!-- Asosiy filter tugmalari -->
       <div class="flex gap-3 lg:gap-1 overflow-auto whitespace-nowrap mb-2">
         <button v-for="t in types" :key="t" class="px-3 md:px-2 py-2 md:py-1 rounded-md" :class="{
           'bg-[var(--primary-color)] text-white': selectedType === t,
@@ -70,8 +64,8 @@ watch(categories, (cats: any[]) => {
       </div>
 
       <!-- Kategoriyalar va mahsulotlar -->
-      <div v-if="filteredCategories.length">
-        <div v-for="cat in filteredCategories" :key="cat.id" class="mb-6">
+      <div v-if="filteredProducts.length">
+        <div v-for="cat in filteredProducts" :key="cat.id" class="mb-6">
           <h3 class="font-bold text-base my-2">{{ cat.name }}</h3>
           <div class="grid grid-cols-2 gap-3">
             <div v-for="prod in cat.products" :key="prod.id" class="rounded-xl bg-white p-2">

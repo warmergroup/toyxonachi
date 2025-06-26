@@ -1,3 +1,0 @@
-<template>
-    discounts
-</template>

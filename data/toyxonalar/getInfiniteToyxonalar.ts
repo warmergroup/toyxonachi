@@ -1,6 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import $axios from "~/http";
-export const useInfiniteToyxonalarQuery = (itemsPerPage = 12) => {
+import $authApi from '~/http/authApi';
+
+export const useInfiniteToyxonalarQuery = (
+    itemsPerPage = 14,
+    mode: 'public' | 'admin' = 'public'
+  ) => {
+  const api = mode === 'admin' ? $authApi : $axios;
+
     const toyxonalarStore = useToyxonalarStore();
     toyxonalarStore.setLoading(true);
   
@@ -8,22 +15,24 @@ export const useInfiniteToyxonalarQuery = (itemsPerPage = 12) => {
       queryKey: ['venues-infinite'],
       queryFn: async ({pageParam = 1}) => {
         try {
-          const {data} = await $axios.get('wedding-halls/all', {
+          const {data} = await api.get('wedding-halls/all', {
             params: {
               page: pageParam,
-              per_page: itemsPerPage
+              limit: itemsPerPage
             }
           })
           if (data && Array.isArray(data.data)) {
+            // a va b uchun tip berish
+            data.data.sort((a: { created_at: string }, b: { created_at: string }) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
             toyxonalarStore.setLoading(false);
             if (pageParam === 1) {
-              toyxonalarStore.setToyxonalar(data.data);
+              toyxonalarStore.setToyxonalar(data.data); // sorted massiv
             } else {
               data.data.forEach((toyxona: any) => {
-                toyxonalarStore.addToyxona(toyxona);
+                toyxonalarStore.addToyxona(toyxona); // har bir yangi element oxiriga qo'shiladi
               });
             }
-            // console.log("Toyxonalar ma'lumoti: ", data.data)
+            
             return data.data;
           }
           toyxonalarStore.setLoading(false);

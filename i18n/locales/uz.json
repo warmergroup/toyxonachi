@@ -37,7 +37,25 @@
     "peopleCount": "Kishi",
     "location": "manzil",
     "goDirection": "yo'l ko'rsatish",
-    "discount": "Chegirmalar"
+    "discounts": "Chegirmalar"
+  },
+  "toyxonaStatus":{
+    "all": "Barchasi",
+    "new": "Yangi",
+    "active": "Faol",
+    "moderation": "Modiratsiyada",
+    "review": "Ko'rib chiqilmoqda",
+    "rejected": "Rad etilgan",
+    "arxiv": "Arxiv",
+    "inactive": "Faol emas",
+    "notModerated": "Moditarsiyadan o'tmagan"
+  },
+  "users": {
+    "all": "Barchasi",
+    "user":"Foydalanuvchi",
+    "users": "Foydalanuvchilar",
+    "admin": "Admin",
+    "superadmin": "Superadmin"
   },
   "profile": {
     "profile": "Profil",
@@ -61,22 +79,34 @@
     "role": "Rol",
     "user": "Foydalanuvchi",
     "admin": "Admin",
-    "superAdmin": "Super Admin"
+    "superadmin": "Superadmin"
   },
   "admin": {
     "myWeddingHalls": "Mening to'yxonalarim",
+    "tarifCount": "Tariflar soni",
+    "minPrice" : "Minimum narx",
+    "maxPrice" : "Maximum narx",
+    "addToyxona": "To'yxona qo'shish",
+    "editToyxona": "To'yxonani tahrirlash",
+    "deleteToyxona": "To'yxonani o'chirish"
   },
+  "superadmin": {
+    "allWeddingHalls": "Barcha to'yxonalar",
+    "allUsers": "Barcha foydalanuvchilar"
+  },
+  
   "profileActions": {
     "myProfile": "Mening profilim",
     "myVenues": "Mening to'yxonalarim",
-    "admins": "Adminlar",
+    "adminList": "Adminlar",
     "allVenues": "Barcha to'yxonalar",
     "discounts": "Chegirmalar",
     "editProfile": "Profilni tahrirlash",
     "viewProfile": "Profilni ko'rish",
     "changePassword": "Parolni o'zgartirish",
     "deleteAccount": "Hisobni o'chirish",
-    "accountSettings": "Hisob sozlamalari"
+    "accountSettings": "Hisob sozlamalari",
+    "addAdmin": "Admin qo'shish"
   },
   "validation": {
     "registerSuccess": "Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi",
@@ -90,6 +120,7 @@
   "form":{
     "nameField": "F.I.SH",
     "phoneField": "Telefon raqami",
+    "roleField": "Rol",
     "saveButton": "Saqlash",
     "cancelButton": "Bekor qilish",
     "submitting": "Yuborilmoqda..." 
@@ -118,5 +149,41 @@
     "logoutPending": "Chiqish jarayoni davom etmoqda...",
     "logoutButton": "Chiqish",
     "logoutError": "Chiqishda xatolik. Iltimos, qayta urinib ko'ring."
+  },
+  "error": {
+    "title": "Xatolik",
+    "message": "Iltimos, qayta urinib ko'ring",
+    "notFound": "Sahifa topilmadi",
+    "serverError": "Serverda xatolik yuz berdi",
+    "unauthorized": "Ruxsat etilmagan",
+    "forbidden": "Ta'qiqlangan",
+    "badRequest": "Yomon so'rov",
+    "networkError": "Tarmoq xatosi",
+    "unknownError": "Noma'lum xatolik",
+    "retry": "Qayta urinib ko'ring",
+    "goBack": "Orqaga qaytish",
+    "userNotFound": "Foydalanuvchi topilmadi",
+    "userAlreadyExists": "Bu foydalanuvchi allaqachon mavjud",
+    "venueNotFound": "To'yxona topilmadi", 
+    "venueAlreadyExists": "Bu to'yxona allaqachon mavjud",
+    "venueCreationError": "To'yxona yaratishda xatolik",
+    "venueUpdateError": "To'yxona yangilanishida xatolik",
+    "venueDeletionError": "To'yxona o'chirishda xatolik",
+    "venueListError": "To'yxonalar ro'yxatini olishda xatolik"
+  },
+  "modal":{
+    "archiveOrDelete": "Toyxonani o'chirasizmi yoki arxiv qilasizmi?",
+    "activeOrDelete": "Toyxonani aktiv qilasizmi yoki o'chirasizmi?"
+  },
+  "toyxonaForm":{
+    "nameField": "To'yxona nomi",
+    "descriptionField": "Tavsif",
+    "addressField": "Manzil",
+    "tariffsField": "Tariflar soni",
+    "phone1Field": "Telefon raqami ",
+    "phone2Field": "Qo'shimcha raqami",
+    "telegramField": "Telegram",
+    "instagramField": "Instagram",
+    "weddingHallPictures": "To'yxona rasmlari"
   }
 }

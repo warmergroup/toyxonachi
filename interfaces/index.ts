@@ -37,7 +37,6 @@ export interface IToyxonalar extends IWithId {
     updated_at: string;
   }>;
   tariffs: ITarif;
-  // Eski API formati uchun qo'shimcha maydonlar (qiymatlar bo'lmasa ham xato bermasligi uchun)
   telegram_link?: string;
   instagram_link?: string;
   min_price?: string;
@@ -62,9 +61,12 @@ export interface ITarif {
 }
 
 export interface Banner extends IWithId {
-  photo: string;
-  name: string;
+  wedding_hall_id: string;
+  notes: string;
+  image_url: string;
+  is_active: string;
   created_at: string;
+  updated_at: string;
 }
 
 export type AuthType = "register" | "login" | "forgot_password";
@@ -84,8 +86,9 @@ export type ComponentType =
   | "discounts"
   | "superDiscounts"
   | "addLocation"
-  | "selectLocation";
-
+  | "selectLocation"
+  | "addAdmins"
+  | 'addToyxona'
 export interface IRoleInfo {
   id: number;
   name: string;
@@ -120,3 +123,25 @@ export interface ILoginResponse {
   token: string;
 }
 
+export interface AttachRoleFormData {
+  phone: string;
+  role: number;
+}
+
+export interface WeddingHallPicture {
+  image_url: string;
+}
+
+export interface WeddingHallFormState {
+  name: string;
+  description: string;
+  tariff_count: number | null;
+  phone1: string;
+  phone2: string;
+  telegram: string;
+  instagram: string;
+  longitude: number | null;
+  latitude: number | null;
+  address: string;
+  wedding_hall_pictures: WeddingHallPicture[];
+}

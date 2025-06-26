@@ -37,7 +37,25 @@
     "peopleCount": "for peoples",
     "location": "Location",
     "goDirection": "Get directions",
-    "discount": "Discounts"
+    "discounts": "Discounts"
+  },
+  "toyxonaStatus":{
+    "all": "All",
+    "new": "New",
+    "active": "Active",
+    "review": "In review",
+    "rejected": "Rejected",
+    "moderation": "In moderation",
+    "arxiv": "Archive",
+    "inactive": "Inactive",
+    "notModerated": "Not moderated"
+  },
+  "users": {
+    "all": "All",
+    "user": "User",
+    "users": "Users",
+    "admin": "Admin",
+    "superadmin": "Superadmin"
   },
   "profile": {
     "profile": "Profile",
@@ -61,22 +79,30 @@
     "role": "Role",
     "user": "User",
     "admin": "Admin",
-    "superAdmin": "Super Admin"
+    "superadmin": "Superadmin"
   },
   "admin": {
-    "myWeddingHalls": "My Wedding Halls"
+    "myWeddingHalls": "My Wedding Halls",
+    "tarifCount": "tariffs count",
+    "minPrice" : "Minimum price",
+    "maxPrice" : "Maximum price"
+  },
+  "superadmin": {
+    "allWeddingHalls": "All Wedding Halls",
+    "allUsers": "All Users"
   },
   "profileActions": {
     "myProfile": "My Profile",
     "myVenues": "My Venues",
-    "admins": "Admins",
+    "adminList": "Admins",
     "allVenues": "All Venues",
     "discounts": "Discounts",
     "editProfile": "Edit Profile",
     "viewProfile": "View Profile",
     "changePassword": "Change Password",
     "deleteAccount": "Delete Account",
-    "accountSettings": "Account Settings"
+    "accountSettings": "Account Settings",
+    "addAdmin": "Add Admin"
   },
   "validation": {
     "registerSuccess": "Registration successful",
@@ -90,6 +116,7 @@
   "form":{
     "nameField": "Full Name",
     "phoneField": "Phone Number",
+    "roleField": "Role",
     "saveButton": "save",
     "cancelButton": "cancel"
   },
@@ -116,5 +143,41 @@
     "logoutPending": "Logging out...",
     "logoutButton": "Logout",
     "logoutError": "Logout error. Please try again."
+  },
+  "error": {
+   "title": "An error occurred",
+    "message": "Please try again later",
+    "notFound": "Page not found",
+    "serverError": "Server error",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Forbidden access",
+    "badRequest": "Bad request",
+    "networkError": "Network error",
+    "unknownError": "Unknown error",
+    "retry": "Retry",
+    "goBack": "Go back",
+    "userNotFound": "User not found",
+    "userAlreadyExists": "User already exists",
+    "venueNotFound": "Venue not found",
+    "venueAlreadyExists": "Venue already exists",
+    "venueCreationError": "Error creating venue",
+    "venueUpdateError": "Error updating venue",
+    "venueDeletionError": "Error deleting venue",
+    "venueListError": "Error fetching venue list"
+  },
+  "modal": {
+    "archiveOrDelete": "Will you delete or archive the wedding venue?",
+    "activeOrDelete": "Will you activate or delete the wedding venue?"
+  },
+  "toyxonaForm":{
+    "nameField": "Name",
+    "descriptionField": "Description",
+    "addressField": "Address",
+    "tariffsField": "Tariffs Count",
+    "phone1Field": "Phone number",
+    "phone2Field": "Additional number",
+    "telegramField": "Telegram",
+    "instagramField": "Instagram",
+    "weddingHallPictures": "Wedding Hall Pictures"
   }
-} 
+}
