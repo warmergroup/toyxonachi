@@ -51,7 +51,7 @@ function addPrice() {
 function removePrice(id: number) {
     prices.value = prices.value.filter(item => item.id !== id)
 }
-
+defineExpose({ prices })
 // Agar parentdan tarifId o'zgarsa, eski narxlarni tozalash (optional)
 watch(() => props.tariffId, () => {
     prices.value = []

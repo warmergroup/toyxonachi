@@ -54,6 +54,7 @@ function handleRemove() {
         }
     )
 }
+defineExpose({ tariffName })
 </script>
 
 <template>
@@ -63,8 +64,8 @@ function handleRemove() {
                 <UInput v-model="tariffName.name" color="secondary" variant="soft" class="w-full" type="text" size="xl"
                     :placeholder="t('toyxonaForm.nameField')" :loading="isCreating">
                     <template v-if="tariffName.name?.length" #trailing>
-                        <UButton color="neutral" size="xl" icon="material-symbols:check" @click="handleCreate"
-                            :loading="isCreating" />
+                        <UButton color="neutral" variant="soft" size="xl" icon="material-symbols:check"
+                            @click="handleCreate" :loading="isCreating" />
                     </template>
                 </UInput>
             </UFormField>
@@ -72,7 +73,7 @@ function handleRemove() {
         <template v-else>
             <div class="flex items-center gap-2">
                 <span class="font-semibold text-lg">{{ createdTariff.name }}</span>
-                <UButton icon="i-heroicons-x-mark" color="warning" size="sm" variant="soft" @click="handleRemove"
+                <UButton icon="custom:trash-icon" color="error" size="sm" variant="soft" @click="handleRemove"
                     :loading="isDeleting" />
             </div>
         </template>

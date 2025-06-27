@@ -74,6 +74,9 @@ const handleSubmit = async () => {
     } catch (error: any) {
         toast.add({ title: error.message || 'Xatolik yuz berdi', color: 'warning' });
     }
+
+    storeImages.cleareImage
+
 };
 </script>
 
@@ -84,10 +87,6 @@ const handleSubmit = async () => {
         <AdminToyxonaYandexMap title="Manzil" address-placeholder="Manzil tanlang..."
             :initial-latitude="coords?.latitude" :initial-longitude="coords?.longitude" :zoom="16"
             @location-change="handleLocationChange" />
-        <!-- Faqat dev vaqtida tekshirish uchun -->
-        <!-- <pre>{{ formState }}</pre> -->
-        <!-- <pre>{{ selectedLocation }}</pre> -->
-
         <UButton class="w-full flex items-center justify-center" color="secondary" label="Saqlash"
             :loading="createToyxonaMutation.isPending.value" @click="handleSubmit" />
     </div>

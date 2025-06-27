@@ -14,6 +14,9 @@ export const useTotxonaFormStore = defineStore('toyxona', {
     },
     removeImage(idx: number) {
       this.images.splice(idx, 1);
+    },
+    cleareImage() {
+      this.images = [];
     }
   }
 });
