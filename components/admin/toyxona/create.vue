@@ -69,7 +69,8 @@ const handleSubmit = async () => {
     try {
         const result = await createToyxonaMutation.mutateAsync(payload);
         toast.add({ title: 'Toyxona muvaffaqiyatli yaratildi!', color: 'success' });
-        emit('created', result.id);
+        emit('created', { id: result.id, tariffCount: payload.tariff_count });
+
         // Reset form (ixtiyoriy)
     } catch (error: any) {
         toast.add({ title: error.message || 'Xatolik yuz berdi', color: 'warning' });

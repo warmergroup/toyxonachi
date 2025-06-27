@@ -63,10 +63,11 @@ async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
 
 const createdToyxonaId = ref<number | null>(null);
 
-const handleToyxonaCreated = (id: number) => {
-  onClose(); // Avvalgi slideoverni yopamiz
-  openComponent.onOpen('createTariff', { toyxonaId: id }); // Yangi componentni id bilan ochamiz
+const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: number }) => {
+  onClose(); // Slideoverni yopish
+  openComponent.onOpen('createTariff', { toyxonaId: id, tariffCount }); // Endi ikkala qiymat uzatiladi
 };
+
 
 </script>
 <template>
@@ -142,7 +143,7 @@ const handleToyxonaCreated = (id: number) => {
 
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'"
       :title="t('admin.createTariff')" @close="onClose">
-      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" />
+      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" :tariff-count="openComponent.payload?.tariffCount" />
     </UiSlideOver>
 
   </div>

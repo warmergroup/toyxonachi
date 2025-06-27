@@ -103,7 +103,17 @@ const tabs = [
     { label: 'Bonuslar', keys: ['Bonuslar'] }
 ]
 const activeTab = ref(tabs[0].label)
-defineExpose({ sections })
+function reset() {
+    sections.forEach(section => {
+        section.form.name = ''
+        section.form.description = ''
+        section.form.image_url = ''
+        section.items = []
+        if ('imageUploading' in section.form) section.form.imageUploading = false
+        if ('isCreating' in section) section.isCreating = false
+    })
+}
+defineExpose({ sections, reset })
 </script>
 
 <template>

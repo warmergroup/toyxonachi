@@ -54,7 +54,11 @@ function handleRemove() {
         }
     )
 }
-defineExpose({ tariffName })
+function reset() {
+    tariffName.name = ''
+    createdTariff.value = null
+}
+defineExpose({ tariffName, reset })
 </script>
 
 <template>

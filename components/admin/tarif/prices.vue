@@ -51,7 +51,12 @@ function addPrice() {
 function removePrice(id: number) {
     prices.value = prices.value.filter(item => item.id !== id)
 }
-defineExpose({ prices })
+function reset() {
+    state.person_count = ''
+    state.price = ''
+    prices.value = []
+}
+defineExpose({ prices, reset })
 // Agar parentdan tarifId o'zgarsa, eski narxlarni tozalash (optional)
 watch(() => props.tariffId, () => {
     prices.value = []
