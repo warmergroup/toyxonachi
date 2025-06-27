@@ -88,7 +88,9 @@
     "maxPrice" : "Maximum narx",
     "addToyxona": "To'yxona qo'shish",
     "editToyxona": "To'yxonani tahrirlash",
-    "deleteToyxona": "To'yxonani o'chirish"
+    "deleteToyxona": "To'yxonani o'chirish",
+    "createTariff": "Tarif yaratish"
+    
   },
   "superadmin": {
     "allWeddingHalls": "Barcha to'yxonalar",
@@ -185,5 +187,17 @@
     "telegramField": "Telegram",
     "instagramField": "Instagram",
     "weddingHallPictures": "To'yxona rasmlari"
+  },
+  "tariffForm" :{
+    "tariffName" :"tarif nomi",
+    "tariffPrice" : "tarif summasi",
+    "people":"Kishi",
+    "price":"Sumasi",
+    "meals":"Taomlar",
+    "salads":"Salatlar",
+    "WeddingTable": "To'y dasturxoni",
+    "bonuses": "bonuslar",
+    "firstFood": "1-ovqat",
+    "secondFood": "2-ovqat"
   }
 }

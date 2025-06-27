@@ -88,7 +88,8 @@ export type ComponentType =
   | "addLocation"
   | "selectLocation"
   | "addAdmins"
-  | 'addToyxona'
+  | "addToyxona"
+  | "createTariff"
 export interface IRoleInfo {
   id: number;
   name: string;

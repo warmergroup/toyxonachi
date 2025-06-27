@@ -61,6 +61,13 @@ async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
   }
 }
 
+const createdToyxonaId = ref<number | null>(null);
+
+const handleToyxonaCreated = (id: number) => {
+  onClose(); // Avvalgi slideoverni yopamiz
+  openComponent.onOpen('createTariff', { toyxonaId: id }); // Yangi componentni id bilan ochamiz
+};
+
 </script>
 <template>
   <div class="lg:pt-16 container mx-auto flex flex-col gap-4 w-full min-h-[100vh] pb-20">
@@ -130,7 +137,12 @@ async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
 
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'addToyxona'"
       :title="t('admin.addToyxona')" @close="onClose">
-      <AdminAddToyxona />
+      <AdminToyxonaCreate @created="handleToyxonaCreated" />
+    </UiSlideOver>
+
+    <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'"
+      :title="t('admin.createTariff')" @close="onClose">
+      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" />
     </UiSlideOver>
 
   </div>

@@ -28,7 +28,7 @@ const state = computed({
             </UFormField>
 
             <UFormField class="w-full" :label="t('toyxonaForm.tariffsField')" name="tariff_count">
-                <UInput v-model="state.tariff_count" type="number" size="xl"
+                <UInput v-model="state.tariff_count" v-maska="'#'" type="text" size="xl"
                     :placeholder="t('toyxonaForm.tariffsField')" color="secondary" />
             </UFormField>
 

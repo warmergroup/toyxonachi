@@ -85,7 +85,11 @@
     "myWeddingHalls": "Мои банкетные залы",
     "tarifCount": "количество тарифов",
     "minPrice" : "минимальная цена",
-    "maxPrice" : "максимальная цена"
+    "maxPrice" : "максимальная цена",
+    "addToyxona": "Добавить банкетный зал",
+    "editToyxona": "To'yxonani tahrirlash",
+    "deleteToyxona": "To'yxonani o'chirish",
+    "createTariff": "Tarif yaratish"
   },
   "superadmin": {
     "allWeddingHalls": "Все банкетные залы",

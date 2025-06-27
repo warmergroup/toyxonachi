@@ -8,6 +8,7 @@ import { useLocationStore } from '#imports';
 const coords = useLocationStore().coords;
 const storeImages = useTotxonaFormStore();
 const toast = useToast();
+const emit = defineEmits(['created'])
 
 // Form state
 const formState = reactive({
@@ -66,8 +67,9 @@ const handleSubmit = async () => {
 
 
     try {
-        await createToyxonaMutation.mutateAsync(payload);
+        const result = await createToyxonaMutation.mutateAsync(payload);
         toast.add({ title: 'Toyxona muvaffaqiyatli yaratildi!', color: 'success' });
+        emit('created', result.id);
         // Reset form (ixtiyoriy)
     } catch (error: any) {
         toast.add({ title: error.message || 'Xatolik yuz berdi', color: 'warning' });
