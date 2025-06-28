@@ -118,6 +118,15 @@ function handleReject(reason: string) {
     })
 }
 
+const openMap = () => {
+    if (!toyxona.value) return;
+    const lat = toyxona.value.latitude;
+    const lon = toyxona.value.longitude;
+    // Google Maps universal link
+    const url = `https://maps.google.com/?q=${lat},${lon}`;
+    window.open(url, '_blank');
+};
+
 </script>
 
 <template>
@@ -126,7 +135,7 @@ function handleReject(reason: string) {
     </div>
     <div v-else-if="toyxona" class="mb-25 lg:p-5 lg:py-20 w-full h-full">
         <SuperadminAcceptReject @reject="isRejectDrawerOpen = true" @accept="handleAccept" />
-        
+
         <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
             <!-- Chap ustun (2/3) -->
             <div class="flex flex-col lg:gap-4 lg:col-span-2 lg:rounded-lg w-full h-full bg-white">
@@ -197,7 +206,7 @@ function handleReject(reason: string) {
                         </svg>
                         <span>{{ toyxona.address }}</span>
                     </div>
-                    <UButton class="w-full py-2 flex items-center justify-center">
+                    <UButton class="w-full py-2 flex items-center justify-center" @click="openMap">
                         <span class="text-text-primary">{{ t('venue.goDirection') }}</span>
                         <Icon name="custom:chevron-right" />
                     </UButton>

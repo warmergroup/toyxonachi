@@ -80,7 +80,14 @@ const openTarifSlide = (tarif: any) => {
   selectedTarif.value = tarif;
   openComponent.onOpen('showTariff');
 };
-
+const openMap = () => {
+  if (!toyxona.value) return;
+  const lat = toyxona.value.latitude;
+  const lon = toyxona.value.longitude;
+  // Google Maps universal link
+  const url = `https://maps.google.com/?q=${lat},${lon}`;
+  window.open(url, '_blank');
+};
 // Sahifa yuklanganda ma'lumotlarni yuklash
 // onMounted(async () => {
 //
@@ -178,10 +185,10 @@ const openTarifSlide = (tarif: any) => {
         </div>
       </div>
     </div>
-    <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'showTariff'"
-      :title="selectedTarif?.name || 'tarif'" @close="onClose">
-      <UiTarifTabs :tarif-id="selectedTarif?.id" />
-    </UiSlideOver>
+    <UButton class="w-full py-2 flex items-center justify-center" @click="openMap">
+      <span class="text-text-primary">{{ t('venue.goDirection') }}</span>
+      <Icon name="custom:chevron-right" />
+    </UButton>
   </div>
 
   <div v-else class="mx-auto mt-50vh flex items-center justify-center h-64">
