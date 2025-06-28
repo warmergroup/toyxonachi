@@ -19,6 +19,7 @@ const onClose = () => {
   openComponent.onClose();
 }
 const showAddAdmins = ref(false);
+const showAddDiscount = ref(false);
 onBeforeRouteLeave(() => {
   openComponent.onClose();
 })
@@ -59,6 +60,12 @@ async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
     superadminListRef.value?.refreshList()
     // fetchNextPage() yoki boshqa funksiyani chaqiring
   }
+}
+
+function refreshDiscounts() {
+  // discountListRef.value?.refetch() yoki
+  openComponent.onOpen('discounts') // yoki
+  // yoki getDiscounts('admin') hookidan refetch chaqiring
 }
 
 const createdToyxonaId = ref<number | null>(null);
@@ -122,9 +129,14 @@ const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: nu
       <UiToyxonalarList ref="superadminListRef" @action="openToyxonaActionModal" />
     </UiSlideOver>
 
+
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'discounts'"
       :title="t('venue.discounts')" @close="onClose">
-      <UiDiscountList />
+      <UiDiscountList @add-discounts="showAddDiscount = true" />
+    </UiSlideOver>
+
+    <UiSlideOver :is-open="showAddDiscount" @close="showAddDiscount = false">
+      <SuperadminAddDiscount @success="refreshDiscounts" />
     </UiSlideOver>
 
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'admins'"

@@ -12,7 +12,7 @@ export const useInfiniteToyxonalarQuery = (
     toyxonalarStore.setLoading(true);
   
     return useInfiniteQuery({
-      queryKey: ['venues-infinite'],
+      queryKey: ['venues-infinite', mode],
       queryFn: async ({pageParam = 1}) => {
         try {
           const {data} = await api.get('wedding-halls/all', {

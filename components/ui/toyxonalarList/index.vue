@@ -7,6 +7,9 @@ const emit = defineEmits<{
     (e: 'action', toyxona: any, tab: string): void
 }>()
 
+const localePath = useLocalePath()
+const router = useRouter()
+
 const { formatPrice } = useFormat()
 const {
     data: toyxonalarData,
@@ -88,7 +91,10 @@ const infoFields = [
 function refreshList() {
     refetch()
 }
-
+const navigateToVenue = (id: string) => {
+    const path = localePath(`/admin/toyxona/${id}`);
+    router.push(path);
+};
 defineExpose({ refreshList })
 </script>
 
@@ -104,9 +110,11 @@ defineExpose({ refreshList })
             <template v-for="tab in items" #[tab.slot]="{ item }">
                 <div class="flex flex-col gap-4">
                     <div v-for="toyxona in filteredToyxonalar(tab.slot)" :key="toyxona.id"
-                        class="relative p-4 rounded-lg bg-gray-50 flex flex-col gap-4">
-                        <div class="flex p-0 flex-col gap-2 relative">
-                            <h3 class="text-lg font-bold">{{ toyxona.name }}</h3>
+                        class="relative p-4 rounded-lg bg-gray-50 flex flex-col gap-4 hover:shadow">
+                        <div class="flex p-0 flex-col gap-2 relative cursor-pointer">
+                            <h3 class="text-lg font-bold hover:text-blue-400 transition-all ease-in"
+                                @click="navigateToVenue(toyxona.id)">{{
+                                    toyxona.name }}</h3>
                             <span class="w-fit py-1 px-3 text-xs font-medium rounded-md"
                                 :class="statusColors[toyxona.status] || 'bg-gray-100 text-gray-600'">
                                 {{ t('toyxonaStatus.' + toyxona.status) }}

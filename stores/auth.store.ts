@@ -28,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         setUser(user: IUser | null) {
             this.user = user;
+            this.isAuth = !!user; // foydalanuvchi bor-yo‘qligiga qarab
             this.isLoading = false;
         },
         setIsAuth(isAuth: boolean) {
@@ -40,7 +41,6 @@ export const useAuthStore = defineStore('auth', {
             this.user = user;
             this.isAuth = !!user;
         },
-
         setToken(token: string) {
             setToken(token);
         },
