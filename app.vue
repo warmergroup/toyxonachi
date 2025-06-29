@@ -8,19 +8,17 @@ const { changeLanguage } = useLanguage()
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
-onBeforeMount(() => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    const { refetch } = useGetMeQuery()
-    refetch()
-  }
-})
-
 onMounted(() => {
   const savedLang = localStorage.getItem('selectedLang')
 
   if (savedLang && savedLang !== locale.value) {
     changeLanguage(savedLang as 'uz' | 'ru' | 'en')
+  }
+
+  const token = localStorage.getItem('token')
+  if (token) {
+    const { refetch } = useGetMeQuery()
+    refetch()
   }
 
 })

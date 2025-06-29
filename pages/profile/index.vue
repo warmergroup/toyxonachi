@@ -5,6 +5,7 @@ import { useLogout } from '~/data/auth/logout';
 import { SuperadminAdmins, UiToyxonalarList, LazyUiModalToyxonaAction } from '#components';
 import { useOverlay } from '#imports'
 import type { IToyxonalar } from '~/interfaces';
+import { useGetMeQuery } from '~/data'
 
 const { isLargeScreen } = useScreenSize();
 const authStore = useAuthStore();
@@ -85,14 +86,18 @@ const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: nu
 
     <div class="w-full lg:w-2/3 px-4 flex flex-col justify-between gap-4">
       <div class="w-full flex flex-col gap-4">
-        <!-- <ProfileUserCardPlaceholder v-if="isLoading" /> -->
-        <ProfileUserCard v-if="user && !isLoading" :name="user.name" :phone="user.phone" :status="user.status"
-          :role="user.role" :avatar="user.avatar" />
-        <UiRegisterPrompt v-else />
+        <client-only>
+          <!-- <ProfileUserCardPlaceholder v-if="isLoading" /> -->
+          <ProfileUserCard v-if="user" :name="user.name" :phone="user.phone" :status="user.status"
+            :role="user.role" :avatar="user.avatar" />
+          <UiRegisterPrompt v-else />
+        </client-only>
         <ProfileActions :role="user?.role" />
       </div>
-      <UButton v-if="user" class="text-center flex items-center justify-center" size="xl" color="secondary"
-        :label="t('logout.logoutTitle')" :loading="isLoggingOut" :disabled="isLoggingOut" @click="handleLogout" />
+      <ClientOnly>
+        <UButton v-if="user" class="text-center flex items-center justify-center" size="xl" color="secondary"
+          :label="t('logout.logoutTitle')" :loading="isLoggingOut" :disabled="isLoggingOut" @click="handleLogout" />
+      </ClientOnly>
     </div>
 
     <UiDrawer v-if="!isLargeScreen" :is-open="openComponent.isOpen && openComponent.componentType === 'changeLanguage'"
@@ -153,8 +158,8 @@ const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: nu
       <AdminToyxonaCreate @created="handleToyxonaCreated" />
     </UiSlideOver>
 
-    <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'"
-      :title="t('admin.createTariff')" @close="onClose">
+    <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'" title="1-tarif"
+      @close="onClose">
       <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" :tariff-count="openComponent.payload?.tariffCount" />
     </UiSlideOver>
 

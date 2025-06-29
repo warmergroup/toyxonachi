@@ -44,10 +44,10 @@ export const useAuthStore = defineStore('auth', {
         setToken(token: string) {
             setToken(token);
         },
-
         logout() {
             this.user = null;
             this.isAuth = false;
+            this.isLoading = false;
         }
     }
 });

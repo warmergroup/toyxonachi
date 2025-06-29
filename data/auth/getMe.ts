@@ -7,12 +7,18 @@ export const useGetMeQuery = () => {
   return useQuery({
     queryKey: ['get-me'],
     queryFn: async () => {
-      const {data} = await $authApi.get<IUser>('users/me');
-      if (!data) {
-        throw new Error('User data not found');
+      authStore.setIsLoading(true);
+      try {
+        const { data } = await $authApi.get<IUser>('users/me');
+        authStore.setUser(data);
+        return data;
+      } catch (e) {
+        authStore.setUser(null);
+        return null;
+      } finally {
+        authStore.setIsLoading(false);
       }
-      authStore.setUser(data);
-      return data;
-    }
+    },
+    // Optionally, refetchOnWindowFocus: false
   });
 };

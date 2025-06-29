@@ -64,9 +64,9 @@ defineExpose({ tariffName, reset })
 <template>
     <UForm :state="tariffName" class="w-full flex flex-col gap-4" @submit.prevent="handleCreate">
         <template v-if="!createdTariff">
-            <UFormField class="w-full" :label="t('toyxonaForm.nameField')" name="name">
+            <UFormField class="w-full" label="tarif nomi" name="name">
                 <UInput v-model="tariffName.name" color="secondary" variant="soft" class="w-full" type="text" size="xl"
-                    :placeholder="t('toyxonaForm.nameField')" :loading="isCreating">
+                    placeholder="tarif nomi" :loading="isCreating">
                     <template v-if="tariffName.name?.length" #trailing>
                         <UButton color="neutral" variant="soft" size="xl" icon="material-symbols:check"
                             @click="handleCreate" :loading="isCreating" />
@@ -81,5 +81,6 @@ defineExpose({ tariffName, reset })
                     :loading="isDeleting" />
             </div>
         </template>
+
     </UForm>
 </template>

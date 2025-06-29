@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { openState } from '~/stores/isOpen.store';
 
+const config = useRuntimeConfig()
+const baseImgUrl = config.public.imgUrl || 'https://api.toyxonachi.uz/storage/images'
+
 const { formatPhone } = useFormat();
 const openComponent = openState();
 const { t } = useI18n();
@@ -33,8 +36,23 @@ const avatarUrl = computed(() => {
   return props.avatar === 'https://toyxonachi.uz/storage/images' ? '/avatar.jpg' : props.avatar;
 });
 const image = computed(() => {
-  return props.avatar === 'https://toyxonachi.uz/storage/images' ? '/avatar.jpg' : props.avatar;
-});
+  // Agar avatar yo'q yoki faqat katalog bo'lsa yoki bo'sh bo'lsa
+  if (
+    !props.avatar ||
+    props.avatar === baseImgUrl ||
+    props.avatar === baseImgUrl + '/' ||
+    props.avatar === 'https://toyxonachi.uz/storage/images' ||
+    props.avatar === 'https://toyxonachi.uz/storage/images/'
+  ) {
+    return '/avatar.jpg'
+  }
+  // Agar avatar faqat rasm nomi bo'lsa (masalan, avatar.png)
+  if (!props.avatar.startsWith('http')) {
+    return `${baseImgUrl}/${props.avatar}`
+  }
+  // To'liq url bo'lsa
+  return props.avatar
+})
 // const uploadImage = () => {
 
 // }
@@ -45,10 +63,9 @@ const image = computed(() => {
 <template>
   <div class="flex items-center justify-between rounded-md bg-white p-4">
     <div class="flex items-center gap-4">
-      <div class="relative w-16 md:w-20 lg:w-24 h-16 md:h-20 lg:h-24 flex items-center justify-center rounded-full">
-        <NuxtImg v-if="image" :src="image" loading="lazy" alt="User Avatar"
-          class="w-full rounded-full aspect-square object-cover" />
-        <NuxtImg v-else src="/avatar.jpg" alt="user avatar" class="w-full rounded-full aspect-square object-cover" />
+      <div class="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 flex items-center justify-center rounded-full">
+        <NuxtImg :src="image" loading="lazy" :alt="name" class="w-full h-full rounded-full aspect-square object-cover"
+          :class="image === '/avatar.jpg' ? 'scale-130 md:scale-150' : 'w-full h-full'" />
         <div @click=""
           class="absolute right-0 bottom-0 z-10 w-6 h-6 flex items-center justify-center overflow-hidden bg-gray-200 border border-gray-400 rounded-full">
           <div class="flex items-center p-1 justify-center w-full">
