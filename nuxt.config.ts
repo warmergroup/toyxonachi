@@ -90,4 +90,9 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
   },
+  vite: {
+    build: {
+      target: 'esnext'
+    }
+  }
 })
