@@ -69,13 +69,20 @@
     // yoki getDiscounts('admin') hookidan refetch chaqiring
   }
 
-  const createdToyxonaId = ref<number | null>(null);
-
   const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: number, name: string }[] }) => {
     onClose(); // Slideoverni yopish
+    // Toyxonalar listini yangilash
+    toyxonalarListRef.value?.refreshList();
+    adminListRef.value?.refreshList?.();
+    superadminListRef.value?.refreshList?.();
     openComponent.onOpen('createTariff', { toyxonaId: id, tariffs }); // tariffs massivini uzatamiz
   };
 
+  function refreshToyxonalarList() {
+    toyxonalarListRef.value?.refreshList();
+    adminListRef.value?.refreshList?.();
+    superadminListRef.value?.refreshList?.();
+  }
 
 </script>
 <template>
@@ -125,12 +132,12 @@
     </UiSlideOver>
 
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'adminToyxonalar'"
-      :title="t('admin.myWeddingHalls')" @close="onClose">
+      :title="t('admin.myWeddingHalls')" @close="onClose" @after-enter="adminListRef.value?.refreshList()">
       <UiToyxonalarList ref="adminListRef" @action="openToyxonaActionModal" />
     </UiSlideOver>
 
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'allVenues'"
-      :title="t('superadmin.allWeddingHalls')" @close="onClose">
+      :title="t('superadmin.allWeddingHalls')" @close="onClose" @after-enter="superadminListRef.value?.refreshList()">
       <UiToyxonalarList ref="superadminListRef" @action="openToyxonaActionModal" />
     </UiSlideOver>
 
@@ -160,7 +167,8 @@
 
     <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'" title="Tariflar"
       @close="onClose">
-      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" :tariffs="openComponent.payload?.tariffs || []" />
+      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId ?? null" :tariffs="openComponent.payload?.tariffs || []"
+        @completed="refreshToyxonalarList" />
     </UiSlideOver>
 
   </div>

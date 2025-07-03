@@ -130,9 +130,9 @@
                             </template>
                         </div>
                         <div v-if="role === 'admin'"
-                            class="absolute right-4 top-4 w-[24px] h-[24px] bg-red-100 flex items-center justify-center rounded-full cursor-pointer"
+                            class="absolute right-4 top-4 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer"
                             @click="emit('action', toyxona, tab.slot)">
-                            <Icon size="24px" name="custom:x-action" />
+                            <Icon size="20px" name="custom:x-action" />
                         </div>
                     </div>
                     <!-- Scroll trigger -->

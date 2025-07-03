@@ -42,7 +42,7 @@
 
     // Hozirgi tarif obyektini olish
     const currentTariff = computed(() => props.tariffs?.[currentTariffIndex.value] || null)
-    
+
     // Saqlash tugmasi faolligi
     const isSaveEnabled = computed(() => {
         const nameValid = nameFormRef.value?.tariffName?.name?.length > 0
@@ -69,8 +69,12 @@
         }
     }
 
+    const emit = defineEmits(['completed'])
+
     function handleGoProfile() {
         openComponent.onClose()
+        // Yangi event emit qilamiz
+        emit('completed')
         const path = localePath('/profile');
         router.push(path);
     }

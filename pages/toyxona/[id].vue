@@ -99,7 +99,7 @@
   <div v-if="error" class="flex items-center justify-center h-64">
     <p class="text-text-secondary">{{ error }}</p>
   </div>
-  <div v-else-if="toyxona" class="lg:p-5 lg:pt-20 w-full h-full pb-20">
+  <div v-else-if="toyxona" class="lg:p-5 lg:pt-20 w-full h-full pb-25">
     <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
       <!-- Chap ustun (2/3) -->
       <div class="flex flex-col lg:gap-4 lg:col-span-2 lg:rounded-lg w-full h-full bg-white">
