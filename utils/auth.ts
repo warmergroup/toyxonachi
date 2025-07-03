@@ -1,14 +1,17 @@
-export const getToken = () => {
-    if (process.server) return null;
+
+export const getAuthToken = () => {
+    if (import.meta.server) return null;
     return localStorage.getItem('token');
 };
 
-export const setToken = (token: string) => {
-    if (process.server) return;
+
+export const setAuthToken = (token: string) => {
+    if (import.meta.server) return;
     localStorage.setItem('token', token);
 };
 
-export const removeToken = () => {
-    if (process.server) return;
+
+export const removeAuthToken = () => {
+    if (import.meta.server) return;
     localStorage.removeItem('token');
 };

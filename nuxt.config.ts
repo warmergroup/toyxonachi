@@ -23,7 +23,8 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL,
       yandexMapsApiKey: process.env.YANDEX_MAPS_API_KEY,
-      imageUrl: process.env.NUXT_PUBLIC_IMG_URL
+      imageUrl: process.env.NUXT_PUBLIC_IMG_URL,
+      vapidKey: process.env.PUBLIC_VAPID_KEY,
     }
   },
   icon: {

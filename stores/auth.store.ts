@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import type { IUser, Role } from '~/interfaces';
-import { setToken } from '~/utils/auth';
+import { setAuthToken } from '~/utils/auth';
 
 
 export const useAuthStore = defineStore('auth', {
@@ -42,7 +42,7 @@ export const useAuthStore = defineStore('auth', {
             this.isAuth = !!user;
         },
         setToken(token: string) {
-            setToken(token);
+            setAuthToken(token);
         },
         logout() {
             this.user = null;

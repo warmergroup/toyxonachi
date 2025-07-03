@@ -178,8 +178,9 @@
     "activeOrDelete": "Toyxonani aktiv qilasizmi yoki o'chirasizmi?"
   },
   "toyxonaForm":{
+    "imageFild": "Toyxona rasmlari",
     "nameField": "To'yxona nomi",
-    "descriptionField": "Tavsif",
+    "descriptionField": "Tavsif kiriting",
     "addressField": "Manzil",
     "tariffsField": "Tariflar soni",
     "phone1Field": "Telefon raqami ",
@@ -200,4 +201,4 @@
     "firstFood": "1-ovqat",
     "secondFood": "2-ovqat"
   }
-}
+} 

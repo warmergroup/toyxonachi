@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import * as locales from '@nuxt/ui/locale'
 import { useGetMeQuery } from '~/data/auth';
+import { onMessage, messaging } from '~/utils/firebase'
 
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
@@ -19,6 +20,20 @@ onMounted(() => {
   if (token) {
     const { refetch } = useGetMeQuery()
     refetch()
+  }
+
+  if (messaging) {
+    onMessage(messaging, (payload) => {
+      if (Notification.permission === 'granted' && payload.notification) {
+        new Notification(
+          payload.notification.title ?? 'Yangi xabar',
+          {
+            body: payload.notification.body ?? '',
+            icon: payload.notification.icon ?? '/logo-splash.svg'
+          }
+        );
+      }
+    });
   }
 
 })

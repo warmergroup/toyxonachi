@@ -1,107 +1,107 @@
 <script setup lang="ts">
 
-import { useGetTarifDetailQuery } from '~/data/tariffs'
+  import { useGetTarifDetailQuery } from '~/data/tariffs'
 
-const props = defineProps<{ tarifId?: number | string }>()
+  const props = defineProps<{ tarifId?: number | string }>()
 
-const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''))
+  const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''))
 
-interface TariffType {
-  id: number
-  person_count: number
-  price: number | string
-}
-interface Product {
-  id: number
-  name: string
-  description: string
-  image_url: string
-  type: string
-  category_id?: string | number
-}
-interface TariffDetail {
-  name: string
-  tariff_types: TariffType[]
-  tariff_products: Product[]
-}
-interface Tab {
-  label: string
-  keys: readonly string[]
-}
-interface Section {
-  label: string
-  items: Product[]
-}
-
-// Tablar va bo‘limlar
-const tabs: readonly Tab[] = [
-  { label: 'Taomlar', keys: ['meals'] },
-  { label: 'Salatlar', keys: ['salads'] },
-  { label: "To'y dasturxoni", keys: ['wedding_table'] },
-  { label: 'Bonuslar', keys: ['bonuses'] }
-] as const
-
-const activeTab: Ref<string> = ref(tabs[0].label)
-
-// Ajratilgan bo'limlar uchun computed
-const mealsSections: ComputedRef<Section[]> = computed(() => {
-  const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'meals')
-  return [
-    {
-      label: '1-taom',
-      items: products.filter((p: Product) => String(p.category_id) === '1')
-    },
-    {
-      label: '2-taom',
-      items: products.filter((p: Product) => String(p.category_id) === '2')
-    }
-  ]
-})
-const weddingSections: ComputedRef<Section[]> = computed(() => {
-  const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'wedding_table')
-  return [
-    {
-      label: "To'y dasturxoni",
-      items: products.filter((p: Product) => String(p.category_id) === '1')
-    },
-    {
-      label: "Qo'shimcha noz ne'matlar",
-      items: products.filter((p: Product) => String(p.category_id) === '2')
-    }
-  ]
-})
-const saladsSection: ComputedRef<Section[]> = computed(() => [
-  {
-    label: 'Salatlar',
-    items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'salads')
+  interface TariffType {
+    id: number
+    person_count: number
+    price: number | string
   }
-])
-const bonusesSection: ComputedRef<Section[]> = computed(() => [
-  {
-    label: 'Bonuslar',
-    items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'bonuses')
+  interface Product {
+    id: number
+    name: string
+    description: string
+    image_url: string
+    type: string
+    category_id?: string | number
   }
-])
+  interface TariffDetail {
+    name: string
+    tariff_types: TariffType[]
+    tariff_products: Product[]
+  }
+  interface Tab {
+    label: string
+    keys: readonly string[]
+  }
+  interface Section {
+    label: string
+    items: Product[]
+  }
 
-const tabSections: ComputedRef<Section[]> = computed(() => {
-  if (activeTab.value === 'Taomlar') return mealsSections.value
-  if (activeTab.value === "To'y dasturxoni") return weddingSections.value
-  if (activeTab.value === 'Salatlar') return saladsSection.value
-  if (activeTab.value === 'Bonuslar') return bonusesSection.value
-  return []
-})
+  // Tablar va bo‘limlar
+  const tabs: readonly Tab[] = [
+    { label: 'Taomlar', keys: ['meals'] },
+    { label: 'Salatlar', keys: ['salads'] },
+    { label: "To'y dasturxoni", keys: ['wedding_table'] },
+    { label: 'Bonuslar', keys: ['bonuses'] }
+  ] as const
 
-// Tabni avtomatik birinchi mavjud bo‘limga o‘zgartirish (ma’lumot kelganda)
-watch(
-  () => tarifDetail.value?.tariff_products,
-  (products: Product[]) => {
-    if (products?.length) {
-      const firstType = tabs.find((tab: Tab) => products.some((p: Product) => tab.keys.includes(p.type)))
-      if (firstType) activeTab.value = firstType.label
+  const activeTab: Ref<string> = ref(tabs[0].label)
+
+  // Ajratilgan bo'limlar uchun computed
+  const mealsSections: ComputedRef<Section[]> = computed(() => {
+    const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'meals')
+    return [
+      {
+        label: '1-taom',
+        items: products.filter((p: Product) => String(p.category_id) === '1')
+      },
+      {
+        label: '2-taom',
+        items: products.filter((p: Product) => String(p.category_id) === '2')
+      }
+    ]
+  })
+  const weddingSections: ComputedRef<Section[]> = computed(() => {
+    const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'wedding_table')
+    return [
+      {
+        label: "To'y dasturxoni",
+        items: products.filter((p: Product) => String(p.category_id) === '1')
+      },
+      {
+        label: "Qo'shimcha noz ne'matlar",
+        items: products.filter((p: Product) => String(p.category_id) === '2')
+      }
+    ]
+  })
+  const saladsSection: ComputedRef<Section[]> = computed(() => [
+    {
+      label: 'Salatlar',
+      items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'salads')
     }
-  },
-  { immediate: true }
-)
+  ])
+  const bonusesSection: ComputedRef<Section[]> = computed(() => [
+    {
+      label: 'Bonuslar',
+      items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'bonuses')
+    }
+  ])
+
+  const tabSections: ComputedRef<Section[]> = computed(() => {
+    if (activeTab.value === 'Taomlar') return mealsSections.value
+    if (activeTab.value === "To'y dasturxoni") return weddingSections.value
+    if (activeTab.value === 'Salatlar') return saladsSection.value
+    if (activeTab.value === 'Bonuslar') return bonusesSection.value
+    return []
+  })
+
+  // Tabni avtomatik birinchi mavjud bo‘limga o‘zgartirish (ma’lumot kelganda)
+  watch(
+    () => tarifDetail.value?.tariff_products,
+    (products: Product[]) => {
+      if (products?.length) {
+        const firstType = tabs.find((tab: Tab) => products.some((p: Product) => tab.keys.includes(p.type)))
+        if (firstType) activeTab.value = firstType.label
+      }
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -153,12 +153,12 @@ watch(
 </template>
 
 <style scoped>
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 </style>

@@ -1,80 +1,80 @@
 <script setup lang="ts">
-import { openState } from '~/stores/isOpen.store';
-import { useAuthStore } from '~/stores/auth.store';
-import { useLogout } from '~/data/auth/logout';
-import { SuperadminAdmins, UiToyxonalarList, LazyUiModalToyxonaAction } from '#components';
-import { useOverlay } from '#imports'
-import type { IToyxonalar } from '~/interfaces';
-import { useGetMeQuery } from '~/data'
+  import { openState } from '~/stores/isOpen.store';
+  import { useAuthStore } from '~/stores/auth.store';
+  import { useLogout } from '~/data/auth/logout';
+  import { SuperadminAdmins, UiToyxonalarList, LazyUiModalToyxonaAction } from '#components';
+  import { useOverlay } from '#imports'
+  import type { IToyxonalar } from '~/interfaces';
+  import { useGetMeQuery } from '~/data'
 
-const { isLargeScreen } = useScreenSize();
-const authStore = useAuthStore();
-const user = computed(() => authStore.user);
-const isLoading = computed(() => authStore.isLoading);
-const { t } = useI18n();
-const toyxonalarListRef = ref()
-const adminListRef = ref()
-const superadminListRef = ref()
-const openComponent = openState();
-const onClose = () => {
-  openComponent.onClose();
-}
-const showAddAdmins = ref(false);
-const showAddDiscount = ref(false);
-onBeforeRouteLeave(() => {
-  openComponent.onClose();
-})
-
-
-// Logout mutation
-const { mutate: logout, isPending: isLoggingOut } = useLogout();
-
-// Handle logout click
-const handleLogout = () => {
-  if (confirm(t('logout.confirmMessage'))) {
-    logout();
+  const { isLargeScreen } = useScreenSize();
+  const authStore = useAuthStore();
+  const user = computed(() => authStore.user);
+  const isLoading = computed(() => authStore.isLoading);
+  const { t } = useI18n();
+  const toyxonalarListRef = ref()
+  const adminListRef = ref()
+  const superadminListRef = ref()
+  const openComponent = openState();
+  const onClose = () => {
+    openComponent.onClose();
   }
-};
-
-const overlay = useOverlay()
-const selectedToyxona = ref<IToyxonalar | null>(null)
-const selectedTab = ref<'active' | 'archive'>('active') // yoki 'archive', kerakli joyda o'zgartirasiz
-
-async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
-  // Ensure tab is either 'active' or 'archive'
-  if (tab !== 'active' && tab !== 'archive') return;
-  selectedToyxona.value = toyxona
-  selectedTab.value = tab as 'active' | 'archive'
-  const modal = overlay.create(LazyUiModalToyxonaAction, {
-    props: {
-      toyxona: toyxona,
-      tab: tab,
-      modelValue: true
-    }
+  const showAddAdmins = ref(false);
+  const showAddDiscount = ref(false);
+  onBeforeRouteLeave(() => {
+    openComponent.onClose();
   })
-  const instance = modal.open()
-  const result = await instance.result
-  if (result === 'success') {
-    // Ma'lumotlarni yangilash yoki boshqa action
-    toyxonalarListRef.value?.refreshList()
-    adminListRef.value?.refreshList()
-    superadminListRef.value?.refreshList()
-    // fetchNextPage() yoki boshqa funksiyani chaqiring
+
+
+  // Logout mutation
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+  // Handle logout click
+  const handleLogout = () => {
+    if (confirm(t('logout.confirmMessage'))) {
+      logout();
+    }
+  };
+
+  const overlay = useOverlay()
+  const selectedToyxona = ref<IToyxonalar | null>(null)
+  const selectedTab = ref<'active' | 'archive'>('active') // yoki 'archive', kerakli joyda o'zgartirasiz
+
+  async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
+    // Ensure tab is either 'active' or 'archive'
+    if (tab !== 'active' && tab !== 'archive') return;
+    selectedToyxona.value = toyxona
+    selectedTab.value = tab as 'active' | 'archive'
+    const modal = overlay.create(LazyUiModalToyxonaAction, {
+      props: {
+        toyxona: toyxona,
+        tab: tab,
+        modelValue: true
+      }
+    })
+    const instance = modal.open()
+    const result = await instance.result
+    if (result === 'success') {
+      // Ma'lumotlarni yangilash yoki boshqa action
+      toyxonalarListRef.value?.refreshList()
+      adminListRef.value?.refreshList()
+      superadminListRef.value?.refreshList()
+      // fetchNextPage() yoki boshqa funksiyani chaqiring
+    }
   }
-}
 
-function refreshDiscounts() {
-  // discountListRef.value?.refetch() yoki
-  openComponent.onOpen('discounts') // yoki
-  // yoki getDiscounts('admin') hookidan refetch chaqiring
-}
+  function refreshDiscounts() {
+    // discountListRef.value?.refetch() yoki
+    openComponent.onOpen('discounts') // yoki
+    // yoki getDiscounts('admin') hookidan refetch chaqiring
+  }
 
-const createdToyxonaId = ref<number | null>(null);
+  const createdToyxonaId = ref<number | null>(null);
 
-const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: number }) => {
-  onClose(); // Slideoverni yopish
-  openComponent.onOpen('createTariff', { toyxonaId: id, tariffCount }); // Endi ikkala qiymat uzatiladi
-};
+  const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: number, name: string }[] }) => {
+    onClose(); // Slideoverni yopish
+    openComponent.onOpen('createTariff', { toyxonaId: id, tariffs }); // tariffs massivini uzatamiz
+  };
 
 
 </script>
@@ -88,8 +88,8 @@ const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: nu
       <div class="w-full flex flex-col gap-4">
         <client-only>
           <!-- <ProfileUserCardPlaceholder v-if="isLoading" /> -->
-          <ProfileUserCard v-if="user" :name="user.name" :phone="user.phone" :status="user.status"
-            :role="user.role" :avatar="user.avatar" />
+          <ProfileUserCard v-if="user" :name="user.name" :phone="user.phone" :status="user.status" :role="user.role"
+            :avatar="user.avatar" />
           <UiRegisterPrompt v-else />
         </client-only>
         <ProfileActions :role="user?.role" />
@@ -158,9 +158,9 @@ const handleToyxonaCreated = ({ id, tariffCount }: { id: number, tariffCount: nu
       <AdminToyxonaCreate @created="handleToyxonaCreated" />
     </UiSlideOver>
 
-    <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'" title="1-tarif"
+    <UiSlideOver :is-open="openComponent.isOpen && openComponent.componentType === 'createTariff'" title="Tariflar"
       @close="onClose">
-      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" :tariff-count="openComponent.payload?.tariffCount" />
+      <AdminTarif :toyxona-id="openComponent.payload?.toyxonaId" :tariffs="openComponent.payload?.tariffs || []" />
     </UiSlideOver>
 
   </div>

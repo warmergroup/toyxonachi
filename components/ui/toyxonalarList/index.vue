@@ -1,101 +1,101 @@
 <script setup lang="ts">
-import { useInfiniteToyxonalarQuery } from '~/data'
-import { useAuthStore } from '~/stores/auth.store'
-import { openState } from '~/stores/isOpen.store'
+    import { useInfiniteToyxonalarQuery } from '~/data'
+    import { useAuthStore } from '~/stores/auth.store'
+    import { openState } from '~/stores/isOpen.store'
 
-const emit = defineEmits<{
-    (e: 'action', toyxona: any, tab: string): void
-}>()
+    const emit = defineEmits<{
+        (e: 'action', toyxona: any, tab: string): void
+    }>()
 
-const localePath = useLocalePath()
-const router = useRouter()
+    const localePath = useLocalePath()
+    const router = useRouter()
 
-const { formatPrice } = useFormat()
-const {
-    data: toyxonalarData,
-    isLoading: toyxonaLoading,
-    fetchNextPage,
-    isFetchingNextPage,
-    error,
-    refetch // <-- refetch funksiyasini olamiz
-} = useInfiniteToyxonalarQuery(12, 'admin');
+    const { formatPrice } = useFormat()
+    const {
+        data: toyxonalarData,
+        isLoading: toyxonaLoading,
+        fetchNextPage,
+        isFetchingNextPage,
+        error,
+        refetch // <-- refetch funksiyasini olamiz
+    } = useInfiniteToyxonalarQuery(12, 'admin');
 
 
-const { t } = useI18n();
-const toyxonalar = computed(() => (toyxonalarData.value?.pages || []).flat())
-const infiniteScrollTrigger = ref<null | HTMLElement>(null);
-const authStore = useAuthStore();
-const role = computed(() => authStore.isSuperAdmin ? 'superadmin' : (authStore.isAdmin ? 'admin' : ''));
-const openComponent = openState();
-const items = computed(() => {
-    if (role.value === 'admin') {
-        return [
-            { label: t('toyxonaStatus.active'), slot: 'active' },
-            { label: t('toyxonaStatus.arxiv'), slot: 'archive' }
-        ]
-    } else if (role.value === 'superadmin') {
-        return [
-            { label: t('toyxonaStatus.all'), slot: 'all' },
-            { label: t('toyxonaStatus.moderation'), slot: 'moderation' }
-        ]
-    } else { return [] }
-});
+    const { t } = useI18n();
+    const toyxonalar = computed(() => (toyxonalarData.value?.pages || []).flat())
+    const infiniteScrollTrigger = ref<null | HTMLElement>(null);
+    const authStore = useAuthStore();
+    const role = computed(() => authStore.isSuperAdmin ? 'superadmin' : (authStore.isAdmin ? 'admin' : ''));
+    const openComponent = openState();
+    const items = computed(() => {
+        if (role.value === 'admin') {
+            return [
+                { label: t('toyxonaStatus.active'), slot: 'active' },
+                { label: t('toyxonaStatus.arxiv'), slot: 'archive' }
+            ]
+        } else if (role.value === 'superadmin') {
+            return [
+                { label: t('toyxonaStatus.all'), slot: 'all' },
+                { label: t('toyxonaStatus.moderation'), slot: 'moderation' }
+            ]
+        } else { return [] }
+    });
 
-const filteredToyxonalar = (slot: string) => {
-    if (role.value === 'admin') {
-        if (slot === 'active') return toyxonalar.value.filter(t => t.status === 'active' || t.status === 'new' || t.status === 'review');
-        if (slot === 'archive') return toyxonalar.value.filter(t => t.status === 'arxiv' || t.status === 'rejected');
-    } else if (role.value === 'superadmin') {
-        if (slot === 'all') return toyxonalar.value;
-        if (slot === 'moderation') return toyxonalar.value.filter(t => t.status === 'review');
-    } else {
+    const filteredToyxonalar = (slot: string) => {
+        if (role.value === 'admin') {
+            if (slot === 'active') return toyxonalar.value.filter(t => t.status === 'active' || t.status === 'new' || t.status === 'review');
+            if (slot === 'archive') return toyxonalar.value.filter(t => t.status === 'arxiv' || t.status === 'rejected');
+        } else if (role.value === 'superadmin') {
+            if (slot === 'all') return toyxonalar.value;
+            if (slot === 'moderation') return toyxonalar.value.filter(t => t.status === 'review');
+        } else {
+            return [];
+        }
         return [];
-    }
-    return [];
-};
+    };
 
-const statusColors: Record<string, string> = {
-    active: 'bg-green-100 text-green-700',
-    rejected: 'bg-red-100 text-red-700',
-    arxiv: 'bg-orange-200 text-gray-600',
-    new: 'bg-yellow-100 text-yellow-700',
-    review: 'bg-blue-100 text-blue-600',
-    moderation: 'bg-blue-100 text-blue-600'
-};
+    const statusColors: Record<string, string> = {
+        active: 'bg-green-100 text-green-700',
+        rejected: 'bg-red-100 text-red-700',
+        arxiv: 'bg-orange-200 text-gray-600',
+        new: 'bg-yellow-100 text-yellow-700',
+        review: 'bg-blue-100 text-blue-600',
+        moderation: 'bg-blue-100 text-blue-600'
+    };
 
-let observer: IntersectionObserver | null = null;
+    let observer: IntersectionObserver | null = null;
 
-onMounted(() => {
-    observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && !isFetchingNextPage.value) {
-            fetchNextPage();
+    onMounted(() => {
+        observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !isFetchingNextPage.value) {
+                fetchNextPage();
+            }
+        });
+        if (infiniteScrollTrigger.value) {
+            observer.observe(infiniteScrollTrigger.value);
         }
     });
-    if (infiniteScrollTrigger.value) {
-        observer.observe(infiniteScrollTrigger.value);
+
+    onUnmounted(() => {
+        if (infiniteScrollTrigger.value && observer) observer.unobserve(infiniteScrollTrigger.value);
+        if (observer) observer.disconnect();
+    });
+
+    const infoFields = [
+        { label: 'admin.tarifCount', value: (t: any, toyxona: any) => toyxona.tariff_count },
+        { label: 'admin.minPrice', value: (t: any, toyxona: any) => formatPrice(toyxona.min_price) },
+        { label: 'admin.maxPrice', value: (t: any, toyxona: any) => formatPrice(toyxona.max_price) }
+    ];
+
+    // Parentdan refresh signalini olish uchun
+    function refreshList() {
+        refetch()
     }
-});
-
-onUnmounted(() => {
-    if (infiniteScrollTrigger.value && observer) observer.unobserve(infiniteScrollTrigger.value);
-    if (observer) observer.disconnect();
-});
-
-const infoFields = [
-    { label: 'admin.tarifCount', value: (t: any, toyxona: any) => toyxona.tariff_count },
-    { label: 'admin.minPrice', value: (t: any, toyxona: any) => formatPrice(toyxona.min_price) },
-    { label: 'admin.maxPrice', value: (t: any, toyxona: any) => formatPrice(toyxona.max_price) }
-];
-
-// Parentdan refresh signalini olish uchun
-function refreshList() {
-    refetch()
-}
-const navigateToVenue = (id: string) => {
-    const path = localePath(`/admin/toyxona/${id}`);
-    router.push(path);
-};
-defineExpose({ refreshList })
+    const navigateToVenue = (id: string) => {
+        const path = localePath(`/admin/toyxona/${id}`);
+        router.push(path);
+    };
+    defineExpose({ refreshList })
 </script>
 
 <template>
@@ -111,10 +111,10 @@ defineExpose({ refreshList })
                 <div class="flex flex-col gap-4">
                     <div v-for="toyxona in filteredToyxonalar(tab.slot)" :key="toyxona.id"
                         class="relative p-4 rounded-lg bg-gray-50 flex flex-col gap-4 hover:shadow">
-                        <div class="flex p-0 flex-col gap-2 relative cursor-pointer">
-                            <h3 class="text-lg font-bold hover:text-blue-400 transition-all ease-in"
-                                @click="navigateToVenue(toyxona.id)">{{
-                                    toyxona.name }}</h3>
+                        <div class="flex p-0 flex-col gap-2 relative cursor-pointer"
+                            @click="navigateToVenue(toyxona.id)">
+                            <h3 class="text-lg font-bold hover:text-blue-400 transition-all ease-in">{{
+                                toyxona.name }}</h3>
                             <span class="w-fit py-1 px-3 text-xs font-medium rounded-md"
                                 :class="statusColors[toyxona.status] || 'bg-gray-100 text-gray-600'">
                                 {{ t('toyxonaStatus.' + toyxona.status) }}

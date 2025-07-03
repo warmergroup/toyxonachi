@@ -25,17 +25,17 @@ export const useLogout = () => {
             
             // Show success message
             toast.add({
-                title: t('logout.title'),
+                title: t('logout.logoutTitle'),
                 description: t('logout.successMessage'),
                 color: 'success',
             });
             
         },
-        onError: (error: unknown) => {
+        onError: (error: any) => {
             console.error('Logout error:', error);
             toast.add({
-                title: t('logout.error'),
-                description: t('logout.logoutError'),
+                title: t('error.title'),
+                description: error, 
                 color: 'error',
             });
         }

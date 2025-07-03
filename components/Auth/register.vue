@@ -1,109 +1,131 @@
 <script lang="ts" setup>
-import { useRegister } from '~/data';
-import { useAuthStore } from '~/stores/auth.store';
-import { openState } from '~/stores/isOpen.store'
-import { vMaska } from 'maska/vue';
+  import { useRegister } from '~/data';
+  import { useAuthStore } from '~/stores/auth.store';
+  import { openState } from '~/stores/isOpen.store'
+  import { getToken, messaging } from '~/utils/firebase'
+  import { vMaska } from 'maska/vue';
 
-const authType = useAuthType();
-const openComponent = openState()
-const { t } = useI18n();
-const toast = useToast();
-const authStore = useAuthStore();
+  const config = useRuntimeConfig();
+  const vapidKey = typeof config.public.vapidKey === 'string' ? config.public.vapidKey : undefined;
+  const fcmToken = messaging ? await getToken(messaging, { vapidKey }) : undefined;
 
-const phonePrefix = '+998';
+  const authType = useAuthType();
+  const openComponent = openState()
+  const { t } = useI18n();
+  const toast = useToast();
+  const authStore = useAuthStore();
 
-const state = reactive({
-  name: '',
-  phone: '',
-});
+  const phonePrefix = '+998';
 
-const fullPhoneNumber = computed(() => phonePrefix + state.phone.replace(/\D/g, ''));
+  const state = reactive({
+    name: '',
+    phone: '',
+  });
 
-// Form validation
-const validateForm = (): boolean => {
-  if (!state.name || !state.phone) {
-    toast.add({
-      title: t('error.validation'),
-      description: t('error.fillAllFields'),
-      color: 'error',
-    });
-    return false;
-  }
-  return true;
-};
+  const fullPhoneNumber = computed(() => phonePrefix + state.phone.replace(/\D/g, ''));
 
-// Handle successful registration
-const handleRegistrationSuccess = (data: any) => {
-  try {
-    // Save user data to store
-    authStore.setUser({
-      id: String(data.user.id),
-      name: data.user.name,
-      phone: data.user.phone,
-      status: data.user.status,
-      role: data.role,
-    });
-
-    // Save token
-    localStorage.setItem('token', data.token);
-
-    // Show success message
-    toast.add({
-      title: t('success.registered'),
-      description: t('success.welcomeMessage', { name: state.name }),
-      color: 'success',
-    });
-
-    // Close registration form
-    openComponent.onClose();
-  } catch (error) {
-    console.error('Error handling registration success:', error);
-    toast.add({
-      title: t('error.title'),
-      description: t('error.unknown'),
-      color: 'error',
-    });
-  }
-};
-
-// Registration mutation with UI handlers
-const { mutate, isPending } = useRegister();
-
-// Forma yuborilganda
-const onSubmit = (event: SubmitEvent) => {
-  event.preventDefault();
-  console.log('Form submission started');
-
-  if (!validateForm()) return;
-
-  const formData = {
-    name: state.name.trim(),
-    phone: fullPhoneNumber.value,
-    status: 'active',
-    role: 1,
+  // Form validation
+  const validateForm = (): boolean => {
+    if (!state.name || !state.phone) {
+      toast.add({
+        title: t('error.validation'),
+        description: t('error.fillAllFields'),
+        color: 'error',
+      });
+      return false;
+    }
+    return true;
   };
 
-  console.log('Submitting form data:', formData);
+  // Handle successful registration
+  const handleRegistrationSuccess = (data: any) => {
+    try {
+      // Save user data to store
+      authStore.setUser({
+        id: String(data.user.id),
+        name: data.user.name,
+        phone: data.user.phone,
+        status: data.user.status,
+        role: data.role,
+      });
 
-  mutate(
-    {
+      // Save token
+      localStorage.setItem('token', data.token);
+
+      // Show success message
+      toast.add({
+        title: t('success.registered'),
+        description: t('success.welcomeMessage', { name: state.name }),
+        color: 'success',
+      });
+
+      // Close registration form
+      openComponent.onClose();
+    } catch (error) {
+      console.error('Error handling registration success:', error);
+      toast.add({
+        title: t('error.title'),
+        description: t('error.unknown'),
+        color: 'error',
+      });
+    }
+  };
+
+  // Registration mutation with UI handlers
+  const { mutate, isPending } = useRegister();
+
+  // Forma yuborilganda
+  const onSubmit = (event: SubmitEvent) => {
+    event.preventDefault();
+    console.log('Form submission started');
+
+    if (!validateForm()) return;
+
+    const formData = {
       name: state.name.trim(),
       phone: fullPhoneNumber.value,
       status: 'active',
       role: 1,
-    },
-    {
-      onSuccess: handleRegistrationSuccess,
-      onError: (error: Error) => {
-        toast.add({
-          title: t('error.title'),
-          description: error.message || t('error.unknown'),
-          color: 'error',
-        });
+    };
+
+    console.log('Submitting form data:', formData);
+
+    mutate(
+      {
+        name: state.name.trim(),
+        phone: fullPhoneNumber.value,
+        status: 'active',
+        role: 1,
       },
+      {
+        onSuccess: handleRegistrationSuccess,
+        onError: (error: Error) => {
+          toast.add({
+            title: t('error.title'),
+            description: error.message || t('error.unknown'),
+            color: 'error',
+          });
+        },
+      }
+    );
+  };
+
+
+  onMounted(async () => {
+    let fcmToken;
+    if (messaging) {
+      fcmToken = await getToken(messaging, { vapidKey });
+      if (fcmToken) {
+        console.log('FCM Token:', fcmToken);
+        // TODO: fcmToken-ni backendga yuborish
+      } else {
+        console.warn('Foydalanuvchi FCM token olishga ruxsat bermadi');
+      }
+    } else {
+      console.warn('Messaging is not initialized.');
     }
-  );
-};
+  });
+
 </script>
 
 <template>

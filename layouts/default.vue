@@ -5,7 +5,9 @@ const { isLargeScreen } = useScreenSize();
 
 <template>
   <div class="">
-    <LayoutsNavbar v-if="isLargeScreen" />
+    
+      <LayoutsNavbar v-if="isLargeScreen" />
+    
     <section>
       <slot />
     </section>

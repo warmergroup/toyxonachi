@@ -128,6 +128,7 @@
     "loginTitle": "Вход",
     "successMessage": "Вы успешно вошли в систему",
     "loginPending": "Процесс входа в систему...",
+    "welcomeBack": "Добро пожаловать",
     "loginButton": "Войти",
     "loginError": "Ошибка входа. Пожалуйста, попробуйте еще раз.",
     "noAccount": "Нет аккаунта?"
@@ -173,6 +174,7 @@
     "activeOrDelete": "Вы уверены, что хотите активировать или удалить банкетный зал?"
   },
   "toyxonaForm":{
+    "imageFild": "Фотографии банкетного зала",
     "nameField": "Название",
     "descriptionField": "Описание",
     "addressField": "Адрес",
@@ -182,5 +184,17 @@
     "telegramField": "Telegram",
     "instagramField": "Instagram",
     "weddingHallPictures": "Расположение банкетного зала"
+  },
+  "tariffForm": {
+    "tariffName": "название тарифа",
+    "tariffPrice": "стоимость тарифа",
+    "people": "Человек",
+    "price": "Сумма",
+    "meals": "Блюда",
+    "salads": "Салаты",
+    "WeddingTable": "Свадебный стол",
+    "bonuses": "бонусы",
+    "firstFood": "Первое блюдо",
+    "secondFood": "Основное блюдо"
   }
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from '~/utils/auth';
+import { getAuthToken } from '~/utils/auth';
 import { API_URL } from './index';
 
 // Auth so'rovlari uchun alohida instance
@@ -8,14 +8,14 @@ const $authApi = axios.create({
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getToken()}`,
+        Authorization: `Bearer ${getAuthToken()}`,
     }
 });
 
 // So'rov yuborishdan oldin token qo'shish
 $authApi.interceptors.request.use(
     (config) => {
-        const token = getToken();
+        const token = getAuthToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

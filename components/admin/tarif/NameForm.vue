@@ -1,86 +1,64 @@
 <script setup lang="ts">
 
-import { useDeleteTariff, useCreateTarif } from '~/data'
+    import { useDeleteTariff, useUpdateTariffName } from '~/data'
 
-const { t } = useI18n()
-const props = defineProps<{
-    toyxonaId: number | null
-}>()
-const emit = defineEmits<{
-    (e: 'created', id: number): void
-}>()
 
-const tariffName = reactive({
-    name: ''
-})
+    const { t } = useI18n()
+    const props = defineProps<{
+        toyxonaId: number | null
+        tariffId: number | null
+        defaultName: string
+    }>()
+    const emit = defineEmits<{
+        (e: 'created', id: number): void
+    }>()
 
-const createdTariff = ref<null | {
-    name: string
-    wedding_hall_id: number
-    updated_at: string
-    created_at: string
-    id: number
-}>(null)
+    // Tarif nomini local state sifatida har safar yangi obyekt qilib olamiz
+    const tariffName = reactive({
+        name: props.defaultName || ''
+    })
 
-const { mutate: createTariff, isPending: isCreating } = useCreateTarif()
-const { mutate: deleteTariff, isPending: isDeleting } = useDeleteTariff()
-
-function handleCreate() {
-    if (!tariffName.name || !props.toyxonaId) return
-    createTariff(
-        {
-            name: tariffName.name,
-            wedding_hall_id: props.toyxonaId
+    watch(
+        () => props.defaultName,
+        (val) => {
+            // Obyektni to'liq yangilash
+            tariffName.name = val || ''
         },
-        {
-            onSuccess(data) {
-                createdTariff.value = data
-                emit('created', data.id)
-            }
-        }
+        { immediate: true }
     )
-}
 
-function handleRemove() {
-    if (!createdTariff.value) return
-    deleteTariff(
-        createdTariff.value.id,
-        {
-            onSuccess() {
-                createdTariff.value = null
-                tariffName.name = ''
-                emit('created', 0)
+    // Faqat update va delete funksiyalari ishlatiladi
+    const { mutate: updateTariff, isPending: isUpdating } = useUpdateTariffName(props.tariffId ?? 0)
+
+    function handleUpdate() {
+        if (!tariffName.name || !props.toyxonaId || !props.tariffId) return
+        updateTariff(
+            { name: tariffName.name, wedding_hall_id: props.toyxonaId },
+            {
+                onSuccess(data) {
+                    tariffName.name = data.name
+                }
             }
-        }
-    )
-}
-function reset() {
-    tariffName.name = ''
-    createdTariff.value = null
-}
-defineExpose({ tariffName, reset })
+        )
+    }
+
+    function reset() {
+        // Propdan sync qilish (keyingi tarifga o'tganda to'g'ri nom chiqishi uchun)
+        tariffName.name = props.defaultName || ''
+    }
+    defineExpose({ tariffName, reset })
 </script>
 
 <template>
-    <UForm :state="tariffName" class="w-full flex flex-col gap-4" @submit.prevent="handleCreate">
-        <template v-if="!createdTariff">
-            <UFormField class="w-full" label="tarif nomi" name="name">
-                <UInput v-model="tariffName.name" color="secondary" variant="soft" class="w-full" type="text" size="xl"
-                    placeholder="tarif nomi" :loading="isCreating">
-                    <template v-if="tariffName.name?.length" #trailing>
-                        <UButton color="neutral" variant="soft" size="xl" icon="material-symbols:check"
-                            @click="handleCreate" :loading="isCreating" />
-                    </template>
-                </UInput>
-            </UFormField>
-        </template>
-        <template v-else>
-            <div class="flex items-center gap-2">
-                <span class="font-semibold text-lg">{{ createdTariff.name }}</span>
-                <UButton icon="custom:trash-icon" color="error" size="sm" variant="soft" @click="handleRemove"
-                    :loading="isDeleting" />
-            </div>
-        </template>
-
+    <UForm :state="tariffName" class="w-full flex flex-col gap-4" @submit.prevent="handleUpdate">
+        <UFormField class="w-full" :label="t('tariffForm.tariffName')" name="name">
+            <UInput v-model="tariffName.name" variant="soft" class="w-full" type="text" size="xl"
+                :placeholder="t('tariffForm.tariffName')" :loading="isUpdating">
+                <template v-if="tariffName.name?.length" #trailing>
+                    <UButton color="neutral" variant="soft" size="xl" icon="material-symbols:check"
+                        @click="handleUpdate" :loading="isUpdating" />
+                </template>
+            </UInput>
+        </UFormField>
     </UForm>
 </template>

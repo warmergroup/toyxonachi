@@ -1,97 +1,97 @@
 <script setup lang="ts">
-import type { ITarif, IToyxonalar } from '~/interfaces';
-import { useLocationStore } from '~/stores/location.store';
-import { getDistanceFromLatLonInKm } from '~/utils/distance'
-import { useGetTariflarQuery } from "~/data/tariffs";
-import { getToyxonaById } from '~/data/toyxonalar';
-import type { UseQueryReturnType } from '@tanstack/vue-query';
-import { openState } from '~/stores/isOpen.store';
+  import type { ITarif, IToyxonalar } from '~/interfaces';
+  import { useLocationStore } from '~/stores/location.store';
+  import { getDistanceFromLatLonInKm } from '~/utils/distance'
+  import { useGetTariflarQuery } from "~/data/tariffs";
+  import { getToyxonaById } from '~/data/toyxonalar';
+  import type { UseQueryReturnType } from '@tanstack/vue-query';
+  import { openState } from '~/stores/isOpen.store';
 
-const openComponent = openState();
-const router = useRouter();
-const route = useRoute();
-const { t } = useI18n();
-const { isLargeScreen } = useScreenSize();
-const locationStore = useLocationStore()
-const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
-const { data: tariflar } = useGetTariflarQuery(route.params.id as string) as UseQueryReturnType<ITarif, Error>;
-const error = ref<string | null>(null);
-const selectedTarif = ref<any | null>(null);
+  const openComponent = openState();
+  const router = useRouter();
+  const route = useRoute();
+  const { t } = useI18n();
+  const { isLargeScreen } = useScreenSize();
+  const locationStore = useLocationStore()
+  const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
+  const { data: tariflar } = useGetTariflarQuery(route.params.id as string) as UseQueryReturnType<ITarif, Error>;
+  const error = ref<string | null>(null);
+  const selectedTarif = ref<any | null>(null);
 
-const goback = () => {
-  router.go(-1);
-};
-const onClose = () => {
-  openComponent.onClose();
-}
-const userDistance = computed(() => {
-  if (
-    locationStore.coords &&
-    toyxona.value &&
-    toyxona.value.latitude &&
-    toyxona.value.longitude
-  ) {
-    return getDistanceFromLatLonInKm(
-      locationStore.coords.latitude,
-      locationStore.coords.longitude,
-      Number(toyxona.value.latitude),
-      Number(toyxona.value.longitude)
-    )
+  const goback = () => {
+    router.go(-1);
+  };
+  const onClose = () => {
+    openComponent.onClose();
   }
-  return null
-})
+  const userDistance = computed(() => {
+    if (
+      locationStore.coords &&
+      toyxona.value &&
+      toyxona.value.latitude &&
+      toyxona.value.longitude
+    ) {
+      return getDistanceFromLatLonInKm(
+        locationStore.coords.latitude,
+        locationStore.coords.longitude,
+        Number(toyxona.value.latitude),
+        Number(toyxona.value.longitude)
+      )
+    }
+    return null
+  })
 
-const imagelItems = computed(() =>
-  (toyxona?.value?.wedding_hall_pictures as any[] || []).map(b => ({
-    src: b.image_url,
-    id: b.id,
-    wedding_hall_id: b.wedding_hall_id
-  }))
-)
-
-const shareLink = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: 'Venue',
-      text: 'Check out this venue!',
-      url: window.location.href,
-    })
-      .then(() => console.log('Shared successfully'))
-      .catch((error) => console.error('Error sharing:', error));
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(window.location.href)
-      .then(() => alert('Link copied to clipboard!'))
-      .catch((error) => console.error('Error copying link:', error));
-  } else {
-    alert('Sharing is not supported on this device. Please copy the link manually: ' + window.location.href);
-  }
-};
-
-const tariflarForCard = computed(() =>
-  Array.isArray(toyxona.value?.tariffs)
-    ? toyxona.value.tariffs.map((tarif: any) => ({
-      ...tarif,
-      tariff_types: tarif.tariff_types || []
+  const imagelItems = computed(() =>
+    (toyxona?.value?.wedding_hall_pictures as any[] || []).map(b => ({
+      src: b.image_url,
+      id: b.id,
+      wedding_hall_id: b.wedding_hall_id
     }))
-    : []
-);
+  )
 
-const openTarifSlide = (tarif: any) => {
-  selectedTarif.value = tarif;
-  openComponent.onOpen('showTariff');
-};
-const openMap = () => {
-  if (!toyxona.value) return;
-  const lat = toyxona.value.latitude;
-  const lon = toyxona.value.longitude;
-  // Google Maps universal link
-  const url = `https://maps.google.com/?q=${lat},${lon}`;
-  window.open(url, '_blank');
-};
-// Sahifa yuklanganda ma'lumotlarni yuklash
-// onMounted(async () => {
-//
-// });
+  const shareLink = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Venue',
+        text: 'Check out this venue!',
+        url: window.location.href,
+      })
+        .then(() => console.log('Shared successfully'))
+        .catch((error) => console.error('Error sharing:', error));
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch((error) => console.error('Error copying link:', error));
+    } else {
+      alert('Sharing is not supported on this device. Please copy the link manually: ' + window.location.href);
+    }
+  };
+
+  const tariflarForCard = computed(() =>
+    Array.isArray(toyxona.value?.tariffs)
+      ? toyxona.value.tariffs.map((tarif: any) => ({
+        ...tarif,
+        tariff_types: tarif.tariff_types || []
+      }))
+      : []
+  );
+
+  const openTarifSlide = (tarif: any) => {
+    selectedTarif.value = tarif;
+    openComponent.onOpen('showTariff');
+  };
+  const openMap = () => {
+    if (!toyxona.value) return;
+    const lat = toyxona.value.latitude;
+    const lon = toyxona.value.longitude;
+    // Google Maps universal link
+    const url = `https://maps.google.com/?q=${lat},${lon}`;
+    window.open(url, '_blank');
+  };
+  // Sahifa yuklanganda ma'lumotlarni yuklash
+  // onMounted(async () => {
+  //
+  // });
 
 </script>
 
@@ -99,17 +99,13 @@ const openMap = () => {
   <div v-if="error" class="flex items-center justify-center h-64">
     <p class="text-text-secondary">{{ error }}</p>
   </div>
-  <div v-else-if="toyxona" class="lg:p-5 lg:pt-20 w-full h-full">
-
+  <div v-else-if="toyxona" class="lg:p-5 lg:pt-20 w-full h-full pb-20">
     <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
       <!-- Chap ustun (2/3) -->
       <div class="flex flex-col lg:gap-4 lg:col-span-2 lg:rounded-lg w-full h-full bg-white">
         <template v-if="isLargeScreen">
           <UiThumbnailGallery class="px-3 pt-3" :toyxona="toyxona" />
         </template>
-        <!-- <div v-if="!isLargeScreen" class="fixed top-0 left-0 right-0 w-full h-auto">
-          <UiCarousel :items="toyxona.images || []" />
-        </div> -->
         <div v-if="!isLargeScreen" ref="imageRef" class="sticky top-0 w-full h-auto">
           <div class="relative">
             <UiCarousel
@@ -178,21 +174,20 @@ const openMap = () => {
             </svg>
             <span>{{ toyxona.address }}</span>
           </div>
-          <UButton class="w-full py-2 flex items-center justify-center">
+          <UButton class="w-full py-2 flex items-center justify-center" @click="openMap">
             <span class="text-text-primary">{{ t('venue.goDirection') }}</span>
             <Icon name="custom:chevron-right" />
           </UButton>
         </div>
       </div>
     </div>
-    <UButton class="w-full py-2 flex items-center justify-center" @click="openMap">
-      <span class="text-text-primary">{{ t('venue.goDirection') }}</span>
-      <Icon name="custom:chevron-right" />
-    </UButton>
   </div>
 
   <div v-else class="mx-auto mt-50vh flex items-center justify-center h-64">
     <p class="text-text-secondary">{{ t('common.loading') }}</p>
   </div>
-
+  <UiSlideOver :isOpen="openComponent.isOpen && openComponent.componentType === 'showTariff'"
+    :title="selectedTarif?.name || 'Tarif'" @close="onClose">
+    <UiTarifTabs :tarif-id="selectedTarif?.id" />
+  </UiSlideOver>
 </template>

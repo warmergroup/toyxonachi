@@ -3,7 +3,9 @@ import { useGetTarifDetailQuery } from './getTarifDetail';
 import { useCreateTarif } from './createTariff';
 import { useCreateTariffProduct } from './createTariff.product';
 import { useCreateTariffType } from './createTariff.type';
-import {useDeleteTariff} from './deleteTariff'
+import { useDeleteTariff } from './deleteTariff';
+import { useUpdateTariffName } from './updateTariff';
+import { useDeleteTariffType } from './deleteTariff.types';
 
 export {
     useGetTariflarQuery,
@@ -11,5 +13,7 @@ export {
     useCreateTarif,
     useCreateTariffProduct,
     useCreateTariffType,
-    useDeleteTariff
+    useDeleteTariff,
+    useUpdateTariffName,
+    useDeleteTariffType
 };

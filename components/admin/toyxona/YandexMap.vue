@@ -176,7 +176,7 @@ onUnmounted(() => {
       <div class="p-5 bg-white">
         <h2 class="text-2xl font-semibold text-gray-900 mb-5 text-left">{{ title }}</h2>
         <UInput v-model="currentAddress" type="text"
-          class="w-full p-4 text-base font-normal text-gray-900 bg-gray-50 border border-gray-200 rounded-lg outline-none transition focus:border-green-500 focus:bg-white placeholder-gray-400"
+          class="w-full text-base font-normal text-gray-900 bg-gray-50 border border-gray-200 rounded-lg outline-none transition focus:border-green-500 focus:bg-white placeholder-gray-400"
           :placeholder="addressPlaceholder" />
       </div>
     </div>

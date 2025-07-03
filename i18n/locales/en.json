@@ -84,6 +84,7 @@
   "admin": {
     "myWeddingHalls": "My Wedding Halls",
     "tarifCount": "tariffs count",
+    "addToyxona": "Add wedding hall",
     "minPrice" : "Minimum price",
     "maxPrice" : "Maximum price"
   },
@@ -124,7 +125,7 @@
     "loginTitle": "Login",
     "successMessage": "Login successful",
     "loginPending": "Login in progress...",
-    "loginWelcomeBack": "Welcome back",
+    "WelcomeBack": "Welcome",
     "loginButton": "Login",
     "loginError": "Login error. Please try again.",
     "noAccount": "Don't have an account?"
@@ -170,6 +171,7 @@
     "activeOrDelete": "Will you activate or delete the wedding venue?"
   },
   "toyxonaForm":{
+    "imageFild": "Wedding hall pictures",
     "nameField": "Name",
     "descriptionField": "Description",
     "addressField": "Address",
@@ -179,5 +181,18 @@
     "telegramField": "Telegram",
     "instagramField": "Instagram",
     "weddingHallPictures": "Wedding Hall Pictures"
+  },
+  "tariffForm": {
+    "tariffName": "tariff name",
+    "tariffPrice": "tariff price",
+    "people": "Person",
+    "price": "Price",
+    "meals": "Meals",
+    "salads": "Salads",
+    "WeddingTable": "Wedding table",
+    "bonuses": "Bonuses",
+    "firstFood": "First course",
+    "secondFood": "Main course"
+
   }
 }
