@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { filteredAdminUsers } from "~/data";
+  import { filteredAdminUsers } from "~/data";
 
-const { formatPhone } = useFormat();
-const { t } = useI18n()
-const { data, isLoading, error } = filteredAdminUsers();
-const search = ref('')
-const items = [
-  { label: t('users.all'), value: 'all' },
-  { label: t('users.superadmin'), value: 'superadmin' },
-  { label: t('users.admin'), value: 'admin' }
-];
-const selectedRole = ref('all');
+  const { formatPhone } = useFormat();
+  const { t } = useI18n()
+  const { data, isLoading, error } = filteredAdminUsers();
+  const search = ref('')
+  const items = [
+    { label: t('users.all'), value: 'all' },
+    { label: t('users.superadmin'), value: 'superadmin' },
+    { label: t('users.admin'), value: 'admin' }
+  ];
+  const selectedRole = ref('all');
 
-const filteredUsers = computed(() => {
-  if (!data.value) return []
-  return data.value.filter(user => {
-    const matchName = user.name.toLowerCase().includes(search.value.toLowerCase())
-    const matchRole = selectedRole.value === 'all' || user.role === selectedRole.value
-    return matchName && matchRole
+  const filteredUsers = computed(() => {
+    if (!data.value) return []
+    return data.value.filter(user => {
+      const matchName = user.name.toLowerCase().includes(search.value.toLowerCase())
+      const matchRole = selectedRole.value === 'all' || user.role === selectedRole.value
+      return matchName && matchRole
+    })
   })
-})
 </script>
 
 <template>
@@ -68,7 +68,7 @@ const filteredUsers = computed(() => {
     <div
       class="container mx-auto absolute bottom-0 left-0 right-0 flex items-center justify-center bg-white w-full min-h-16 border-t border-gray-300 px-5 py-3 z-30">
       <UButton class="w-full flex items-center justify-center" color="secondary" size="xl" icon="custom:plus"
-        :label="t('profileActions.add')" @click="$emit('add-admin')" />
+        :label="t('profileActions.addAdmin')" @click="$emit('add-admin')" />
     </div>
   </div>
 </template>

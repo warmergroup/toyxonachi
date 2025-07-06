@@ -1,12 +1,10 @@
 <script setup lang="ts">
-    import { ref, reactive, watch, computed } from 'vue';
     import { useCreateToyxona } from '~/data';
-    import { useTotxonaFormStore } from '~/stores/toyxonaForm.store';
-    import { useLocationStore } from '#imports';
+    import { useToyxonaFormStore } from '~/stores/toyxonaForm.store';
 
     // Stores
     const coords = useLocationStore().coords;
-    const storeImages = useTotxonaFormStore();
+    const storeImages = useToyxonaFormStore();
     const toast = useToast();
     const emit = defineEmits(['created'])
 
@@ -69,8 +67,10 @@
             latitude: String(selectedLocation.value.latitude),
             longitude: String(selectedLocation.value.longitude),
             address: selectedLocation.value.address,
-            wedding_hall_pictures: storeImages.images.map(name => ({
-                image_url: name
+            wedding_hall_pictures: storeImages.images.map(img => ({
+                image_url: typeof img === 'string'
+                    ? (img.includes('/') ? img.split('/').pop()! : img)
+                    : (img.image_url.includes('/') ? img.image_url.split('/').pop()! : img.image_url)
             }))
         };
 
@@ -83,9 +83,7 @@
         } catch (error: any) {
             toast.add({ title: error.message || 'Xatolik yuz berdi', color: 'warning' });
         }
-
         storeImages.cleareImage()
-
     };
 </script>
 

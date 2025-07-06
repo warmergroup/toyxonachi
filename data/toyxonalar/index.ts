@@ -1,3 +1,4 @@
+import { useUpdateToyxona } from './updateToyxona';
 import {useGetToyxonalarQuery} from './getToyxonalar';
 import {useInfiniteToyxonalarQuery} from './getInfiniteToyxonalar';
 import {getToyxonaById } from './getToyxonaById';
@@ -11,5 +12,6 @@ export {
   getToyxonaById,
   useDeleteToyxona,
   useChangeToyxonaStatus,
-  useCreateToyxona
+  useCreateToyxona,
+  useUpdateToyxona
 };

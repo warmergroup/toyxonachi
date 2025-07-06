@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/vue-query';
+import { requestFcmToken } from '~/composables/useFCM'
 import $axios from '~/http';
 import type { IRegisterResponse } from '~/interfaces';
 

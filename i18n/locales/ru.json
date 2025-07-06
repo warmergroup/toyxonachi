@@ -20,7 +20,9 @@
     "appLanguage": "Язык приложения",
     "changeLanguage": "Выберите язык",
     "save": "Сохранить",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "readMore": "Читать все",
+    "readLess": "Свернуть"
   },
   "about": {
     "aboutUs": "О нас",
@@ -89,11 +91,17 @@
     "addToyxona": "Добавить банкетный зал",
     "editToyxona": "To'yxonani tahrirlash",
     "deleteToyxona": "To'yxonani o'chirish",
-    "createTariff": "Tarif yaratish"
+    "createTariff": "Tarif yaratish",
+    "editButton": "Изменить данные"
   },
   "superadmin": {
     "allWeddingHalls": "Все банкетные залы",
-    "allUsers": "Все пользователи"
+    "allUsers": "Все пользователи",
+    "acceptToyxona": "Принять",
+    "rejectToyxona": "Отклонить",
+    "accepted": "Принято",
+    "rejected": "Отклонено"
+
   },
   "profileActions": {
     "myProfile": "Мой профиль",
@@ -143,6 +151,7 @@
   },
   "logout": {
     "logoutTitle": "Выход",
+    "confirmMessage": "Вы уверены, что хотите выйти?",
     "successMessage": "Вы успешно вышли из системы",
     "logoutPending": "Процесс выхода из системы...",
     "logoutButton": "Выйти",

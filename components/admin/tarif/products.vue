@@ -1,44 +1,59 @@
 <script setup lang="ts">
-import { useCreateTariffProduct, useUploadImage } from '~/data'
+import { useCreateTariffProduct, useUploadImage, useDeleteTariffProduct, useGetTarifDetailQuery } from '~/data'
+import type { Product, FormState, Section } from '~/interfaces'
+
 const config = useRuntimeConfig()
 const imageUrl = config.public.imageUrl
 
-interface Product {
-    id: number
-    name: string
-    description: string
-    image_url: string
-    type: string
-    category_id?: string | number
-}
-interface FormState {
-    name: string
-    description: string
-    image_url: string
-    imageUploading: boolean
-}
-interface Section {
-    label: string
-    type: string
-    category_id?: number
-    form: FormState
-    items: Product[]
-    isCreating?: boolean // Qo'shildi
-}
-
-const props = defineProps<{ tariffId: number | null }>()
+const props = defineProps<{
+    tariffId: number | null,
+    initialProducts?: Array<{
+        id: number
+        name: string
+        description: string
+        image_url: string
+        type: string
+        category_id?: string | number
+    }>
+}>()
 
 const sections = reactive<Section[]>([
     { label: '1-taom', type: 'meals', category_id: 1, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] },
     { label: '2-taom', type: 'meals', category_id: 2, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] },
-    { label: 'Salatlar', type: 'salads', category_id: 1, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] }, // category_id: 1
+    { label: 'Salatlar', type: 'salads', category_id: 1, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] },
     { label: "To'y dasturxoni", type: 'wedding_table', category_id: 1, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] },
     { label: "Qo'shimcha noz ne'matlar", type: 'wedding_table', category_id: 2, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] },
-    { label: 'Bonuslar', type: 'bonuses', category_id: 1, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] } // category_id: 1
+    { label: 'Bonuslar', type: 'bonuses', category_id: 1, form: { name: '', description: '', image_url: '', imageUploading: false }, items: [] }
 ])
+
+// Fetch existing products if tariffId is provided but no initialProducts
+const { data: tariffDetail } = useGetTarifDetailQuery(
+    props.tariffId && !props.initialProducts ? String(props.tariffId) : ''
+)
+
+// AVVALGI PRODUCTLARNI TO'G'RI TAQSIMLASH
+watchEffect(() => {
+    // Foydalanuvchi productlar yoki fetched productlar
+    const productsToUse = props.initialProducts && props.initialProducts.length > 0
+        ? props.initialProducts
+        : (tariffDetail.value?.tariff_products || []);
+
+    if (Array.isArray(productsToUse)) {
+        // Har bir section uchun mahsulotlarni tozalash va qayta to'ldirish
+        sections.forEach(section => {
+            const sectionProducts = productsToUse.filter(product => {
+                const prodCat = product.category_id !== undefined ? Number(product.category_id) : undefined;
+                return section.type === product.type &&
+                    (section.category_id === undefined || Number(section.category_id) === prodCat);
+            });
+            section.items = sectionProducts;
+        });
+    }
+});
 
 const uploadImage = useUploadImage()
 const createProduct = useCreateTariffProduct()
+const deleteProduct = useDeleteTariffProduct()
 
 function handleImageUpload(e: Event, form: FormState) {
     const file = (e.target as HTMLInputElement).files?.[0]
@@ -71,13 +86,25 @@ function addProduct(section: Section) {
     createProduct.mutate(payload, {
         onSuccess(data: Product[] | Product) {
             if (Array.isArray(data)) {
-                section.items = data.filter(
+                // API dan qaytgan array'dan bizning section'ga mos keladiganini topamiz
+                const newProducts = data.filter(
                     item =>
                         item.type === section.type &&
                         Number(item.category_id) === section.category_id
                 )
+                // Faqat yangi mahsulotlarni qo'shamiz (duplicat bo'lmasligi uchun)
+                newProducts.forEach(newProduct => {
+                    const existingProduct = section.items.find(item => item.id === newProduct.id)
+                    if (!existingProduct) {
+                        section.items.unshift(newProduct)
+                    }
+                })
             } else if (data) {
-                section.items.unshift(data)
+                // Yagona mahsulot qaytsa, uni qo'shamiz
+                const existingProduct = section.items.find(item => item.id === data.id)
+                if (!existingProduct) {
+                    section.items.unshift(data)
+                }
             }
             section.form.name = ''
             section.form.description = ''
@@ -89,9 +116,24 @@ function addProduct(section: Section) {
         }
     })
 }
+
 function removeProduct(section: Section, id: number) {
-    section.items = section.items.filter(i => i.id !== id)
+    // Delete from database if product has an ID (exists in database)
+    if (id) {
+        deleteProduct.mutate(id, {
+            onSuccess() {
+                section.items = section.items.filter(i => i.id !== id)
+            },
+            onError(error: any) {
+                alert(error.message || 'Xatolik yuz berdi')
+            }
+        })
+    } else {
+        // Remove from local state if not yet saved
+        section.items = section.items.filter(i => i.id !== id)
+    }
 }
+
 function removeImage(form: FormState) {
     form.image_url = ''
 }
@@ -165,14 +207,17 @@ defineExpose({ sections, reset })
                             :disabled="section.form.imageUploading || !!section.form.image_url" />
                     </label>
                     <div v-else class="relative w-24 h-24 rounded-lg overflow-hidden group">
-                        <NuxtImg :src="`${imageUrl}/${section.form.image_url}`" alt="preview"
-                            class="object-cover w-full h-full" />
+                        <NuxtImg
+                            :src="section.form.image_url.startsWith('http') ? section.form.image_url : `${imageUrl}/${section.form.image_url}`"
+                            alt="preview" class="object-cover w-full h-full" />
                         <UButton class="absolute top-1 right-1 bg-black/40 rounded-full hover:bg-black/80"
                             variant="soft" color="neutral" icon="i-heroicons-x-mark"
                             @click="removeImage(section.form)" />
                     </div>
                 </div>
             </div>
+
+            <!-- Products list - View only -->
             <div v-for="item in section.items" :key="item.id" class="relative flex flex-col gap-2 mt-5">
                 <div class="">
                     <div>
@@ -184,8 +229,12 @@ defineExpose({ sections, reset })
                         <div class="w-full p-2 bg-gray-50 rounded-lg">{{ item.description }}</div>
                     </div>
                 </div>
-                <NuxtImg v-if="item.image_url" :src="`${imageUrl}/${item.image_url}`"
+                <NuxtImg v-if="item.image_url"
+                    :src="item.image_url.startsWith('http') ? item.image_url : `${imageUrl}/${item.image_url}`"
                     class="w-24 h-24 object-cover rounded-lg" />
+                <div v-if="item.image_url" class="text-xs text-gray-500 mt-1">
+
+                </div>
                 <button @click="removeProduct(section, item.id)" class="absolute right-0 top-0 text-red-500">
                     <Icon name="custom:trash-icon" />
                 </button>

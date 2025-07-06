@@ -1,3 +1,4 @@
+import { useUpdateTariffProduct } from './updateTariff.product';
 import { useGetTariflarQuery } from './getTariflar';
 import { useGetTarifDetailQuery } from './getTarifDetail';
 import { useCreateTarif } from './createTariff';
@@ -6,6 +7,7 @@ import { useCreateTariffType } from './createTariff.type';
 import { useDeleteTariff } from './deleteTariff';
 import { useUpdateTariffName } from './updateTariff';
 import { useDeleteTariffType } from './deleteTariff.types';
+import { useDeleteTariffProduct } from './deleteTariff.product';
 
 export {
     useGetTariflarQuery,
@@ -15,5 +17,7 @@ export {
     useCreateTariffType,
     useDeleteTariff,
     useUpdateTariffName,
-    useDeleteTariffType
+    useDeleteTariffType,
+    useUpdateTariffProduct,
+    useDeleteTariffProduct
 };

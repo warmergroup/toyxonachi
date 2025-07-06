@@ -2,27 +2,29 @@
 definePageMeta({
     middleware: ['admin-or-superadmin']
 })
-import type { ITarif, IToyxonalar } from '~/interfaces';
+
+import { useAuthStore } from '~/stores/auth.store'
+import type { IToyxonalar } from '~/interfaces';
 import { useLocationStore } from '~/stores/location.store';
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
-import { useGetTariflarQuery } from "~/data/tariffs";
 import { getToyxonaById } from '~/data/toyxonalar';
 import type { UseQueryReturnType } from '@tanstack/vue-query';
 import { openState } from '~/stores/isOpen.store';
 import { useChangeToyxonaStatus } from '~/data'
 
+const auth = useAuthStore();
 const openComponent = openState();
-const authStore = useAuthStore()
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const { isLargeScreen } = useScreenSize();
 const locationStore = useLocationStore()
 const changeStatus = useChangeToyxonaStatus()
-const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
-const { data: tariflar } = useGetTariflarQuery(route.params.id as string) as UseQueryReturnType<ITarif, Error>;
+const toyxonaQuery = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
+const toyxona = toyxonaQuery.data;
 const error = ref<string | null>(null);
 const selectedTarif = ref<any | null>(null);
+const isEditTariffOpen = ref(false);
 const isRejectDrawerOpen = ref(false)
 const toast = useToast()
 
@@ -31,6 +33,14 @@ const goback = () => {
 };
 const onClose = () => {
     openComponent.onClose();
+}
+function handleEditClose() {
+    openComponent.onClose();
+    setTimeout(() => {
+        if (toyxonaQuery && typeof toyxonaQuery.refetch === 'function') {
+            toyxonaQuery.refetch();
+        }
+    }, 300);
 }
 const userDistance = computed(() => {
     if (
@@ -67,9 +77,17 @@ const tariflarForCard = computed(() =>
         : []
 );
 
+
+// Open tariff details (view mode)
 const openTarifSlide = (tarif: any) => {
     selectedTarif.value = tarif;
     openComponent.onOpen('showTariff');
+};
+
+// Open tariff edit (edit mode)
+const openTarifEdit = (tarif: any) => {
+    selectedTarif.value = tarif;
+    isEditTariffOpen.value = true;
 };
 
 
@@ -82,7 +100,7 @@ function handleAccept() {
     }, {
         onSuccess: () => {
             toast.add({
-                description: 'Toyxona qabul qilindi',
+                description: `${t('superadmin.accepted')}`,
                 color: 'success',
             })
         },
@@ -104,7 +122,7 @@ function handleReject(reason: string) {
     }, {
         onSuccess: () => {
             toast.add({
-                description: 'Rad etish xabari yuborildi',
+                description: `${t('superadmin.rejected')}`,
                 color: 'success',
             }),
                 isRejectDrawerOpen.value = false
@@ -118,14 +136,20 @@ function handleReject(reason: string) {
     })
 }
 
-const openMap = () => {
-    if (!toyxona.value) return;
-    const lat = toyxona.value.latitude;
-    const lon = toyxona.value.longitude;
-    // Google Maps universal link
-    const url = `https://maps.google.com/?q=${lat},${lon}`;
-    window.open(url, '_blank');
-};
+const showFullDescription = ref(false);
+const DESCRIPTION_LIMIT = 180;
+const shortDescription = computed(() => {
+    if (!toyxona.value?.description) return '';
+    return toyxona.value.description.length > DESCRIPTION_LIMIT
+        ? toyxona.value.description.slice(0, DESCRIPTION_LIMIT)
+        : toyxona.value.description;
+});
+const isTruncated = computed(() => {
+    return toyxona.value?.description && toyxona.value.description.length > DESCRIPTION_LIMIT;
+});
+function toggleDescription() {
+    showFullDescription.value = !showFullDescription.value;
+}
 
 </script>
 
@@ -133,8 +157,7 @@ const openMap = () => {
     <div v-if="error" class="flex items-center justify-center h-64">
         <p class="text-text-secondary">{{ error }}</p>
     </div>
-    <div v-else-if="toyxona" class="mb-25 lg:p-5 lg:py-20 w-full h-full">
-        <SuperadminAcceptReject @reject="isRejectDrawerOpen = true" @accept="handleAccept" />
+    <div v-else-if="toyxona" class="relative pb-20 lg:px-5 lg:py-20 w-full h-full">
 
         <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
             <!-- Chap ustun (2/3) -->
@@ -178,45 +201,82 @@ const openMap = () => {
                     <UiTarifCard v-for="tarif in tariflarForCard" :key="tarif.id" :tarif="tarif"
                         @click="openTarifSlide(tarif)" />
 
-                    <div>
-                        <h2 class="font-medium text-lg">{{ t('venue.description') }}</h2>
-                        <span>{{ toyxona.description }}
-                        </span>
-                    </div>
-
                 </div>
             </div>
             <!-- O‘ng ustun (1/3) -->
             <div class="flex flex-col gap-4">
+
+                <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
+                    <transition name="fade-expand">
+                        <span v-if="showFullDescription" key="full"
+                            class="text-gray-500 text-sm block whitespace-pre-line">
+                            {{ toyxona.description }}
+                        </span>
+                        <span v-else key="short" class="text-gray-500 text-sm block whitespace-pre-line">
+                            {{ shortDescription }}<span v-if="isTruncated">...</span>
+                        </span>
+                    </transition>
+                    <button v-if="isTruncated" @click="toggleDescription"
+                        class="text-green-500 font-medium mt-2 flex items-center gap-1 select-none">
+                        <span>{{ showFullDescription ? t('common.readLess') : t('common.readMore') }}</span>
+                        <svg :class="{ 'rotate-180': showFullDescription, 'transition-transform': true }" width="16"
+                            height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 6l4 4 4-4" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+
                 <!-- Map -->
-                <div class="bg-white lg:rounded-lg shadow-sm p-4">
+                <div class="bg-white rounded-lg p-4">
                     <h2 class="text-xl font-bold text-text-primary mb-4 capitalize ">{{ t('venue.location') }}</h2>
                     <div class="bg-gray-100 rounded-lg overflow-hidden mb-4">
                         <YandexMap :center="{ lat: Number(toyxona.latitude), lng: Number(toyxona.longitude) }"
-                            :title="toyxona.name" class="w-full h-48 md:h-64 lg:h-80" />
-                        <!-- {{ toyxona.latitude }}, {{ toyxona.longitude }} -->
+                            :title="toyxona.name" class="w-full h-48 md:aspect-video lg:h-80" />
                     </div>
-                    <div class="flex items-center text-text-secondary mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span>{{ toyxona.address }}</span>
+                    <div class="flex flex-col text-text-secondary mb-4">
+                        <p>{{ toyxona.address }}</p>
+                        <span v-if="userDistance" class="text-text-secondary">
+                            <Icon name="custom:location" class="inline-block mr-1" />
+                            {{ userDistance.toFixed(1) }} km {{ t('common.fromYou') }}
+                        </span>
                     </div>
-                    <UButton class="w-full py-2 flex items-center justify-center" @click="openMap">
-                        <span class="text-text-primary">{{ t('venue.goDirection') }}</span>
-                        <Icon name="custom:chevron-right" />
-                    </UButton>
                 </div>
+            </div>
+
+            <div class="relative">
+                <SuperadminAcceptReject @reject="isRejectDrawerOpen = true" @accept="handleAccept" />
+                <AdminEditBtn :show="true" @click="openComponent.onOpen('editToyxona')" />
             </div>
         </div>
 
+
+        <!-- Tariff details slideover (view mode) -->
         <UiSlideOver :isOpen="openComponent.isOpen && openComponent.componentType === 'showTariff'"
-            :title="selectedTarif?.name || 'tarif'" @close="onClose">
-            <UiTarifTabs :tarif-id="selectedTarif?.id" />
+            :title="selectedTarif?.name || 'tarif'" @close="handleEditClose">
+            <UiTarifTabs :tarif-id="selectedTarif?.id" :tariff="selectedTarif" :is-admin="auth.isAdmin"
+                @edit-tariff="openTarifEdit" />
+        </UiSlideOver>
+
+        <!-- Tariff edit slideover (edit mode) -->
+        <UiSlideOver :isOpen="openComponent.isOpen && openComponent.componentType === 'editTarif'"
+            :title="selectedTarif?.name || 'Tarifni tahrirlash'" @close="handleEditClose">
+            <div v-if="selectedTarif" class="relative flex flex-col gap-4">
+                <div class="flex flex-col items-center justify-between bg-white p-4 rounded-lg">
+                    <AdminTarifNameForm :toyxona-id="Number(toyxona.id)" :tariff-id="selectedTarif.id"
+                        :default-name="selectedTarif.name" />
+                    <AdminTarifPrices :tariff-id="selectedTarif.id" :initial-prices="selectedTarif.tariff_types" />
+                </div>
+                <AdminTarifProducts :tariff-id="selectedTarif.id" :initial-products="selectedTarif.products" />
+                <!-- YANGI: Saqlash tugmasi -->
+                <UButton class="flex items-center justify-center mt-4" color="secondary" :label="t('common.save')"
+                    @click="handleEditClose" />
+            </div>
+        </UiSlideOver>
+
+
+        <UiSlideOver :isOpen="openComponent.isOpen && openComponent.componentType === 'editToyxona'" @close="onClose">
+            <AdminToyxonaEdit :toyxona="toyxona" @updated="handleEditClose" />
         </UiSlideOver>
 
         <UiDrawer v-if="!isLargeScreen" :isOpen="isRejectDrawerOpen" title="Rad etish sababi"
@@ -230,7 +290,7 @@ const openMap = () => {
         </UiSlideOver>
     </div>
 
-    <div v-else class=" mx-auto mt-50vh flex items-center justify-center h-64">
+    <div v-else class="mx-auto mt-50vh flex items-center justify-center h-64">
         <p class="text-text-secondary">{{ t('common.loading') }}</p>
     </div>
 

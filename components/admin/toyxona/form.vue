@@ -46,7 +46,7 @@
             </UFormField>
 
             <UFormField class="w-full" :label="t('toyxonaForm.telegramField')" name="telegram">
-                <UInput class="w-full" v-model="state.telegram" type="text" size="xl" placeholder="t.me/..."
+                <UInput class="w-full" v-model="state.telegram" type="text" size="xl" placeholder="t.me/"
                     variant="soft" />
             </UFormField>
 

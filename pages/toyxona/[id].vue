@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import type { ITarif, IToyxonalar } from '~/interfaces';
+  import type { IToyxonalar } from '~/interfaces';
   import { useLocationStore } from '~/stores/location.store';
   import { getDistanceFromLatLonInKm } from '~/utils/distance'
-  import { useGetTariflarQuery } from "~/data/tariffs";
-  import { getToyxonaById } from '~/data/toyxonalar';
+  import { getToyxonaById } from '~/data';
   import type { UseQueryReturnType } from '@tanstack/vue-query';
   import { openState } from '~/stores/isOpen.store';
 
@@ -14,7 +13,6 @@
   const { isLargeScreen } = useScreenSize();
   const locationStore = useLocationStore()
   const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
-  const { data: tariflar } = useGetTariflarQuery(route.params.id as string) as UseQueryReturnType<ITarif, Error>;
   const error = ref<string | null>(null);
   const selectedTarif = ref<any | null>(null);
 
@@ -88,10 +86,21 @@
     const url = `https://maps.google.com/?q=${lat},${lon}`;
     window.open(url, '_blank');
   };
-  // Sahifa yuklanganda ma'lumotlarni yuklash
-  // onMounted(async () => {
-  //
-  // });
+
+  const showFullDescription = ref(false);
+  const DESCRIPTION_LIMIT = 180;
+  const shortDescription = computed(() => {
+    if (!toyxona.value?.description) return '';
+    return toyxona.value.description.length > DESCRIPTION_LIMIT
+      ? toyxona.value.description.slice(0, DESCRIPTION_LIMIT)
+      : toyxona.value.description;
+  });
+  const isTruncated = computed(() => {
+    return toyxona.value?.description && toyxona.value.description.length > DESCRIPTION_LIMIT;
+  });
+  function toggleDescription() {
+    showFullDescription.value = !showFullDescription.value;
+  }
 
 </script>
 
@@ -99,7 +108,7 @@
   <div v-if="error" class="flex items-center justify-center h-64">
     <p class="text-text-secondary">{{ error }}</p>
   </div>
-  <div v-else-if="toyxona" class="lg:p-5 lg:pt-20 w-full h-full pb-25">
+  <div v-else-if="toyxona" class="pb-30 lg:px-5 lg:py-20 w-full h-full ">
     <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
       <!-- Chap ustun (2/3) -->
       <div class="flex flex-col lg:gap-4 lg:col-span-2 lg:rounded-lg w-full h-full bg-white">
@@ -148,8 +157,25 @@
 
           <div>
             <h2 class="font-medium text-lg">{{ t('venue.description') }}</h2>
-            <span>{{ toyxona.description }}
-            </span>
+            <div class="relative">
+              <transition name="fade-expand">
+                <span v-if="showFullDescription" key="full" class="text-gray-500 text-sm block whitespace-pre-line">
+                  {{ toyxona.description }}
+                </span>
+                <span v-else key="short" class="text-gray-500 text-sm block whitespace-pre-line">
+                  {{ shortDescription }}<span v-if="isTruncated">...</span>
+                </span>
+              </transition>
+              <button v-if="isTruncated" @click="toggleDescription"
+                class="text-green-500 font-medium mt-2 flex items-center gap-1 select-none">
+                <span>{{ showFullDescription ? t('common.readLess') : t('common.readMore') }}</span>
+                <svg :class="{ 'rotate-180': showFullDescription, 'transition-transform': true }" width="16" height="16"
+                  fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 6l4 4 4-4" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
           </div>
 
         </div>
@@ -174,10 +200,29 @@
             </svg>
             <span>{{ toyxona.address }}</span>
           </div>
-          <UButton class="w-full py-2 flex items-center justify-center" @click="openMap">
-            <span class="text-text-primary">{{ t('venue.goDirection') }}</span>
+          <UButton variant="soft" color="neutral" class="w-full py-2 flex items-center justify-between"
+            @click="openMap">
+            <div></div>
+            <span class="text-primary">{{ t('venue.goDirection') }}</span>
             <Icon name="custom:chevron-right" />
           </UButton>
+        </div>
+        <!-- Contact info -->
+        <div class="bg-white lg:rounded-lg shadow-sm p-4 flex flex-col gap-2">
+          <!-- <span class="flex items-center gap-2">
+            <Icon name="material-symbols:call" /> {{ toyxona.phone1 }}
+          </span>
+          <span class="flex items-center gap-2">
+            <Icon name="material-symbols:call" /> {{ toyxona.phone2 }}
+          </span> -->
+          <div class="flex items-center gap-3">
+            <NuxtLink :to="`https://t.me/${toyxona.telegram}`" target="_blank">
+              <Icon name="custom:telegram" />
+            </NuxtLink>
+            <NuxtLink :to="`https://www.instagram.com/${toyxona.instagram}`" target="_blank">
+              <Icon name="custom:instagram" />
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </div>

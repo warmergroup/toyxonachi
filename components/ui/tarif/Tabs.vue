@@ -1,8 +1,13 @@
 <script setup lang="ts">
-
   import { useGetTarifDetailQuery } from '~/data/tariffs'
+  import { openState } from '~/stores/isOpen.store'
 
-  const props = defineProps<{ tarifId?: number | string }>()
+  const { t } = useI18n()
+  const openComponent = openState()
+  const props = defineProps<{
+    tarifId?: number | string,
+    isAdmin?: boolean
+  }>()
 
   const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''))
 
@@ -33,7 +38,10 @@
     items: Product[]
   }
 
-  // Tablar va bo‘limlar
+  const onClose = () => {
+    openComponent.onClose();
+  }
+  // Tablar va bo'limlar
   const tabs: readonly Tab[] = [
     { label: 'Taomlar', keys: ['meals'] },
     { label: 'Salatlar', keys: ['salads'] },
@@ -91,7 +99,7 @@
     return []
   })
 
-  // Tabni avtomatik birinchi mavjud bo‘limga o‘zgartirish (ma’lumot kelganda)
+  // Tabni avtomatik birinchi mavjud bo'limga o'zgartirish (ma'lumot kelganda)
   watch(
     () => tarifDetail.value?.tariff_products,
     (products: Product[]) => {
@@ -108,8 +116,13 @@
   <div>
     <div v-if="isLoading">Yuklanmoqda...</div>
     <div v-else-if="error">Xatolik: {{ error.message }}</div>
-    <div v-else class="flex flex-col gap-2">
-
+    <div v-else class="flex flex-col gap-2 pb-20">
+      <!-- EditBtn faqat admin sahifalarida ko'rinadi -->
+      <div
+        class="container mx-auto absolute bottom-0 left-0 right-0 flex items-center justify-center bg-white w-full min-h-16 border-t border-gray-300 px-5 py-3 z-30">
+        <UButton v-if="tarifDetail && props.isAdmin" class="w-full flex items-center justify-center" color="secondary"
+          size="xl" :label="t('admin.editButton')" @click="openComponent.onOpen('editTarif')" />
+      </div>
       <div v-if="tarifDetail && tarifDetail.tariff_types && tarifDetail.tariff_types.length">
         <div class="p-2 bg-white rounded-lg flex flex-col gap-2">
           <h1 class="font-bold text-xl">{{ tarifDetail.name }}</h1>
@@ -142,11 +155,13 @@
               <div class="text-muted text-sm">{{ prod.description }}</div>
             </div>
           </div>
-          <div v-else class="text-gray-400 text-sm">Mahsulotlar yo‘q</div>
+          <div v-else class="text-gray-400 text-sm">Mahsulotlar yo'q</div>
         </div>
+
       </div>
+
       <div v-else>
-        <p>Kategoriya yoki mahsulotlar yo‘q</p>
+        <p>Kategoriya yoki mahsulotlar yo'q</p>
       </div>
     </div>
   </div>

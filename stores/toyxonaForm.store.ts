@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia';
 
-export const useTotxonaFormStore = defineStore('toyxona', {
+export const useToyxonaFormStore = defineStore('toyxona', {
   state: () => ({
-    images: [] as string[],
+    images: [] as (string | { id: number, image_url: string })[],
     // boshqa form maydonlari...
   }),
   actions: {
-    setImages(imgs: string[]) {
+    setImages(imgs: (string | { id: number, image_url: string })[]) {
       this.images = imgs;
     },
-    addImage(img: string) {
+    addImage(img: string | { id: number, image_url: string }) {
       this.images.push(img);
     },
     removeImage(idx: number) {

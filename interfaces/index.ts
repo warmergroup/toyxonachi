@@ -90,6 +90,8 @@ export type ComponentType =
   | "addAdmins"
   | "addToyxona"
   | "createTariff"
+  | "editToyxona"
+  | "editTarif"
 export interface IRoleInfo {
   id: number;
   name: string;
@@ -145,4 +147,50 @@ export interface WeddingHallFormState {
   latitude: number | null;
   address: string;
   wedding_hall_pictures: WeddingHallPicture[];
+}
+
+export interface ToyxonaFormData { 
+  name: string;
+  description: string;
+  status: string;
+  longitude: string;
+  latitude: string;
+  address: string;
+  tariff_count: number;
+  phone1: string;
+  phone2: string;
+  telegram: string;
+  instagram: string;
+  wedding_hall_pictures: {image_url: string}[];
+}
+
+export interface TariffProductFormData { 
+  tariff_id: number,
+  type: string, //meals, salads, wedding_table, bonuses
+  name: string,
+  description: string,
+  image_url: string,
+  category_id: number | null,
+}
+export interface Product {
+  id: number
+  name: string
+  description: string
+  image_url: string
+  type: string
+  category_id?: string | number
+}
+export interface FormState {
+  name: string
+  description: string
+  image_url: string
+  imageUploading: boolean
+}
+export interface Section {
+  label: string
+  type: string
+  category_id?: number
+  form: FormState
+  items: Product[]
+  isCreating?: boolean // Qo'shildi
 }

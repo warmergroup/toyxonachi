@@ -6,8 +6,7 @@
   import { vMaska } from 'maska/vue';
 
   const config = useRuntimeConfig();
-  const vapidKey = typeof config.public.vapidKey === 'string' ? config.public.vapidKey : undefined;
-  const fcmToken = messaging ? await getToken(messaging, { vapidKey }) : undefined;
+  const vapidKey = config.public.vapidKey;
 
   const authType = useAuthType();
   const openComponent = openState()
@@ -54,18 +53,16 @@
 
       // Show success message
       toast.add({
-        title: t('success.registered'),
         description: t('success.welcomeMessage', { name: state.name }),
         color: 'success',
       });
 
       // Close registration form
       openComponent.onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error handling registration success:', error);
       toast.add({
-        title: t('error.title'),
-        description: t('error.unknown'),
+        description: t('error.unknown') + error.message,
         color: 'error',
       });
     }
@@ -74,52 +71,49 @@
   // Registration mutation with UI handlers
   const { mutate, isPending } = useRegister();
 
-  // Forma yuborilganda
-  const onSubmit = (event: SubmitEvent) => {
+  const onSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
-    console.log('Form submission started');
-
     if (!validateForm()) return;
+
+    let fcmToken = null;
+    if (messaging) {
+      try {
+        fcmToken = await getToken(messaging, { vapidKey });
+      } catch (err) {
+        console.warn('FCM token olishda xatolik:', err);
+      }
+    }
 
     const formData = {
       name: state.name.trim(),
       phone: fullPhoneNumber.value,
       status: 'active',
       role: 1,
+      fcm_token: fcmToken
     };
 
-    console.log('Submitting form data:', formData);
-
-    mutate(
-      {
-        name: state.name.trim(),
-        phone: fullPhoneNumber.value,
-        status: 'active',
-        role: 1,
+    mutate(formData, {
+      onSuccess: handleRegistrationSuccess,
+      onError: (error: Error) => {
+        toast.add({
+          description: error.message || t('error.unknown'),
+          color: 'error',
+        });
       },
-      {
-        onSuccess: handleRegistrationSuccess,
-        onError: (error: Error) => {
-          toast.add({
-            title: t('error.title'),
-            description: error.message || t('error.unknown'),
-            color: 'error',
-          });
-        },
-      }
-    );
+    });
   };
 
-
   onMounted(async () => {
-    let fcmToken;
     if (messaging) {
-      fcmToken = await getToken(messaging, { vapidKey });
-      if (fcmToken) {
-        console.log('FCM Token:', fcmToken);
-        // TODO: fcmToken-ni backendga yuborish
-      } else {
-        console.warn('Foydalanuvchi FCM token olishga ruxsat bermadi');
+      try {
+        const fcmToken = await getToken(messaging, { vapidKey });
+        if (fcmToken) {
+          console.log('FCM Token:', fcmToken);
+        } else {
+          console.warn('Foydalanuvchi FCM token olishga ruxsat bermadi');
+        }
+      } catch (err) {
+        console.warn('FCM token olishda xatolik:', err);
       }
     } else {
       console.warn('Messaging is not initialized.');

@@ -1,88 +1,87 @@
 <script setup lang="ts">
-  import { openState } from '~/stores/isOpen.store';
-  import { useAuthStore } from '~/stores/auth.store';
-  import { useLogout } from '~/data/auth/logout';
-  import { SuperadminAdmins, UiToyxonalarList, LazyUiModalToyxonaAction } from '#components';
-  import { useOverlay } from '#imports'
-  import type { IToyxonalar } from '~/interfaces';
-  import { useGetMeQuery } from '~/data'
+import { openState } from '~/stores/isOpen.store';
+import { useAuthStore } from '~/stores/auth.store';
+import { useLogout } from '~/data';
+import { SuperadminAdmins, UiToyxonalarList, LazyUiModalToyxonaAction } from '#components';
+import { useOverlay } from '#imports'
+import type { IToyxonalar } from '~/interfaces';
 
-  const { isLargeScreen } = useScreenSize();
-  const authStore = useAuthStore();
-  const user = computed(() => authStore.user);
-  const isLoading = computed(() => authStore.isLoading);
-  const { t } = useI18n();
-  const toyxonalarListRef = ref()
-  const adminListRef = ref()
-  const superadminListRef = ref()
-  const openComponent = openState();
-  const onClose = () => {
-    openComponent.onClose();
+const { isLargeScreen } = useScreenSize();
+const authStore = useAuthStore();
+const user = computed(() => authStore.user);
+const isLoading = computed(() => authStore.isLoading);
+const { t } = useI18n();
+const toyxonalarListRef = ref()
+const adminListRef = ref()
+const superadminListRef = ref()
+const openComponent = openState();
+const onClose = () => {
+  openComponent.onClose();
+}
+const showAddAdmins = ref(false);
+const showAddDiscount = ref(false);
+onBeforeRouteLeave(() => {
+  openComponent.onClose();
+})
+
+
+// Logout mutation
+const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+// Handle logout click
+const handleLogout = () => {
+  if (confirm(t('logout.confirmMessage'))) {
+    logout();
   }
-  const showAddAdmins = ref(false);
-  const showAddDiscount = ref(false);
-  onBeforeRouteLeave(() => {
-    openComponent.onClose();
+};
+
+const overlay = useOverlay()
+const selectedToyxona = ref<IToyxonalar | null>(null)
+const selectedTab = ref<'active' | 'archive'>('active') // yoki 'archive', kerakli joyda o'zgartirasiz
+
+async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
+  // Ensure tab is either 'active' or 'archive'
+  if (tab !== 'active' && tab !== 'archive') return;
+  selectedToyxona.value = toyxona
+  selectedTab.value = tab as 'active' | 'archive'
+  const modal = overlay.create(LazyUiModalToyxonaAction, {
+    props: {
+      toyxona: toyxona,
+      tab: tab,
+      modelValue: true
+    }
   })
-
-
-  // Logout mutation
-  const { mutate: logout, isPending: isLoggingOut } = useLogout();
-
-  // Handle logout click
-  const handleLogout = () => {
-    if (confirm(t('logout.confirmMessage'))) {
-      logout();
-    }
-  };
-
-  const overlay = useOverlay()
-  const selectedToyxona = ref<IToyxonalar | null>(null)
-  const selectedTab = ref<'active' | 'archive'>('active') // yoki 'archive', kerakli joyda o'zgartirasiz
-
-  async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
-    // Ensure tab is either 'active' or 'archive'
-    if (tab !== 'active' && tab !== 'archive') return;
-    selectedToyxona.value = toyxona
-    selectedTab.value = tab as 'active' | 'archive'
-    const modal = overlay.create(LazyUiModalToyxonaAction, {
-      props: {
-        toyxona: toyxona,
-        tab: tab,
-        modelValue: true
-      }
-    })
-    const instance = modal.open()
-    const result = await instance.result
-    if (result === 'success') {
-      // Ma'lumotlarni yangilash yoki boshqa action
-      toyxonalarListRef.value?.refreshList()
-      adminListRef.value?.refreshList()
-      superadminListRef.value?.refreshList()
-      // fetchNextPage() yoki boshqa funksiyani chaqiring
-    }
+  const instance = modal.open()
+  const result = await instance.result
+  if (result === 'success') {
+    // Ma'lumotlarni yangilash yoki boshqa action
+    toyxonalarListRef.value?.refreshList()
+    adminListRef.value?.refreshList()
+    superadminListRef.value?.refreshList()
+    // fetchNextPage() yoki boshqa funksiyani chaqiring
   }
+}
 
-  function refreshDiscounts() {
-    // discountListRef.value?.refetch() yoki
-    openComponent.onOpen('discounts') // yoki
-    // yoki getDiscounts('admin') hookidan refetch chaqiring
-  }
+function refreshDiscounts() {
+  // discountListRef.value?.refetch() yoki
+  openComponent.onOpen('discounts') // yoki
+  // yoki getDiscounts('admin') hookidan refetch chaqiring
+}
 
-  const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: number, name: string }[] }) => {
-    onClose(); // Slideoverni yopish
-    // Toyxonalar listini yangilash
-    toyxonalarListRef.value?.refreshList();
-    adminListRef.value?.refreshList?.();
-    superadminListRef.value?.refreshList?.();
-    openComponent.onOpen('createTariff', { toyxonaId: id, tariffs }); // tariffs massivini uzatamiz
-  };
+const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: number, name: string }[] }) => {
+  onClose(); // Slideoverni yopish
+  // Toyxonalar listini yangilash
+  toyxonalarListRef.value?.refreshList();
+  adminListRef.value?.refreshList?.();
+  superadminListRef.value?.refreshList?.();
+  openComponent.onOpen('createTariff', { toyxonaId: id, tariffs }); // tariffs massivini uzatamiz
+};
 
-  function refreshToyxonalarList() {
-    toyxonalarListRef.value?.refreshList();
-    adminListRef.value?.refreshList?.();
-    superadminListRef.value?.refreshList?.();
-  }
+function refreshToyxonalarList() {
+  toyxonalarListRef.value?.refreshList();
+  adminListRef.value?.refreshList?.();
+  superadminListRef.value?.refreshList?.();
+}
 
 </script>
 <template>

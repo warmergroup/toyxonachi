@@ -92,14 +92,10 @@ onUnmounted(() => {
 <template>
   <div class="w-full max-w-md mx-auto">
     <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
-      <div ref="mapContainer" class="relative w-full h-72 bg-gray-100 flex items-center justify-center">
+      <div ref="mapContainer" class="relative w-full h-80 bg-gray-100 flex items-center justify-center">
         <div v-if="error" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10 text-red-600">
           {{ error }}
         </div>
-      </div>
-      <div class="p-5 bg-white">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2 text-left">{{ title }}</h2>
-        <p class="text-sm text-gray-500">Joylashuv marker ko‘rinishida belgilangan.</p>
       </div>
     </div>
   </div>

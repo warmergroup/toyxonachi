@@ -20,7 +20,9 @@
     "appLanguage": "Ilova tili",
     "changeLanguage": "Tilni tanlang",
     "save": "Saqlash",
-    "cancel": "Bekor qilish"
+    "cancel": "Bekor qilish",
+    "readMore": "Barchasini o'qish",
+    "readLess": "Kamroq"
   },
   "about": {
     "aboutUs": "Biz haqimizda",
@@ -89,12 +91,17 @@
     "addToyxona": "To'yxona qo'shish",
     "editToyxona": "To'yxonani tahrirlash",
     "deleteToyxona": "To'yxonani o'chirish",
-    "createTariff": "Tarif yaratish"
+    "createTariff": "Tarif yaratish",
+    "editButton": "Ma'lumotlarni o'zgartirish"
     
   },
   "superadmin": {
     "allWeddingHalls": "Barcha to'yxonalar",
-    "allUsers": "Barcha foydalanuvchilar"
+    "allUsers": "Barcha foydalanuvchilar",
+    "acceptToyxona": "Qabul qilish",
+    "rejectToyxona": "Rad etish",
+    "accepted": "Qabul qilindi",
+    "rejected": "Rad etildi"
   },
   
   "profileActions": {

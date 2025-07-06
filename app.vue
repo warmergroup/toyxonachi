@@ -2,6 +2,7 @@
 import * as locales from '@nuxt/ui/locale'
 import { useGetMeQuery } from '~/data/auth';
 import { onMessage, messaging } from '~/utils/firebase'
+import { listenToMessages } from '~/composables/useFCM'
 
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
@@ -22,6 +23,7 @@ onMounted(() => {
     refetch()
   }
 
+  listenToMessages()
   if (messaging) {
     onMessage(messaging, (payload) => {
       if (Notification.permission === 'granted' && payload.notification) {

@@ -20,7 +20,9 @@
     "appLanguage": "App Language",
     "changeLanguage": "Select Language",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "readMore": "Read More",
+    "readLess": "Less"
   },
   "about": {
     "aboutUs": "About Us",
@@ -86,11 +88,16 @@
     "tarifCount": "tariffs count",
     "addToyxona": "Add wedding hall",
     "minPrice" : "Minimum price",
-    "maxPrice" : "Maximum price"
+    "maxPrice" : "Maximum price",
+    "editButton":"Change data"
   },
   "superadmin": {
     "allWeddingHalls": "All Wedding Halls",
-    "allUsers": "All Users"
+    "allUsers": "All Users",
+    "acceptToyxona": "Accept",
+    "rejectToyxona": "Reject",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
   },
   "profileActions": {
     "myProfile": "My Profile",
@@ -140,6 +147,7 @@
   },
   "logout": {
     "logoutTitle": "Logout",
+    "confirmMessage": "Are you sure you want to logout?",
     "successMessage": "Logout successful",
     "logoutPending": "Logging out...",
     "logoutButton": "Logout",

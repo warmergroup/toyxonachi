@@ -1,22 +1,38 @@
-// src/firebase.js
-import { initializeApp } from 'firebase/app'
-import type { Messaging } from 'firebase/messaging'
-import { getMessaging,getToken,onMessage } from 'firebase/messaging'
+
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage,isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBPz6LqUzM3aluyXTwmzwBqGUNNJDN-o2E",
-  authDomain: "toyxonachi-e5ab6.firebaseapp.com",
-  projectId: "toyxonachi-e5ab6",
-  storageBucket: "toyxonachi-e5ab6.appspot.com",
-  messagingSenderId: "145501933049",
-  appId: "1:145501933049:web:d9242e6e1fca537d720128",
-  measurementId: "G-98WGS7RMTM"
+  apiKey: "AIzaSyDXPRtRax8xNzu4yHe5Lk2Uk4QH-9dw2CY",
+  authDomain: "toyxonachi-47293.firebaseapp.com",
+  projectId: "toyxonachi-47293",
+  storageBucket: "toyxonachi-47293.firebasestorage.app",
+  messagingSenderId: "205020384733",
+  appId: "1:205020384733:web:76396fc8013eff01de3a34",
+  measurementId: "G-GVJ7P9KLHD"
+};
+
+const app = initializeApp(firebaseConfig);
+
+let messaging: ReturnType<typeof getMessaging> | null = null;
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  isSupported().then(supported => {
+    if (supported) messaging = getMessaging(app);
+  });
 }
-let messaging: Messaging | null = null;
-if (import.meta.client) {
-  const { getMessaging } = await import('firebase/messaging');
-  const firebaseApp = initializeApp(firebaseConfig);
-  messaging = getMessaging(firebaseApp);
+
+export async function requestFcmToken(vapidKey: string): Promise<string | null> {
+  if (!messaging) return null;
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') throw new Error('Notification permission denied');
+    const token = await getToken(messaging, { vapidKey });
+    if (token) localStorage.setItem('fcm_token', token);
+    return token;
+  } catch (err) {
+    console.error('FCM token error:', err);
+    return null;
+  }
 }
 
 export { messaging, getToken, onMessage };

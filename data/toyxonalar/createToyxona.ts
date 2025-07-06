@@ -1,26 +1,12 @@
 import { useMutation } from '@tanstack/vue-query';
 import $authApi from '~/http/authApi';
-// import type {  } from '~/interfaces';
+import type { ToyxonaFormData } from '~/interfaces';
 
-interface CreateToyxonaFormData { 
-    name: string;
-    description: string;
-    status: string;
-    longitude: string;
-    latitude: string;
-    address: string;
-    tariff_count: number;
-    phone1: string;
-    phone2: string;
-    telegram: string;
-    instagram: string;
-    wedding_hall_pictures: {image_url: string}[];
-}
 
 export const useCreateToyxona = () => { 
     return useMutation({
         mutationKey: ['createToyxona'],
-        mutationFn: async (formData: CreateToyxonaFormData) => {
+        mutationFn: async (formData: ToyxonaFormData) => {
             try {
                 const response = await $authApi.post('wedding-halls/store', formData);
                 console.log("respons ichidagi datani ko'rish",response.data)

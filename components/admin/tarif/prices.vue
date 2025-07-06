@@ -4,7 +4,17 @@
     import { vMaska } from 'maska/vue'
 
     const { t } = useI18n()
-    const props = defineProps<{ tariffId: number | null }>()
+    const props = defineProps<{
+        tariffId: number | null,
+        initialPrices?: Array<{
+            id: number
+            tariff_id: string
+            person_count: string
+            price: string
+            created_at: string
+            updated_at: string
+        }>
+    }>()
 
     // Form state
     const state = reactive({
@@ -13,14 +23,18 @@
     })
 
     // Tariflar ro'yxati
-    const prices = ref<Array<{
-        id: number
-        tariff_id: string
-        person_count: string
-        price: string
-        created_at: string
-        updated_at: string
-    }>>([])
+    const prices = ref(props.initialPrices || [])
+
+    // Watch for changes in initialPrices
+    watch(
+        () => props.initialPrices,
+        (newPrices) => {
+            if (newPrices) {
+                prices.value = newPrices
+            }
+        },
+        { immediate: true }
+    )
 
     const { mutate: createTariffType, isPending: isCreating } = useCreateTariffType()
 

@@ -1,6 +1,7 @@
-import {useRegister} from '~/data/auth/register'
-import {useGetMeQuery} from '~/data/auth/getMe'
-import { useLogin } from '~/data/auth/login'
-import { useUpdateProfile } from '~/data/auth/updateProfile'
+import {useRegister} from './register'
+import {useGetMeQuery} from './getMe'
+import { useLogin } from './login'
+import { useUpdateProfile } from './updateProfile'
+import { useLogout } from './logout'
 
-export {useRegister, useGetMeQuery, useLogin, useUpdateProfile}
+export {useRegister, useGetMeQuery, useLogin, useUpdateProfile, useLogout}
