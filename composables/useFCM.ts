@@ -1,22 +1,5 @@
 // composables/useFCM.ts
-import { messaging, getToken, onMessage } from '~/utils/firebase'
-
-export async function requestFcmToken(vapidKey: string) {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') {
-      console.warn('Notification ruxsat berilmadi.');
-      return null;
-    }
-    if (messaging) { 
-      const fcmToken = await getToken(messaging, { vapidKey });
-      return fcmToken;
-    }
-  } catch (err) {
-    console.error('FCM token olishda xatolik:', err);
-    return null;
-  }
-}
+import { messaging, onMessage } from '~/utils/firebase'
 
 export function listenToMessages() {
   if (messaging) {

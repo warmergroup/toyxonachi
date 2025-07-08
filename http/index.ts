@@ -3,11 +3,12 @@ import axios from 'axios';
 export const API_URL = 'https://api.toyxonachi.uz'
 
 const $axios = axios.create({
-    baseURL: `${API_URL}/api`,
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
+  baseURL: `${API_URL}/api`,
+  // withCredentials: true,
+  headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
 });
 
 export default $axios;
