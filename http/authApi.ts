@@ -5,7 +5,6 @@ import { API_URL } from './index';
 // Auth so'rovlari uchun alohida instance
 const $authApi = axios.create({
     baseURL: `${API_URL}/api`,
-    // withCredentials: true,
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
