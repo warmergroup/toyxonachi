@@ -116,28 +116,23 @@ function toggleDescription() {
   showFullDescription.value = !showFullDescription.value;
 }
 
+const defaultImg = '/logo-splash.svg'
+const img = getFullImageUrl(toyxona.value?.wedding_hall_pictures?.[0]?.image_url) || defaultImg
 
-watchEffect(() => {
-  if (toyxona.value) {
-    const defaultImg = '/logo-splash.svg'
-    const img = getFullImageUrl(toyxona.value.wedding_hall_pictures?.[0]?.image_url) || defaultImg
-    console.log("imageurl", img)
-    useHead({
-      title: `${toyxona.value.name} — Toyxonachi`,
-      meta: [
-        { name: 'description', content: toyxona.value.description?.slice(0, 160) },
-        { property: 'og:title', content: toyxona.value.name },
-        { property: 'og:description', content: toyxona.value.description?.slice(0, 160) },
-        { property: 'og:image', content: img || defaultImg },
-        { property: 'og:type', content: 'website' },
-        { property: 'og:url', content: `https://toyxonachiuz.vercel.app/toyxona/${toyxona.value.id}` },
-        { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: toyxona.value.name },
-        { name: 'twitter:description', content: toyxona.value.description?.slice(0, 100) },
-        { name: 'twitter:image', content: img || '/logo-splash.svg' }
-      ]
-    })
-  }
+useHead({
+  title: toyxona.value ? `${toyxona.value.name} — Toyxonachi` : 'toyxonachi.uz',
+  meta: [
+    { name: 'description', content: toyxona.value?.description?.slice(0, 160) || 'Find the perfect venue for your event' },
+    { property: 'og:title', content: toyxona.value?.name || 'toyxonachi.uz' },
+    { property: 'og:description', content: toyxona.value?.description?.slice(0, 160) || 'Find the perfect venue for your event' },
+    { property: 'og:image', content: img },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `https://toyxonachiuz.vercel.app/uz/toyxona/${toyxona.value?.id}` },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: toyxona.value?.name || 'toyxonachi.uz' },
+    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 100) || 'Find the perfect venue for your event' },
+    { name: 'twitter:image', content: img }
+  ]
 })
 
 </script>
