@@ -1,49 +1,69 @@
 <script setup lang="ts">
-    import { useUploadImage } from '~/data';
-    import { useToyxonaFormStore } from '~/stores/toyxonaForm.store';
-    const { t } = useI18n()
-    const toyxonaFormStore = useToyxonaFormStore();
-    const uploadImage = useUploadImage();
-    const config = useRuntimeConfig()
-    const imageUrl = config.public.imageUrl
-    type ImageType = string | { image_url: string };
+import { useUploadImage, useDeleteToyxonaImage } from '~/data';
+import { useToyxonaFormStore } from '~/stores/toyxonaForm.store';
 
-    const images = computed<ImageType[]>({
-        get: () => toyxonaFormStore.images as ImageType[],
-        set: (val: ImageType[]) => toyxonaFormStore.setImages(
-            val.map(img => typeof img === 'string' ? img : img.image_url)
-        )
-    });
+const { t } = useI18n()
+const toyxonaFormStore = useToyxonaFormStore();
+const uploadImage = useUploadImage();
+const deleteImage = useDeleteToyxonaImage();
+const config = useRuntimeConfig()
+const imageUrl = config.public.imageUrl
+type ImageType = {
+    id?: number | string;
+    image_url: string;
+    isUploading?: boolean;
+    isDeleting?: boolean;
+};
 
-    function getImageSrc(img: ImageType) {
-        const url = typeof img === 'string' ? img : img.image_url;
-        if (url.startsWith('http://') || url.startsWith('https://')) {
-            return url;
-        }
-        return `${imageUrl}/${url}`;
+const images = computed({
+    get: () => toyxonaFormStore.images,
+    set: (val) => toyxonaFormStore.setImages(val)
+});
+
+function getImageSrc(img: ImageType) {
+    const url = typeof img === 'string' ? img : img.image_url;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
     }
-    const max = 5
+    return `${imageUrl}/${url}`;
+}
+const max = 5
 
 
-    async function onFileChange(e: Event) {
-        const files = (e.target as HTMLInputElement).files;
-        if (!files || !files[0]) return;
-        const file = files[0];
-        if (images.value.length >= max) return;
+async function onFileChange(e: Event) {
+    const files = (e.target as HTMLInputElement).files;
+    if (!files || !files[0]) return;
+    const file = files[0];
+    if (images.value.length >= max) return;
+    const tempImage: ImageType = { image_url: URL.createObjectURL(file), isUploading: true };
+    images.value.push(tempImage);
+    try {
+        const data = await uploadImage.mutateAsync(file);
+        if (data?.image) {
+            images.value.splice(images.value.indexOf(tempImage), 1, { ...data.image, isUploading: false });
+        }
+    } catch (err) {
+        images.value.splice(images.value.indexOf(tempImage), 1);
+        alert('Rasm yuklashda xatolik!');
+    }
+    (e.target as HTMLInputElement).value = '';
+}
+
+async function removeImage(idx: number) {
+    const img = images.value[idx];
+    if (img.id) {
+        images.value[idx].isDeleting = true;
         try {
-            const data = await uploadImage.mutateAsync(file);
-            if (data?.image) {
-                toyxonaFormStore.addImage(data.image);
-            }
+            await deleteImage.mutateAsync(img.id);
+            images.value.splice(idx, 1);
         } catch (err) {
-            alert('Rasm yuklashda xatolik!');
+            images.value[idx].isDeleting = false;
+            alert('Rasm o‘chirishda xatolik!');
         }
-        (e.target as HTMLInputElement).value = '';
+    } else {
+        images.value.splice(idx, 1);
     }
-
-    function removeImage(idx: number) {
-        toyxonaFormStore.removeImage(idx);
-    }
+}
 
 </script>
 
@@ -58,7 +78,7 @@
                     <Icon name="custom:plus-image" />
                     <p class="text-gray-400 mt-2 select-none">{{ t('common.clickHere') }}</p>
                     <input type="file" class="hidden" accept="image/*" @change="onFileChange"
-                        :disabled="images.length >= max" />
+                        :disabled="images.length >= max || images.some(img => img.isUploading)" />
                 </label>
                 <div v-if="images.length >= max"
                     class="absolute inset-0 bg-white/60 rounded-lg flex items-center justify-center">
@@ -66,11 +86,19 @@
                 </div>
             </div>
             <!-- Image previews -->
-            <div v-for="(img, idx) in images" :key="idx"
+            <div v-for="(img, idx) in images" :key="img.id || idx"
                 class="relative w-22 h-22 md:w-28 md:h-28 rounded-lg overflow-hidden group">
-                <NuxtImg :src="getImageSrc(img)" alt="preview" class="object-cover w-full h-full" />
+                <NuxtImg :src="getImageSrc(img)" alt="preview" class="object-cover w-full h-full"
+                    :class="{ 'opacity-50 grayscale': img.isUploading || img.isDeleting }" />
                 <UButton class="absolute top-1 right-1 bg-black/40 rounded-full hover:bg-black/80" variant="soft"
-                    color="neutral" icon="custom:remove" @click="removeImage(idx)" />
+                    color="neutral" icon="custom:remove" @click="removeImage(idx)"
+                    :disabled="img.isDeleting || img.isUploading" />
+                <div v-if="img.isUploading" class="absolute inset-0 flex items-center justify-center bg-white/60">
+                    <span class="loader"></span>
+                </div>
+                <div v-if="img.isDeleting" class="absolute inset-0 flex items-center justify-center bg-white/60">
+                    <span class="loader"></span>
+                </div>
             </div>
         </div>
     </div>

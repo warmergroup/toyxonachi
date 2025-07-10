@@ -1,157 +1,157 @@
 <script setup lang="ts">
-    definePageMeta({
-        middleware: ['admin-or-superadmin']
-    })
+definePageMeta({
+    middleware: ['admin-or-superadmin']
+})
 
-    import { useAuthStore } from '~/stores/auth.store'
-    import type { IToyxonalar } from '~/interfaces';
-    import { useLocationStore } from '~/stores/location.store';
-    import { getDistanceFromLatLonInKm } from '~/utils/distance'
-    import { getToyxonaById } from '~/data/toyxonalar';
-    import type { UseQueryReturnType } from '@tanstack/vue-query';
-    import { openState } from '~/stores/isOpen.store';
-    import { useChangeToyxonaStatus } from '~/data'
+import { useAuthStore } from '~/stores/auth.store'
+import type { IToyxonalar } from '~/interfaces';
+import { useLocationStore } from '~/stores/location.store';
+import { getDistanceFromLatLonInKm } from '~/utils/distance'
+import { getToyxonaById } from '~/data/toyxonalar';
+import type { UseQueryReturnType } from '@tanstack/vue-query';
+import { openState } from '~/stores/isOpen.store';
+import { useChangeToyxonaStatus } from '~/data'
 
-    const auth = useAuthStore();
-    const openComponent = openState();
-    const router = useRouter();
-    const route = useRoute();
-    const { t } = useI18n();
-    const { isLargeScreen } = useScreenSize();
-    const locationStore = useLocationStore()
-    const changeStatus = useChangeToyxonaStatus()
-    const toyxonaQuery = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
-    const toyxona = toyxonaQuery.data;
-    const error = ref<string | null>(null);
-    const selectedTarif = ref<any | null>(null);
-    const isEditTariffOpen = ref(false);
-    const isRejectDrawerOpen = ref(false)
-    const toast = useToast()
+const auth = useAuthStore();
+const openComponent = openState();
+const router = useRouter();
+const route = useRoute();
+const { t } = useI18n();
+const { isLargeScreen } = useScreenSize();
+const locationStore = useLocationStore()
+const changeStatus = useChangeToyxonaStatus()
+const toyxonaQuery = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
+const toyxona = toyxonaQuery.data;
+const error = ref<string | null>(null);
+const selectedTarif = ref<any | null>(null);
+const isEditTariffOpen = ref(false);
+const isRejectDrawerOpen = ref(false)
+const toast = useToast()
 
-    const goback = () => {
-        router.go(-1);
-    };
-    const onClose = () => {
-        openComponent.onClose();
-    }
-    function handleEditClose() {
-        openComponent.onClose();
-        setTimeout(() => {
-            if (toyxonaQuery && typeof toyxonaQuery.refetch === 'function') {
-                toyxonaQuery.refetch();
-            }
-        }, 300);
-    }
-    const userDistance = computed(() => {
-        if (
-            locationStore.coords &&
-            toyxona.value &&
-            toyxona.value.latitude &&
-            toyxona.value.longitude
-        ) {
-            return getDistanceFromLatLonInKm(
-                locationStore.coords.latitude,
-                locationStore.coords.longitude,
-                Number(toyxona.value.latitude),
-                Number(toyxona.value.longitude)
-            )
+const goback = () => {
+    router.go(-1);
+};
+const onClose = () => {
+    openComponent.onClose();
+}
+function handleEditClose() {
+    openComponent.onClose();
+    setTimeout(() => {
+        if (toyxonaQuery && typeof toyxonaQuery.refetch === 'function') {
+            toyxonaQuery.refetch();
         }
-        return null
-    })
+    }, 300);
+}
+const userDistance = computed(() => {
+    if (
+        locationStore.coords &&
+        toyxona.value &&
+        toyxona.value.latitude &&
+        toyxona.value.longitude
+    ) {
+        return getDistanceFromLatLonInKm(
+            locationStore.coords.latitude,
+            locationStore.coords.longitude,
+            Number(toyxona.value.latitude),
+            Number(toyxona.value.longitude)
+        )
+    }
+    return null
+})
 
-    const imagelItems = computed(() =>
-        (toyxona?.value?.wedding_hall_pictures as any[] || []).map(b => ({
-            src: b.image_url,
-            id: b.id,
-            wedding_hall_id: b.wedding_hall_id
+const imagelItems = computed(() =>
+    (toyxona?.value?.wedding_hall_pictures as any[] || []).map(b => ({
+        src: b.image_url,
+        id: b.id,
+        wedding_hall_id: b.wedding_hall_id
+    }))
+)
+
+
+const tariflarForCard = computed(() =>
+    Array.isArray(toyxona.value?.tariffs)
+        ? toyxona.value.tariffs.map((tarif: any) => ({
+            ...tarif,
+            tariff_types: tarif.tariff_types || []
         }))
-    )
+        : []
+);
 
 
-    const tariflarForCard = computed(() =>
-        Array.isArray(toyxona.value?.tariffs)
-            ? toyxona.value.tariffs.map((tarif: any) => ({
-                ...tarif,
-                tariff_types: tarif.tariff_types || []
-            }))
-            : []
-    );
+// Open tariff details (view mode)
+const openTarifSlide = (tarif: any) => {
+    selectedTarif.value = tarif;
+    openComponent.onOpen('showTariff');
+};
+
+// Open tariff edit (edit mode)
+const openTarifEdit = (tarif: any) => {
+    selectedTarif.value = tarif;
+    isEditTariffOpen.value = true;
+};
 
 
-    // Open tariff details (view mode)
-    const openTarifSlide = (tarif: any) => {
-        selectedTarif.value = tarif;
-        openComponent.onOpen('showTariff');
-    };
+function handleAccept() {
+    if (!toyxona.value) return
+    changeStatus.mutate({
+        wedding_hall_id: toyxona.value.id,
+        status: 'active',
+        reject_reason: ''
+    }, {
+        onSuccess: () => {
+            toast.add({
+                description: `${t('superadmin.accepted')}`,
+                color: 'success',
+            })
+        },
+        onError: (err) => {
+            toast.add({
+                description: (err.message || 'Xatolik yuz berdi'),
+                color: 'error',
+            })
+        }
+    })
+}
 
-    // Open tariff edit (edit mode)
-    const openTarifEdit = (tarif: any) => {
-        selectedTarif.value = tarif;
-        isEditTariffOpen.value = true;
-    };
+function handleReject(reason: string) {
+    if (!toyxona.value) return
+    changeStatus.mutate({
+        wedding_hall_id: toyxona.value.id,
+        status: 'rejected',
+        reject_reason: reason
+    }, {
+        onSuccess: () => {
+            toast.add({
+                description: `${t('superadmin.rejected')}`,
+                color: 'success',
+            }),
+                isRejectDrawerOpen.value = false
+        },
+        onError: (err) => {
+            toast.add({
+                description: (err.message || 'Xatolik yuz berdi'),
+                color: 'error',
+            })
+        }
+    })
+}
 
-
-    function handleAccept() {
-        if (!toyxona.value) return
-        changeStatus.mutate({
-            wedding_hall_id: toyxona.value.id,
-            status: 'active',
-            reject_reason: ''
-        }, {
-            onSuccess: () => {
-                toast.add({
-                    description: `${t('superadmin.accepted')}`,
-                    color: 'success',
-                })
-            },
-            onError: (err) => {
-                toast.add({
-                    description: (err.message || 'Xatolik yuz berdi'),
-                    color: 'error',
-                })
-            }
-        })
-    }
-
-    function handleReject(reason: string) {
-        if (!toyxona.value) return
-        changeStatus.mutate({
-            wedding_hall_id: toyxona.value.id,
-            status: 'rejected',
-            reject_reason: reason
-        }, {
-            onSuccess: () => {
-                toast.add({
-                    description: `${t('superadmin.rejected')}`,
-                    color: 'success',
-                }),
-                    isRejectDrawerOpen.value = false
-            },
-            onError: (err) => {
-                toast.add({
-                    description: (err.message || 'Xatolik yuz berdi'),
-                    color: 'error',
-                })
-            }
-        })
-    }
-
-    const isAdmin = computed(() => auth.isAdmin);
-    const isSuperAdmin = computed(() => auth.isSuperAdmin);
-    const showFullDescription = ref(false);
-    const DESCRIPTION_LIMIT = 180;
-    const shortDescription = computed(() => {
-        if (!toyxona.value?.description) return '';
-        return toyxona.value.description.length > DESCRIPTION_LIMIT
-            ? toyxona.value.description.slice(0, DESCRIPTION_LIMIT)
-            : toyxona.value.description;
-    });
-    const isTruncated = computed(() => {
-        return toyxona.value?.description && toyxona.value.description.length > DESCRIPTION_LIMIT;
-    });
-    function toggleDescription() {
-        showFullDescription.value = !showFullDescription.value;
-    }
+const isAdmin = computed(() => auth.isAdmin);
+const isSuperAdmin = computed(() => auth.isSuperAdmin);
+const showFullDescription = ref(false);
+const DESCRIPTION_LIMIT = 180;
+const shortDescription = computed(() => {
+    if (!toyxona.value?.description) return '';
+    return toyxona.value.description.length > DESCRIPTION_LIMIT
+        ? toyxona.value.description.slice(0, DESCRIPTION_LIMIT)
+        : toyxona.value.description;
+});
+const isTruncated = computed(() => {
+    return toyxona.value?.description && toyxona.value.description.length > DESCRIPTION_LIMIT;
+});
+function toggleDescription() {
+    showFullDescription.value = !showFullDescription.value;
+}
 
 </script>
 
@@ -211,7 +211,7 @@
 
                 <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
                     <h2 class="text-xl font-medium text-text-primary mb-4 capitalize ">{{ t('weddingHall.description')
-                        }}
+                    }}
                     </h2>
                     <transition name="fade-expand">
                         <span v-if="showFullDescription" key="full"

@@ -5,6 +5,7 @@ import {getToyxonaById } from './getToyxonaById';
 import {useDeleteToyxona} from './deleteToyxona';
 import { useChangeToyxonaStatus } from './changeToyxonaStatus';
 import { useCreateToyxona } from './createToyxona';
+import { useDeleteToyxonaImage } from './deleteToyxonaImage';
 
 export {
   useGetToyxonalarQuery,
@@ -13,5 +14,6 @@ export {
   useDeleteToyxona,
   useChangeToyxonaStatus,
   useCreateToyxona,
-  useUpdateToyxona
+  useUpdateToyxona,
+  useDeleteToyxonaImage
 };

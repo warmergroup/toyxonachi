@@ -8,7 +8,6 @@ const props = defineProps<{
     show?: boolean
 }>()
 
-// Faqat admin va show prop true bo'lsa ko'rsatamiz
 const shouldShow = computed(() => {
     return authStore.isAdmin && (props.show !== false)
 })
