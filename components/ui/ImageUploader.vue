@@ -21,7 +21,10 @@ const images = computed({
 });
 
 function getImageSrc(img: ImageType) {
+    if (!img) return '';
     const url = typeof img === 'string' ? img : img.image_url;
+    if (!url) return '';
+    console.log('getImageSrc:', url);
     if (url.startsWith('http://') || url.startsWith('https://')) {
         return url;
     }
@@ -40,7 +43,7 @@ async function onFileChange(e: Event) {
     try {
         const data = await uploadImage.mutateAsync(file);
         if (data?.image) {
-            images.value.splice(images.value.indexOf(tempImage), 1, { ...data.image, isUploading: false });
+            images.value.splice(images.value.indexOf(tempImage), 1, { image_url: data.image, isUploading: false });
         }
     } catch (err) {
         images.value.splice(images.value.indexOf(tempImage), 1);

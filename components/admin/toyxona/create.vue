@@ -56,9 +56,9 @@ const handleSubmit = async () => {
         longitude: String(selectedLocation.value.longitude),
         address: selectedLocation.value.address,
         wedding_hall_pictures: storeImages.images
-            .filter(img => !img.isUploading)
+            .filter(img => !img.isUploading && img.image_url && !img.image_url.startsWith('blob:'))
             .map(img => ({
-                image_url: img.image_url.includes('/') ? img.image_url.split('/').pop()! : img.image_url
+                image_url: img.image_url
             }))
     };
 

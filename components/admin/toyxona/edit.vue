@@ -69,12 +69,21 @@ const handleSubmit = async () => {
         latitude: String(selectedLocation.value.latitude),
         longitude: String(selectedLocation.value.longitude),
         address: selectedLocation.value.address,
-        wedding_hall_pictures: toyxonaFormStore.images.map((img: any) => {
-            if (img.id) {
-                return { id: img.id, wedding_hall_id: props.toyxona.id, image_url: extractFileName(img.image_url) };
-            }
-            return { image_url: extractFileName(img.image_url) };
-        })
+        wedding_hall_pictures: toyxonaFormStore.images
+            .filter(img => !img.isUploading && img.image_url && !img.image_url.startsWith('blob:'))
+            .map(img => {
+                if (img.id) {
+                    return {
+                        id: img.id,
+                        wedding_hall_id: props.toyxona.id,
+                        image_url: img.image_url
+                    }
+                }
+                return {
+                    wedding_hall_id: props.toyxona.id,
+                    image_url: img.image_url
+                }
+            })
     };
     try {
         await updateToyxonaMutation.mutateAsync(payload);
