@@ -126,11 +126,13 @@ useHead({
     { property: 'og:title', content: toyxona.value?.name || 'toyxonachi.uz' },
     { property: 'og:description', content: toyxona.value?.description?.slice(0, 160) || 'Find the perfect venue for your event' },
     { property: 'og:image', content: img },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `https://toyxonachiuz.vercel.app/uz/toyxona/${toyxona.value?.id}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: toyxona.value?.name || 'toyxonachi.uz' },
-    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 100) || 'Find the perfect venue for your event' },
+    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 150) || 'Find the perfect venue for your event' },
     { name: 'twitter:image', content: img }
   ]
 })
