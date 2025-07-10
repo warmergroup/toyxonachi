@@ -6,6 +6,8 @@ import { getToyxonaById } from '~/data';
 import type { UseQueryReturnType } from '@tanstack/vue-query';
 import { openState } from '~/stores/isOpen.store';
 
+const config = useRuntimeConfig()
+const imageUrl = config.public.imageUrl
 const openComponent = openState();
 const router = useRouter();
 const route = useRoute();
@@ -22,6 +24,13 @@ const goback = () => {
 const onClose = () => {
   openComponent.onClose();
 }
+
+function getFullImageUrl(imageName?: string) {
+  if (!imageName) return ''
+  if (imageName.startsWith('http')) return imageName
+  return imageUrl + (imageName.startsWith('/') ? '' : '/') + imageName
+}
+
 const userDistance = computed(() => {
   if (
     locationStore.coords &&
@@ -105,19 +114,20 @@ function toggleDescription() {
 
 watchEffect(() => {
   if (toyxona.value) {
+    const img = getFullImageUrl(toyxona.value.wedding_hall_pictures?.[0]?.image_url)
     useHead({
       title: `${toyxona.value.name} — Toyxonachi`,
       meta: [
         { name: 'description', content: toyxona.value.description?.slice(0, 160) },
         { property: 'og:title', content: toyxona.value.name },
         { property: 'og:description', content: toyxona.value.description?.slice(0, 160) },
-        { property: 'og:image', content: toyxona.value.wedding_hall_pictures?.[0]?.image_url || '/logo-splash.svg' },
+        { property: 'og:image', content: img || '/logo-splash.svg' },
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: `https://toyxonachi.uz/toyxona/${toyxona.value.id}` },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: toyxona.value.name },
         { name: 'twitter:description', content: toyxona.value.description?.slice(0, 100) },
-        { name: 'twitter:image', content: toyxona.value.wedding_hall_pictures?.[0]?.image_url || '/logo-splash.svg' }
+        { name: 'twitter:image', content: img || '/logo-splash.svg' }
       ]
     })
   }
