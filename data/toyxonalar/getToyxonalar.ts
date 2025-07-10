@@ -9,13 +9,12 @@ export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number,
       try {
         const {data} = await $axios.get('wedding-halls/all', {
           params: {
+            limit: itemsPerpage,
             price: price,
-            start: currentPage,
-            limit: itemsPerpage
+            serarch: '',
           }
         });
-        console.log("getToyxonalar response: ", data.data)
-       
+      
         return data.data;
       } catch (error: any) {
         throw new Error('To\'yxonalarni yuklashda xatolik yuz berdi', error);

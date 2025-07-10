@@ -51,7 +51,17 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'Venue Finder',
+      title: 'toyxonachi.uz',
+      link: [
+        // Faviconlar
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/android-chrome-192x192.png' },
+        { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/android-chrome-512x512.png' },
+        { rel: 'icon', type: 'image/png', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' },
+        { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
       meta: [
         {charset: 'utf-8'},
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},

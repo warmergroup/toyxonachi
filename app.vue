@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import * as locales from '@nuxt/ui/locale'
-import { useGetMeQuery } from '~/data/auth';
+import { useGetMeQuery } from '~/data';
 import { onMessage, messaging } from '~/utils/firebase'
-import { listenToMessages } from '~/composables/useFCM'
+
 
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
-
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
@@ -23,7 +22,6 @@ onMounted(() => {
     refetch()
   }
 
-  listenToMessages()
   if (messaging) {
     onMessage(messaging, (payload) => {
       if (Notification.permission === 'granted' && payload.notification) {

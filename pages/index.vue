@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useInfiniteToyxonalarQuery } from '~/data'
 import { getDiscounts } from "~/data"
+import { useSearchStore } from '~/stores/search.store'
 useHead({
   title: 'Toyxonachi — Eng yaxshi to‘yxonalar va banket zallari',
   meta: [
@@ -13,6 +14,8 @@ useHead({
     { name: 'twitter:card', content: 'summary_large_image' }
   ]
 })
+
+const searchStore = useSearchStore()
 const { isLargeScreen } = useScreenSize();
 const { t } = useI18n()
 const router = useRouter()
@@ -20,6 +23,14 @@ const { data: toyxonalarData, isLoading: toyxonaLoading, fetchNextPage, isFetchi
 const { data: banners, isLoading: isBannersLoading } = getDiscounts()
 const infiniteScrollTrigger = ref<null | HTMLElement>(null)
 const toyxonalar = computed(() => (toyxonalarData.value?.pages || []).flat())
+
+const filteredToyxonalar = computed(() => {
+  if (!searchStore.query) return toyxonalar.value
+  return toyxonalar.value.filter(t =>
+    t.name?.toLowerCase().includes(searchStore.query.toLowerCase())
+    // yoki boshqa maydonlar bo‘yicha ham filter qilishingiz mumkin
+  )
+})
 
 const carouselItems = computed(() =>
   (banners.value as any[] || []).map(b => ({
@@ -67,7 +78,7 @@ onMounted(() => {
       </div>
 
       <h2 v-if="!toyxonaLoading && toyxonalar && toyxonalar.length > 0"
-        class="text-xl font-bold text-text-primary py-2">{{ t('common.venues') }}</h2>
+        class="text-xl font-bold text-text-primary py-2">{{ t('common.weddingHalls') }}</h2>
 
       <div v-if="error" class="text-center text-red-500">
         {{ error?.message || t('common.error') }}
@@ -79,12 +90,12 @@ onMounted(() => {
 
       <div v-if="toyxonalar && toyxonalar.length > 0 && !toyxonaLoading"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <VenueCard v-for="toyxona in toyxonalar" :key="`wedding-${toyxona.id}`" :toyxona="toyxona" />
+        <VenueCard v-for="toyxona in filteredToyxonalar" :key="`wedding-${toyxona.id}`" :toyxona="toyxona" />
       </div>
 
       <div v-else-if="!toyxonaLoading && (!toyxonalar || toyxonalar.length === 0)"
         class="text-center text-gray-500 py-10">
-        {{ t('venue.notFound') }}
+        {{ t('weddingHall.notFound') }}
       </div>
 
       <div ref="infiniteScrollTrigger">

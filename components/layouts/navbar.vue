@@ -1,19 +1,25 @@
 <script setup>
-  import { openState } from '~/stores/isOpen.store';
+import { openState } from '~/stores/isOpen.store';
 
-  const { t } = useI18n();
-  const route = useRoute();
-  const localePath = useLocalePath();
-  const openComponent = openState();
+const { t } = useI18n();
+const route = useRoute();
+const localePath = useLocalePath();
+const openComponent = openState();
 
+const showSearchInput = computed(() => {
+  const mainPath = localePath('/');
+  const toyxonalarPath = localePath('/toyxonalar');
+  return route.path === mainPath || route.path.startsWith(toyxonalarPath);
+});
 
 </script>
 
 <template>
   <ClientOnly>
     <nav
-      class="xl:container mx-auto xl:mx-auto fixed top-0 left-0 right-0 flex justify-between items-center bg-white z-50 w-full h-16 border-b border-gray-300 px-5 py-5">
+      class="xl:container mx-auto lg:mx-auto fixed top-0 left-0 right-0 flex justify-between items-center bg-white z-50 w-full h-16 border-b border-gray-300 px-5 py-5">
       <NuxtLink :to="localePath('/')" class="hidden md:block">
+        <!-- <NuxtImg src="/TOYXONACHI-02 png (oq orqa fonsiz).png" /> -->
         <h1 class="text-2xl font-bold">To'yxonachi</h1>
       </NuxtLink>
 
@@ -23,13 +29,13 @@
           <UIcon name="custom:home" />
           <span>{{ t('common.main') }}</span>
         </NuxtLink>
-        <NuxtLink :to="localePath('/toyxonalar')" class="hidden lg:flex justify-between items-center gap-1"
+        <NuxtLink :to="localePath('/toyxonalar')"
+          class="hidden lg:flex justify-between items-center gap-1 whitespace-nowrap"
           :class="{ 'text-[var(--primary-color)]': route.path.startsWith(localePath('/toyxonalar')) }">
           <UIcon name="custom:navbar-search" />
-          <span>{{ t('common.venues') }}</span>
+          <span class="whitespace-nowrap">{{ t('common.weddingHalls') }}</span>
         </NuxtLink>
-        <UInput icon="custom:search" size="xl" class="w-full rounded-lg border border-gray-300" placeholder="Nomi"
-          variant="soft" />
+        <UiSearchPanel v-if="showSearchInput" />
       </div>
 
       <div class="flex justify-between items-center gap-3">

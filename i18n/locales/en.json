@@ -2,7 +2,7 @@
   "common": {
     "loading": "Loading...",
     "currency": "sum",
-    "venues": "Venues",
+    "weddingHalls": "Wedding Halls",
     "search": "Search",
     "main": "Main",
     "about": "About",
@@ -20,28 +20,33 @@
     "appLanguage": "App Language",
     "changeLanguage": "Select Language",
     "save": "Save",
+    "delete": "Delete",
+    "archive": "Archive",
+    "activate": "Activate",
     "cancel": "Cancel",
     "readMore": "Read More",
-    "readLess": "Less"
+    "readLess": "Less",
+    "mostExpensive": "Most Expensive Wedding Halls",
+    "clickHere": "Click Here"
   },
   "about": {
     "aboutUs": "About Us",
-    "description": "We are the largest venue platform in Uzbekistan. With our platform, you can choose a venue, compare prices, and book it."
+    "description": "We are the largest wedding hall platform in Uzbekistan. With our platform, you can choose a wedding hall, compare prices, and book it."
   },
-  "venue": {
-    "title": "Venues",
+  "weddingHall": {
+    "title": "Wedding Halls",
     "tariffs":"Tariffs",
     "description": "Description",
     "pricing": "Pricing",
     "contact": "Contact",
     "noAddress": "No address provided",
-    "notFound": "No venues found",
-    "peopleCount": "for peoples",
+    "notFound": "No wedding halls found",
+    "peopleCount": "people",
     "location": "Location",
     "goDirection": "Get directions",
     "discounts": "Discounts"
   },
-  "toyxonaStatus":{
+  "weddingHallStatus":{
     "all": "All",
     "new": "New",
     "active": "Active",
@@ -50,7 +55,17 @@
     "moderation": "In moderation",
     "arxiv": "Archive",
     "inactive": "Inactive",
-    "notModerated": "Not moderated"
+    "notModerated": "Not moderated",
+    "weddingHallDeleted": "Wedding hall deleted",
+    "weddingHallArchived": "Wedding hall archived",
+    "weddingHallActive": "Wedding hall active",
+    "weddingHallNotModerated": "Wedding hall not moderated",
+    "weddingHallInReview": "Wedding hall in review",
+    "weddingHallRejected": "Wedding hall rejected",
+    "weddingHallAccepted": "Wedding hall accepted",
+    "weddingHallNotFound": "Wedding hall not found",
+    "weddingHallAlreadyExists": "Wedding hall already exists",
+    "weddingHallCreationError": "Wedding hall creation error"
   },
   "users": {
     "all": "All",
@@ -73,10 +88,11 @@
     "haveAccount": "Already have an account?",
     "noAccount": "Don't have an account?",
     "passwordsDoNotMatch": "Passwords do not match",
+    "avatarUpdated": "Avatar successfully uploaded",
     "loginError": "Login error",
     "registerError": "Registration error",
-    "myVenues": "My Venues",
-    "allVenues": "All Venues",
+    "myWeddingHalls": "My Wedding Halls",
+    "allWeddingHalls": "All Wedding Halls",
     "status": "Status",
     "role": "Role",
     "user": "User",
@@ -85,32 +101,41 @@
   },
   "admin": {
     "myWeddingHalls": "My Wedding Halls",
-    "tarifCount": "tariffs count",
-    "addToyxona": "Add wedding hall",
-    "minPrice" : "Minimum price",
-    "maxPrice" : "Maximum price",
-    "editButton":"Change data"
+    "tarifCount": "Tariffs Count",
+    "minPrice" : "Minimum Price",
+    "maxPrice" : "Maximum Price",
+    "addWeddingHall": "Add Wedding Hall",
+    "editWeddingHall": "Edit Wedding Hall",
+    "deleteWeddingHall": "Delete Wedding Hall",
+    "createTariff": "Create Tariff",
+    "editButton": "Edit Data"
   },
   "superadmin": {
     "allWeddingHalls": "All Wedding Halls",
     "allUsers": "All Users",
-    "acceptToyxona": "Accept",
-    "rejectToyxona": "Reject",
+    "acceptWeddingHall": "Accept",
+    "rejectWeddingHall": "Reject",
     "accepted": "Accepted",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "rejectedReason": "Rejection reason",
+    "rejectedPlaceholder": "Enter rejection reason",
+    "sendReason": "Send"
   },
   "profileActions": {
     "myProfile": "My Profile",
-    "myVenues": "My Venues",
+    "myWeddingHalls": "My Wedding Halls",
     "adminList": "Admins",
-    "allVenues": "All Venues",
+    "allWeddingHalls": "All Wedding Halls",
     "discounts": "Discounts",
     "editProfile": "Edit Profile",
     "viewProfile": "View Profile",
     "changePassword": "Change Password",
     "deleteAccount": "Delete Account",
     "accountSettings": "Account Settings",
-    "addAdmin": "Add Admin"
+    "addAdmin": "Add Admin",
+    "addWeddingHall": "Add Wedding Hall",
+    "addDiscounts": "Add Discounts",
+    "addTariffs": "Add Tariffs"
   },
   "validation": {
     "registerSuccess": "Registration successful",
@@ -132,7 +157,7 @@
     "loginTitle": "Login",
     "successMessage": "Login successful",
     "loginPending": "Login in progress...",
-    "WelcomeBack": "Welcome",
+    "welcomeBack": "Welcome",
     "loginButton": "Login",
     "loginError": "Login error. Please try again.",
     "noAccount": "Don't have an account?"
@@ -167,19 +192,19 @@
     "goBack": "Go back",
     "userNotFound": "User not found",
     "userAlreadyExists": "User already exists",
-    "venueNotFound": "Venue not found",
-    "venueAlreadyExists": "Venue already exists",
-    "venueCreationError": "Error creating venue",
-    "venueUpdateError": "Error updating venue",
-    "venueDeletionError": "Error deleting venue",
-    "venueListError": "Error fetching venue list"
+    "weddingHallNotFound": "Wedding hall not found",
+    "weddingHallAlreadyExists": "Wedding hall already exists",
+    "weddingHallCreationError": "Error creating wedding hall",
+    "weddingHallUpdateError": "Error updating wedding hall",
+    "weddingHallDeletionError": "Error deleting wedding hall",
+    "weddingHallListError": "Error fetching wedding hall list"
   },
   "modal": {
-    "archiveOrDelete": "Will you delete or archive the wedding venue?",
-    "activeOrDelete": "Will you activate or delete the wedding venue?"
+    "archiveOrDelete": "Will you delete or archive the wedding hall?",
+    "activeOrDelete": "Will you activate or delete the wedding hall?"
   },
-  "toyxonaForm":{
-    "imageFild": "Wedding hall pictures",
+  "weddingHallForm": {
+    "imageField": "Wedding hall pictures",
     "nameField": "Name",
     "descriptionField": "Description",
     "addressField": "Address",
@@ -201,6 +226,17 @@
     "bonuses": "Bonuses",
     "firstFood": "First course",
     "secondFood": "Main course"
-
+  },
+  "tariff": {
+    "meals": "Meals",
+    "salads": "Salads",
+    "main": "Main",
+    "weddingTable": "Wedding table",
+    "additionalDelicacies": "Additional delicacies",
+    "bonuses": "Bonuses",
+    "firstMeal": "First meal",
+    "secondMeal": "Second meal",
+    "noProducts": "No products",
+    "noCategoriesOrProducts": "No categories or products"
   }
 }

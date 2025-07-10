@@ -3,9 +3,6 @@ import { openState } from '~/stores/isOpen.store';
 
 const openComponent = openState();
 const { t } = useI18n();
-
-
-
 </script>
 
 <template>

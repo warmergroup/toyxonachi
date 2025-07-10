@@ -26,7 +26,7 @@ export const PROFILE_ACTIONS: IProfileAction[] = [  // Har qanday holatda ko'rin
   // Superadmin uchun maxsus actionlar
   {
     id: 'allVenues',
-    label: 'profile.allVenues',
+    label: 'profile.allWeddingHalls',
     icon: 'list',
     component: 'allVenues',
     roles: ['superadmin']
@@ -42,7 +42,7 @@ export const PROFILE_ACTIONS: IProfileAction[] = [  // Har qanday holatda ko'rin
   // ham superadmin, ham admin uchun ko'rinadigan actionlar
   {
     id: 'discounts',
-    label: 'venue.discounts',
+    label: 'weddingHall.discounts',
     icon: 'discounts',
     component: 'discounts',
     roles: ['admin', 'superadmin']

@@ -1,93 +1,95 @@
 <script lang="ts" setup>
-    import { useLogin } from '~/data';
-    import { useAuthStore } from '~/stores/auth.store';
-    import { openState } from '~/stores/isOpen.store';
-    import { vMaska } from 'maska/vue';
-    import { z } from 'zod';
-    import type { FormSubmitEvent } from '#ui/types';
+import { useLogin } from '~/data';
+import { useAuthStore } from '~/stores/auth.store';
+import { openState } from '~/stores/isOpen.store';
+import { vMaska } from 'maska/vue';
+import { z } from 'zod';
+import type { FormSubmitEvent } from '#ui/types';
 
 
-    const authType = useAuthType();
-    const openComponent = openState();
-    const { t } = useI18n();
-    const toast = useToast();
-    const authStore = useAuthStore();
+const config = useRuntimeConfig();
+const vapidKey = config.public.vapidKey;
+const authType = useAuthType();
+const openComponent = openState();
+const { t } = useI18n();
+const toast = useToast();
+const authStore = useAuthStore();
 
-    const phonePrefix = '+998'; // UI uchun
-    const phoneCode = '998';  // Backend uchun
+const phonePrefix = '+998'; // UI uchun
+const phoneCode = '998';  // Backend uchun
 
-    const state = reactive({
-        phone: '',
-    });
+const state = reactive({
+    phone: '',
+});
 
-    // Custom validation schema for phone with mask
-    const schema = z.object({
-        phone: z.string()
-            .min(1, t('validation.phoneRequired'))
-            .refine(
-                (value) => value.replace(/\D/g, '').length === 9,
-                t('validation.phoneInvalid')
-            )
-    });
+// Custom validation schema for phone with mask
+const schema = z.object({
+    phone: z.string()
+        .min(1, t('validation.phoneRequired'))
+        .refine(
+            (value) => value.replace(/\D/g, '').length === 9,
+            t('validation.phoneInvalid')
+        )
+});
 
-    type Schema = z.infer<typeof schema>;
+type Schema = z.infer<typeof schema>;
 
-    // Handle successful login
-    const handleLoginSuccess = (data: { user: any; token: string }) => {
-        try {
-            // Save user data to store
-            authStore.setUser({
-                id: String(data.user.id),
-                name: data.user.name,
-                phone: data.user.phone,
-                status: data.user.status,
-                role: data.user.role,
-            });
+// Handle successful login
+const handleLoginSuccess = (data: { user: any; token: string }) => {
+    try {
+        // Save user data to store
+        authStore.setUser({
+            id: String(data.user.id),
+            name: data.user.name,
+            phone: data.user.phone,
+            status: data.user.status,
+            role: data.user.role,
+        });
 
-            // Save token
-            localStorage.setItem('token', data.token);
+        // Save token
+        localStorage.setItem('token', data.token);
 
-            // Show success message
+        // Show success message
+        toast.add({
+            description: t('login.welcomeBack', { name: data.user.name }),
+            color: 'primary',
+        });
+
+        // Close login form
+        openComponent.onClose();
+    } catch (error) {
+        console.error('Error handling login success:', error);
+        toast.add({
+
+            description: t('error.unknown'),
+            color: 'error',
+        });
+    }
+};
+
+// Login mutation
+const { mutate, isPending } = useLogin(vapidKey);
+
+// Form submission handler
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+    const formData = {
+        phone: phoneCode + event.data.phone.replace(/\D/g, ''),
+
+    };
+
+    mutate(formData, {
+        onSuccess: handleLoginSuccess,
+        onError: (error: unknown) => {
             toast.add({
-                description: t('login.welcomeBack', { name: data.user.name }),
-                color: 'primary',
-            });
 
-            // Close login form
-            openComponent.onClose();
-        } catch (error) {
-            console.error('Error handling login success:', error);
-            toast.add({
-
-                description: t('error.unknown'),
+                description: error instanceof Error ? error.message : t('error.unknown'),
                 color: 'error',
             });
-        }
-    };
+        },
+    });
+};
 
-    // Login mutation
-    const { mutate, isPending } = useLogin();
-
-    // Form submission handler
-    const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-        const formData = {
-            phone: phoneCode + event.data.phone.replace(/\D/g, ''),
-
-        };
-
-        mutate(formData, {
-            onSuccess: handleLoginSuccess,
-            onError: (error: unknown) => {
-                toast.add({
-
-                    description: error instanceof Error ? error.message : t('error.unknown'),
-                    color: 'error',
-                });
-            },
-        });
-    };
-
-    // Validation events directly in template
+// Validation events directly in template
 </script>
 
 <template>

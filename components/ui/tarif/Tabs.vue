@@ -43,10 +43,10 @@
   }
   // Tablar va bo'limlar
   const tabs: readonly Tab[] = [
-    { label: 'Taomlar', keys: ['meals'] },
-    { label: 'Salatlar', keys: ['salads'] },
-    { label: "To'y dasturxoni", keys: ['wedding_table'] },
-    { label: 'Bonuslar', keys: ['bonuses'] }
+    { label: t('tariff.meals'), keys: ['meals'] },
+    { label: t('tariff.salads'), keys: ['salads'] },
+    { label: t('tariff.weddingTable'), keys: ['wedding_table'] },
+    { label: t('tariff.bonuses'), keys: ['bonuses'] }
   ] as const
 
   const activeTab: Ref<string> = ref(tabs[0].label)
@@ -56,11 +56,11 @@
     const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'meals')
     return [
       {
-        label: '1-taom',
+        label: t('tariff.firstMeal'),
         items: products.filter((p: Product) => String(p.category_id) === '1')
       },
       {
-        label: '2-taom',
+        label: t('tariff.secondMeal'),
         items: products.filter((p: Product) => String(p.category_id) === '2')
       }
     ]
@@ -69,33 +69,33 @@
     const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'wedding_table')
     return [
       {
-        label: "To'y dasturxoni",
+        label: t('tariff.main'),
         items: products.filter((p: Product) => String(p.category_id) === '1')
       },
       {
-        label: "Qo'shimcha noz ne'matlar",
+        label: t('tariff.additionalDelicacies'),
         items: products.filter((p: Product) => String(p.category_id) === '2')
       }
     ]
   })
   const saladsSection: ComputedRef<Section[]> = computed(() => [
     {
-      label: 'Salatlar',
+      label: t('tariff.salads'),
       items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'salads')
     }
   ])
   const bonusesSection: ComputedRef<Section[]> = computed(() => [
     {
-      label: 'Bonuslar',
+      label: t('tariff.bonuses'),
       items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'bonuses')
     }
   ])
 
   const tabSections: ComputedRef<Section[]> = computed(() => {
-    if (activeTab.value === 'Taomlar') return mealsSections.value
-    if (activeTab.value === "To'y dasturxoni") return weddingSections.value
-    if (activeTab.value === 'Salatlar') return saladsSection.value
-    if (activeTab.value === 'Bonuslar') return bonusesSection.value
+    if (activeTab.value === t('tariff.meals')) return mealsSections.value
+    if (activeTab.value === t('tariff.weddingTable')) return weddingSections.value
+    if (activeTab.value === t('tariff.salads')) return saladsSection.value
+    if (activeTab.value === t('tariff.bonuses')) return bonusesSection.value
     return []
   })
 
@@ -114,8 +114,8 @@
 
 <template>
   <div>
-    <div v-if="isLoading">Yuklanmoqda...</div>
-    <div v-else-if="error">Xatolik: {{ error.message }}</div>
+    <div v-if="isLoading">{{ t('common.loading') }}...</div>
+    <div v-else-if="error">{{ t('error.title') }} {{ error.message }}</div>
     <div v-else class="flex flex-col gap-2 pb-20">
       <!-- EditBtn faqat admin sahifalarida ko'rinadi -->
       <div
@@ -127,14 +127,15 @@
         <div class="p-2 bg-white rounded-lg flex flex-col gap-2">
           <h1 class="font-bold text-xl">{{ tarifDetail.name }}</h1>
           <div v-for="type in tarifDetail.tariff_types" :key="type.id" class="flex justify-between items-center">
-            <span class="text-gray-500 text-xs md:text-sm">{{ type.person_count }} kishi</span>
+            <span class="text-gray-500 text-xs md:text-sm">{{ type.person_count }} {{ t('weddingHall.peopleCount')
+            }}</span>
             <span class="font-bold text-sm">{{ Number(type.price).toLocaleString('ru-RU') }} so'm</span>
           </div>
         </div>
       </div>
 
       <!-- Tabs -->
-      <div class="flex gap-3 lg:gap-1 overflow-auto whitespace-nowrap mb-2 hide-scrollbar min-h-[44px]">
+      <div class="flex gap-3 lg:gap-2 overflow-auto whitespace-nowrap mb-2 lg:hide-scrollbar min-h-[44px]">
         <button v-for="tab in tabs" :key="tab.label"
           class="px-3 md:px-2 py-2 md:py-1 rounded-xl font-medium whitespace-nowrap transition"
           :class="activeTab === tab.label ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'" style="flex-shrink: 0;"
@@ -155,13 +156,13 @@
               <div class="text-muted text-sm">{{ prod.description }}</div>
             </div>
           </div>
-          <div v-else class="text-gray-400 text-sm">Mahsulotlar yo'q</div>
+          <div v-else class="text-gray-400 text-sm">{{ t('tariff.noProducts') }}</div>
         </div>
 
       </div>
 
       <div v-else>
-        <p>Kategoriya yoki mahsulotlar yo'q</p>
+        <p>{{ t('tariff.noCategoriesOrProducts') }}</p>
       </div>
     </div>
   </div>

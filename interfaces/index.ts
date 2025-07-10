@@ -1,76 +1,13 @@
+
 export interface IWithId {
   id: string;
 }
 
-export interface IProfileAction {
-  id: string;
-  label: string;
-  icon: string;
-  component: ComponentType; // string o'rniga ComponentType ishlatamiz
-  roles: string[];
-}
-
-export interface IToyxonalar extends IWithId {
-  user_id: string;
-  name: string;
-  description: string;
-  status: string;
-  longitude: string;
-  latitude: string;
-  address: string;
-  tariff_count: string;
-  region_id: null | string;
-  district_id: null | string;
-  quarter_id: null | string;
-  phone1: null | string;
-  phone2: null | string;
-  telegram: null | string;
-  instagram: null | string;
-  reject_reason: null | string;
-  created_at: string;
-  updated_at: string;
-  wedding_hall_pictures: Array<{
-    id: number;
-    wedding_hall_id: string;
-    image_url: string;
-    created_at: string;
-    updated_at: string;
-  }>;
-  tariffs: ITarif;
-  telegram_link?: string;
-  instagram_link?: string;
-  min_price?: string;
-  max_price?: string;
-  admin_id?: string;
-  tarif_count?: string;
-  images?: string[];
-  prices?: Array<{
-    title: string;
-    amount: number;
-    currency: string;
-    description: string;
-  }>;
-}
-
-export interface ITarif {
-    id: number;
-    name: string;
-    wedding_hall_id: string;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface Banner extends IWithId {
-  wedding_hall_id: string;
-  notes: string;
-  image_url: string;
-  is_active: string;
+export interface CreatedAndUpdatedAt { // 🔧 Typo to'g'rilandi: CretedAndUpdatedAtt → CreatedAndUpdatedAt
   created_at: string;
   updated_at: string;
 }
 
-export type AuthType = "register" | "login" | "forgot_password";
-export type Role = "user" | "admin" | "superadmin";
 export type ComponentType =
   "tarif"
   | "changeLanguage"
@@ -92,21 +29,77 @@ export type ComponentType =
   | "createTariff"
   | "editToyxona"
   | "editTarif"
-export interface IRoleInfo {
-  id: number;
-  name: string;
-  guard_name: string;
-  created_at: string;
-  updated_at: string;
-  pivot?: {
-    model_type: string;
-    model_id: string;
-    role_id: string;
-  };
+
+export type AuthType = "register" | "login" | "forgot_password";
+export type Role = "user" | "admin" | "superadmin";
+
+export interface IProfileAction extends IWithId {
+  label: string;
+  icon: string;
+  component: ComponentType;
+  roles: Role[];
 }
 
-export interface IUser {
-  id: string;
+export interface WeddingHallPicture extends IWithId, CreatedAndUpdatedAt {
+  wedding_hall_id: string;
+  image_url: string;
+}
+
+export interface ITariffType extends IWithId, CreatedAndUpdatedAt {
+  tariff_id: string;
+  person_count: string;
+  price: string;
+}
+
+export interface ITarif extends IWithId, CreatedAndUpdatedAt {
+  name: string;
+  wedding_hall_id: string;
+  tariff_types: ITariffType[];
+}
+
+export interface IToyxonalar extends IWithId, CreatedAndUpdatedAt {
+  user_id: string;
+  name: string;
+  description: string;
+  status: string;
+  longitude: string | null;
+  latitude: string | null;
+  address: string | null;
+  tariff_count: string | null;
+  region_id: string | null;
+  district_id: string | null;
+  quarter_id: string | null;
+  phone1: string | null; // 🔧 null tip qo‘shildi
+  phone2: string | null; // 🔧 null tip qo‘shildi
+  telegram: string | null; // 🔧 null tip qo‘shildi
+  instagram: string | null; // 🔧 null tip qo‘shildi
+  reject_reason: string | null;
+  min_price: string | null;
+  max_price: string | null;
+  wedding_hall_pictures: WeddingHallPicture[];
+  tariffs: ITarif[];
+}
+
+export interface Banner extends IWithId, CreatedAndUpdatedAt {
+  notes: string;
+  wedding_hall_id: string;
+  image_url: string;
+  is_active: string;
+}
+
+export interface Pivot {
+  model_type: string;
+  model_id: string;
+  role_id: string;
+}
+
+export interface IRoleInfo extends IWithId, CreatedAndUpdatedAt {
+  name: string;
+  guard_name: string;
+  pivot?: Pivot;
+}
+
+export interface IUser extends IWithId, CreatedAndUpdatedAt {
   name: string;
   phone: string;
   status: string;
@@ -131,10 +124,6 @@ export interface AttachRoleFormData {
   role: number;
 }
 
-export interface WeddingHallPicture {
-  image_url: string;
-}
-
 export interface WeddingHallFormState {
   name: string;
   description: string;
@@ -146,10 +135,9 @@ export interface WeddingHallFormState {
   longitude: number | null;
   latitude: number | null;
   address: string;
-  wedding_hall_pictures: WeddingHallPicture[];
+  wedding_hall_pictures: { image_url: string }[];
 }
-
-export interface ToyxonaFormData { 
+export interface ToyxonaFormData {
   name: string;
   description: string;
   status: string;
@@ -161,36 +149,39 @@ export interface ToyxonaFormData {
   phone2: string;
   telegram: string;
   instagram: string;
-  wedding_hall_pictures: {image_url: string}[];
+  wedding_hall_pictures: { image_url: string }[];
 }
 
-export interface TariffProductFormData { 
-  tariff_id: number,
-  type: string, //meals, salads, wedding_table, bonuses
-  name: string,
-  description: string,
-  image_url: string,
-  category_id: number | null,
+export interface TariffProductFormData {
+  tariff_id: number;
+  type: string; // meals, salads, wedding_table, bonuses
+  name: string;
+  description: string;
+  image_url: string;
+  category_id: number | null;
 }
+
 export interface Product {
-  id: number
-  name: string
-  description: string
-  image_url: string
-  type: string
-  category_id?: string | number
+  id: number;
+  name: string;
+  description: string;
+  image_url: string;
+  type: string;
+  category_id?: string | number;
 }
+
 export interface FormState {
-  name: string
-  description: string
-  image_url: string
-  imageUploading: boolean
+  name: string;
+  description: string;
+  image_url: string;
+  imageUploading: boolean;
 }
+
 export interface Section {
-  label: string
-  type: string
-  category_id?: number
-  form: FormState
-  items: Product[]
-  isCreating?: boolean // Qo'shildi
+  label: string;
+  type: string;
+  category_id?: number;
+  form: FormState;
+  items: Product[];
+  isCreating?: boolean; // ✅ Qo‘shildi
 }

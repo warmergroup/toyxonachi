@@ -1,11 +1,12 @@
 import { useMutation } from '@tanstack/vue-query';
 import $authApi from '~/http/authApi';
+import { getToken, messaging } from '~/utils/firebase';
 
 interface LogoutResponse {
     message: string;
 }
 
-export const useLogout = () => {
+export const useLogout = (vapidKey: string) => {
     const toast = useToast();
     const { t } = useI18n();
     const authStore = useAuthStore();
@@ -14,7 +15,15 @@ export const useLogout = () => {
     return useMutation({
         mutationKey: ['logout'],
         mutationFn: async () => {
-            const { data } = await $authApi.post<LogoutResponse>('users/logout');
+            let fcmToken = null;
+            if (messaging) {
+                try {
+                    fcmToken = await getToken(messaging, { vapidKey });
+                } catch (err) {
+                    console.warn('FCM token olishda xatolik:', err);
+                }
+            }
+            const { data } = await $authApi.post<LogoutResponse>('users/logout', { fcm_token: fcmToken });
             return data;
         },
         onSuccess: () => {
@@ -25,7 +34,6 @@ export const useLogout = () => {
             
             // Show success message
             toast.add({
-                title: t('logout.logoutTitle'),
                 description: t('logout.successMessage'),
                 color: 'success',
             });

@@ -1,69 +1,93 @@
 <script lang="ts" setup>
-import { getDiscounts } from '~/data'
-import { useUpdateDiscount } from '~/data/discounts/updateDiscounts'
-import { useDeleteDiscount } from '~/data/discounts/deleteDiscount'
-import type { Banner } from '~/interfaces'
+    import { getDiscounts } from '~/data'
+    import { useUpdateDiscount } from '~/data/discounts/updateDiscounts'
+    import { useDeleteDiscount } from '~/data/discounts/deleteDiscount'
+    import type { Banner } from '~/interfaces'
 
-const { formatDate } = useFormat()
-const { t } = useI18n();
-const toast = useToast()
-const { data: banners, isLoading: isBannersLoading, refetch } = getDiscounts('admin')
-const updateDiscount = useUpdateDiscount()
-const deleteDiscount = useDeleteDiscount()
+    const { formatDate } = useFormat()
+    const { t } = useI18n();
+    const toast = useToast()
+    const { data: banners, isLoading: isBannersLoading, refetch } = getDiscounts('admin')
+    const updateDiscount = useUpdateDiscount()
+    const deleteDiscount = useDeleteDiscount()
 
-const loadingId = ref<string | number | null>(null)
-const deletingId = ref<string | number | null>(null)
+    const loadingId = ref<string | number | null>(null)
+    const deletingId = ref<string | number | null>(null)
 
-const items = [
-    { label: t('toyxonaStatus.active'), slot: 'active' },
-    { label: t('toyxonaStatus.arxiv'), slot: 'archive' }
-]
+    const items = [
+        { label: t('weddingHallStatus.active'), slot: 'active' },
+        { label: t('weddingHallStatus.arxiv'), slot: 'archive' }
+    ]
 
-const filteredBanners = (slot: string) => {
-    if (!banners.value) return [];
-    if (slot === 'active') {
-        return banners.value.filter((b: Banner) =>
-            (typeof b.is_active === 'string' && b.is_active === '1') ||
-            (typeof b.is_active === 'boolean' && b.is_active === true)
+    const filteredBanners = (slot: string) => {
+        if (!banners.value) return [];
+        if (slot === 'active') {
+            return banners.value.filter((b: Banner) =>
+                (typeof b.is_active === 'string' && b.is_active === '1') ||
+                (typeof b.is_active === 'boolean' && b.is_active === true)
+            );
+        }
+        if (slot === 'archive') {
+            return banners.value.filter((b: Banner) =>
+                (typeof b.is_active === 'string' && b.is_active === '0') ||
+                (typeof b.is_active === 'boolean' && b.is_active === false)
+            );
+        }
+        return [];
+    };
+
+    function toggleStatus(banner: Banner) {
+        let newStatus: string | boolean;
+        let toastMsg = '';
+        if (typeof banner.is_active === 'string') {
+            if (banner.is_active === '1') {
+                newStatus = '0';
+                toastMsg = "Arxivelashtirildi";
+            } else {
+                newStatus = '1';
+                toastMsg = "Aktivelashtirildi";
+            }
+        } else {
+            if (banner.is_active === true) {
+                newStatus = false;
+                toastMsg = "Arxivelashtirildi";
+            } else {
+                newStatus = true;
+                toastMsg = "Aktivelashtirildi";
+            }
+        }
+        loadingId.value = banner.id
+        updateDiscount.mutate(
+            { id: banner.id, is_active: newStatus },
+            {
+                onSuccess: () => {
+                    toast.add({
+                        description: toastMsg,
+                        color: 'success'
+                    })
+                    refetch && refetch()
+                },
+                onError: (err: any) => {
+                    toast.add({
+                        description: err.message || 'Xatolik yuz berdi',
+                        color: 'error'
+                    })
+                },
+                onSettled: () => {
+                    loadingId.value = null
+                }
+            }
         );
     }
-    if (slot === 'archive') {
-        return banners.value.filter((b: Banner) =>
-            (typeof b.is_active === 'string' && b.is_active === '0') ||
-            (typeof b.is_active === 'boolean' && b.is_active === false)
-        );
-    }
-    return [];
-};
 
-function toggleStatus(banner: Banner) {
-    let newStatus: string | boolean;
-    let toastMsg = '';
-    if (typeof banner.is_active === 'string') {
-        if (banner.is_active === '1') {
-            newStatus = '0';
-            toastMsg = "Arxivelashtirildi";
-        } else {
-            newStatus = '1';
-            toastMsg = "Aktivelashtirildi";
-        }
-    } else {
-        if (banner.is_active === true) {
-            newStatus = false;
-            toastMsg = "Arxivelashtirildi";
-        } else {
-            newStatus = true;
-            toastMsg = "Aktivelashtirildi";
-        }
-    }
-    loadingId.value = banner.id
-    updateDiscount.mutate(
-        { id: banner.id, is_active: newStatus },
-        {
+    function handleDelete(banner: Banner) {
+        if (!banner.id) return;
+        deletingId.value = banner.id
+        deleteDiscount.mutate(banner.id, {
             onSuccess: () => {
                 toast.add({
-                    description: toastMsg,
-                    color: 'success'
+                    description: `Chegirma o'chirildi`,
+                    color: 'warning'
                 })
                 refetch && refetch()
             },
@@ -74,34 +98,10 @@ function toggleStatus(banner: Banner) {
                 })
             },
             onSettled: () => {
-                loadingId.value = null
+                deletingId.value = null
             }
-        }
-    );
-}
-
-function handleDelete(banner: Banner) {
-    if (!banner.id) return;
-    deletingId.value = banner.id
-    deleteDiscount.mutate(banner.id, {
-        onSuccess: () => {
-            toast.add({
-                description: `Chegirma o'chirildi`,
-                color: 'warning'
-            })
-            refetch && refetch()
-        },
-        onError: (err: any) => {
-            toast.add({
-                description: err.message || 'Xatolik yuz berdi',
-                color: 'error'
-            })
-        },
-        onSettled: () => {
-            deletingId.value = null
-        }
-    })
-}
+        })
+    }
 </script>
 
 <template>
@@ -152,7 +152,7 @@ function handleDelete(banner: Banner) {
         <div
             class="container mx-auto absolute bottom-0 left-0 right-0 flex items-center justify-center bg-white w-full min-h-16 border-t border-gray-300 px-5 py-3 z-30">
             <UButton class="w-full flex items-center justify-center" color="secondary" size="xl" icon="custom:plus"
-                :label="t('profileActions.add')" @click="$emit('add-discounts')" />
+                :label="t('profileActions.addDiscounts')" @click="$emit('add-discounts')" />
         </div>
     </div>
 </template>

@@ -2,7 +2,7 @@
   "common": {
     "loading": "Yuklanmoqda...",
     "currency": "so'm",
-    "venues": "To'yxonalar",
+    "weddingHalls": "To'yxonalar",
     "search": "Qidirish",
     "main": "Asosiy",
     "about": "Biz haqimizda",
@@ -20,15 +20,20 @@
     "appLanguage": "Ilova tili",
     "changeLanguage": "Tilni tanlang",
     "save": "Saqlash",
+    "delete": "O'chirish",
+    "archive": "Arxivlash",
+    "activate": "Faollashtirish",
     "cancel": "Bekor qilish",
     "readMore": "Barchasini o'qish",
-    "readLess": "Kamroq"
+    "readLess": "Kamroq",
+    "mostExpensive": "Eng qimmat to'yxonalar",
+    "clickHere": "Bu yerga bosing"
   },
   "about": {
     "aboutUs": "Biz haqimizda",
     "description": "Biz O'zbekistonning eng yirik to'yxonalar platformasimiz. Bizning platformamiz orqali siz o'zingizga yoqqan to'yxonani tanlashingiz, narxlarni solishtirish va band qilishingiz mumkin."
   },
-  "venue": {
+  "weddingHall": {
     "title": "To'yxona",
     "tariffs": "Tariflar",
     "description": "Tavsif",
@@ -41,7 +46,7 @@
     "goDirection": "yo'l ko'rsatish",
     "discounts": "Chegirmalar"
   },
-  "toyxonaStatus":{
+  "weddingHallStatus":{
     "all": "Barchasi",
     "new": "Yangi",
     "active": "Faol",
@@ -50,7 +55,17 @@
     "rejected": "Rad etilgan",
     "arxiv": "Arxiv",
     "inactive": "Faol emas",
-    "notModerated": "Moditarsiyadan o'tmagan"
+    "notModerated": "Moditarsiyadan o'tmagan",
+    "weddingHallDeleted": "To'yxona o'chirildi",
+    "weddingHallArchived": "To'yxona arxivlandi",
+    "weddingHallActive": "To'yxona faol",
+    "weddingHallNotModerated": "To'yxona modiratsiyadan o'tmagan",
+    "weddingHallInReview": "To'yxona ko'rib chiqilmoqda",
+    "weddingHallRejected": "To'yxona rad etildi",
+    "weddingHallAccepted": "To'yxona qabul qilindi",
+    "weddingHallNotFound": "To'yxona topilmadi",
+    "weddingHallAlreadyExists": "Bu to'yxona allaqachon mavjud",
+    "weddingHallCreationError": "To'yxona yaratishda xatolik"
   },
   "users": {
     "all": "Barchasi",
@@ -76,7 +91,8 @@
     "passwordsDoNotMatch": "Parollar mos kelmadi",
     "loginError": "Kirishda xatolik yuz berdi",
     "registerError": "Ro'yxatdan o'tishda xatolik yuz berdi",
-    "allVenues": "Barcha to'yxonalar",
+    "avatarUpdated": "Avatar muvaffaqiyatli yangilandi",
+    "allWeddingHalls": "Barcha to'yxonalar",
     "status": "Holat",
     "role": "Rol",
     "user": "Foydalanuvchi",
@@ -88,9 +104,9 @@
     "tarifCount": "Tariflar soni",
     "minPrice" : "Minimum narx",
     "maxPrice" : "Maximum narx",
-    "addToyxona": "To'yxona qo'shish",
-    "editToyxona": "To'yxonani tahrirlash",
-    "deleteToyxona": "To'yxonani o'chirish",
+    "addWeddingHall": "To'yxona qo'shish",
+    "editWeddingHall": "To'yxonani tahrirlash",
+    "deleteWeddingHall": "To'yxonani o'chirish",
     "createTariff": "Tarif yaratish",
     "editButton": "Ma'lumotlarni o'zgartirish"
     
@@ -98,24 +114,30 @@
   "superadmin": {
     "allWeddingHalls": "Barcha to'yxonalar",
     "allUsers": "Barcha foydalanuvchilar",
-    "acceptToyxona": "Qabul qilish",
-    "rejectToyxona": "Rad etish",
+    "acceptWeddingHall": "Qabul qilish",
+    "rejectWeddingHall": "Rad etish",
     "accepted": "Qabul qilindi",
-    "rejected": "Rad etildi"
+    "rejected": "Rad etildi",
+    "rejectedReason": "Rad etish sababi",
+    "rejectedPlaceholder": "Rad etish sababini kiriting",
+    "sendReason": "Yuborish"
   },
   
   "profileActions": {
     "myProfile": "Mening profilim",
-    "myVenues": "Mening to'yxonalarim",
+    "myWeddingHalls": "Mening to'yxonalarim",
     "adminList": "Adminlar",
-    "allVenues": "Barcha to'yxonalar",
+    "allWeddingHalls": "Barcha to'yxonalar",
     "discounts": "Chegirmalar",
     "editProfile": "Profilni tahrirlash",
     "viewProfile": "Profilni ko'rish",
     "changePassword": "Parolni o'zgartirish",
     "deleteAccount": "Hisobni o'chirish",
     "accountSettings": "Hisob sozlamalari",
-    "addAdmin": "Admin qo'shish"
+    "addAdmin": "Admin qo'shish",
+    "addWeddingHall":"To'yxona qo'shish",
+    "addDiscounts": "Chegirma qo'shish",
+    "addTariffs": "Tariflarni qo'shish"
   },
   "validation": {
     "registerSuccess": "Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi",
@@ -173,19 +195,19 @@
     "goBack": "Orqaga qaytish",
     "userNotFound": "Foydalanuvchi topilmadi",
     "userAlreadyExists": "Bu foydalanuvchi allaqachon mavjud",
-    "venueNotFound": "To'yxona topilmadi", 
-    "venueAlreadyExists": "Bu to'yxona allaqachon mavjud",
-    "venueCreationError": "To'yxona yaratishda xatolik",
-    "venueUpdateError": "To'yxona yangilanishida xatolik",
-    "venueDeletionError": "To'yxona o'chirishda xatolik",
-    "venueListError": "To'yxonalar ro'yxatini olishda xatolik"
+    "weddingHallNotFound": "To'yxona topilmadi",
+    "weddingHallAlreadyExists": "Bu to'yxona allaqachon mavjud",
+    "weddingHallCreationError": "To'yxona yaratishda xatolik",
+    "weddingHallUpdateError": "To'yxona yangilanishida xatolik",
+    "weddingHallDeletionError": "To'yxona o'chirishda xatolik",
+    "weddingHallListError": "To'yxonalar ro'yxatini olishda xatolik"
   },
   "modal":{
     "archiveOrDelete": "Toyxonani o'chirasizmi yoki arxiv qilasizmi?",
     "activeOrDelete": "Toyxonani aktiv qilasizmi yoki o'chirasizmi?"
   },
-  "toyxonaForm":{
-    "imageFild": "Toyxona rasmlari",
+  "weddingHallForm":{
+    "imageField": "Toyxona rasmlari",
     "nameField": "To'yxona nomi",
     "descriptionField": "Tavsif kiriting",
     "addressField": "Manzil",
@@ -207,5 +229,29 @@
     "bonuses": "bonuslar",
     "firstFood": "1-ovqat",
     "secondFood": "2-ovqat"
+  },
+  "tariff": {
+    "meals": "Taomlar",
+    "salads": "Salatlar",
+    "bonuses": "Bonuslar",
+    "weddingTable": "To'y dasturxoni",
+    "main": "Asosiy", 
+    "additionalDelicacies": "Qo'shimcha noz-ne'matlar",
+    "firstMeal": "1-ovqat",
+    "secondMeal": "2-ovqat",
+    "noProducts": "Mahsulotlar yo'q",
+    "noCategoriesOrProducts": "Kategoriyalar yoki mahsulotlar yo'q"
+  },
+  "discount":{
+    "discounts": "Chegirmalar",
+    "addDiscount": "Chegirma qo'shish",
+    "editDiscount": "Chegirmani tahrirlash",
+    "deleteDiscount": "Chegirmani o'chirish",
+    "discountName": "Chegirma nomi",
+    "discountValue": "Chegirma qiymati",
+    "discountDescription": "Chegirma tavsifi",
+    "noDiscounts": "Chegirmalar mavjud emas",
+    "discountsList": "Chegirmalar ro'yxati",
+    "discountsCount": "Chegirmalar soni"
   }
 } 

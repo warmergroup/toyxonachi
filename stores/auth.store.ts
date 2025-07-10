@@ -23,12 +23,13 @@ export const useAuthStore = defineStore('auth', {
         isUser(): boolean {
             return this.hasRole('user');
         }
+        
     },
 
     actions: {
         setUser(user: IUser | null) {
-            this.user = user;
-            this.isAuth = !!user; // foydalanuvchi bor-yo‘qligiga qarab
+            this.user = user ? { ...user } : null;
+            this.isAuth = !!user;
             this.isLoading = false;
         },
         setIsAuth(isAuth: boolean) {
@@ -38,12 +39,13 @@ export const useAuthStore = defineStore('auth', {
             this.isLoading = isLoading;
         },
         updateUser(user: IUser | null) {
-            this.user = user;
+            this.user = user ? { ...user } : null;
             this.isAuth = !!user;
         },
         setToken(token: string) {
             setAuthToken(token);
         },
+    
         logout() {
             this.user = null;
             this.isAuth = false;

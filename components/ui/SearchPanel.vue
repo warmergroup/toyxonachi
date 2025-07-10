@@ -1,13 +1,11 @@
-<script lang="ts" setup>
-const {t} = useI18n();
+<script setup lang="ts">
+import { useSearchStore } from '~/stores/search.store'
+const { t } = useI18n()
+const searchStore = useSearchStore()
 </script>
 <template>
-  <div class="relative w-[90%] md:w-[95%]">
-    <input
-      type="text" :placeholder="t('common.searchPlaceholder')"
-      class="w-full pl-10 pr-8 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring focus:ring-gray-400">
-    <div class="absolute left-3 top-2.5 text-gray-400">
-      <Icon name="custom:search"/>
-    </div>
+  <div class="relative w-full">
+    <UInput icon="custom:search" size="xl" class="w-full rounded-lg border border-gray-300"
+      :placeholder="t('common.search')" variant="soft" v-model="searchStore.query" />
   </div>
 </template>

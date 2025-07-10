@@ -39,8 +39,8 @@
         </template>
       </UInput>
     </div>
-    <div v-if="isLoading">Loading...</div>
-    <div v-else-if="error">Error: {{ error.message }}</div>
+    <div v-if="isLoading">{{ t('common.loading') }}</div>
+    <div v-else-if="error">{{ t('error.title') }} {{ error.message }}</div>
     <ul v-else class="bg-white px-4 mt-8 mb-15">
       <template v-for="(user, index) in filteredUsers" :key="user.id">
         <USeparator v-if="index > 0" />

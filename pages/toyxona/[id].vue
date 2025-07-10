@@ -1,106 +1,127 @@
 <script setup lang="ts">
-  import type { IToyxonalar } from '~/interfaces';
-  import { useLocationStore } from '~/stores/location.store';
-  import { getDistanceFromLatLonInKm } from '~/utils/distance'
-  import { getToyxonaById } from '~/data';
-  import type { UseQueryReturnType } from '@tanstack/vue-query';
-  import { openState } from '~/stores/isOpen.store';
+import type { IToyxonalar } from '~/interfaces';
+import { useLocationStore } from '~/stores/location.store';
+import { getDistanceFromLatLonInKm } from '~/utils/distance'
+import { getToyxonaById } from '~/data';
+import type { UseQueryReturnType } from '@tanstack/vue-query';
+import { openState } from '~/stores/isOpen.store';
 
-  const openComponent = openState();
-  const router = useRouter();
-  const route = useRoute();
-  const { t } = useI18n();
-  const { isLargeScreen } = useScreenSize();
-  const locationStore = useLocationStore()
-  const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
-  const error = ref<string | null>(null);
-  const selectedTarif = ref<any | null>(null);
+const openComponent = openState();
+const router = useRouter();
+const route = useRoute();
+const { t } = useI18n();
+const { isLargeScreen } = useScreenSize();
+const locationStore = useLocationStore()
+const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
+const error = ref<string | null>(null);
+const selectedTarif = ref<any | null>(null);
 
-  const goback = () => {
-    router.go(-1);
-  };
-  const onClose = () => {
-    openComponent.onClose();
+const goback = () => {
+  router.go(-1);
+};
+const onClose = () => {
+  openComponent.onClose();
+}
+const userDistance = computed(() => {
+  if (
+    locationStore.coords &&
+    toyxona.value &&
+    toyxona.value.latitude &&
+    toyxona.value.longitude
+  ) {
+    return getDistanceFromLatLonInKm(
+      locationStore.coords.latitude,
+      locationStore.coords.longitude,
+      Number(toyxona.value.latitude),
+      Number(toyxona.value.longitude)
+    )
   }
-  const userDistance = computed(() => {
-    if (
-      locationStore.coords &&
-      toyxona.value &&
-      toyxona.value.latitude &&
-      toyxona.value.longitude
-    ) {
-      return getDistanceFromLatLonInKm(
-        locationStore.coords.latitude,
-        locationStore.coords.longitude,
-        Number(toyxona.value.latitude),
-        Number(toyxona.value.longitude)
-      )
-    }
-    return null
-  })
+  return null
+})
 
-  const imagelItems = computed(() =>
-    (toyxona?.value?.wedding_hall_pictures as any[] || []).map(b => ({
-      src: b.image_url,
-      id: b.id,
-      wedding_hall_id: b.wedding_hall_id
+const imagelItems = computed(() =>
+  (toyxona?.value?.wedding_hall_pictures as any[] || []).map(b => ({
+    src: b.image_url,
+    id: b.id,
+    wedding_hall_id: b.wedding_hall_id
+  }))
+)
+
+const shareLink = () => {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Wedding Hall',
+      text: 'Check out this wedding hall!',
+      url: window.location.href,
+    })
+      .then(() => console.log('Shared successfully'))
+      .catch((error) => console.error('Error sharing:', error));
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => alert('Link copied to clipboard!'))
+      .catch((error) => console.error('Error copying link:', error));
+  } else {
+    alert('Sharing is not supported on this device. Please copy the link manually: ' + window.location.href);
+  }
+};
+
+const tariflarForCard = computed(() =>
+  Array.isArray(toyxona.value?.tariffs)
+    ? toyxona.value.tariffs.map((tarif: any) => ({
+      ...tarif,
+      tariff_types: tarif.tariff_types || []
     }))
-  )
+    : []
+);
 
-  const shareLink = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Venue',
-        text: 'Check out this venue!',
-        url: window.location.href,
-      })
-        .then(() => console.log('Shared successfully'))
-        .catch((error) => console.error('Error sharing:', error));
-    } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch((error) => console.error('Error copying link:', error));
-    } else {
-      alert('Sharing is not supported on this device. Please copy the link manually: ' + window.location.href);
-    }
-  };
+const openTarifSlide = (tarif: any) => {
+  selectedTarif.value = tarif;
+  openComponent.onOpen('showTariff');
+};
+const openMap = () => {
+  if (!toyxona.value) return;
+  const lat = toyxona.value.latitude;
+  const lon = toyxona.value.longitude;
+  // Google Maps universal link
+  const url = `https://maps.google.com/?q=${lat},${lon}`;
+  window.open(url, '_blank');
+};
 
-  const tariflarForCard = computed(() =>
-    Array.isArray(toyxona.value?.tariffs)
-      ? toyxona.value.tariffs.map((tarif: any) => ({
-        ...tarif,
-        tariff_types: tarif.tariff_types || []
-      }))
-      : []
-  );
+const showFullDescription = ref(false);
+const DESCRIPTION_LIMIT = 180;
+const shortDescription = computed(() => {
+  if (!toyxona.value?.description) return '';
+  return toyxona.value.description.length > DESCRIPTION_LIMIT
+    ? toyxona.value.description.slice(0, DESCRIPTION_LIMIT)
+    : toyxona.value.description;
+});
+const isTruncated = computed(() => {
+  return toyxona.value?.description && toyxona.value.description.length > DESCRIPTION_LIMIT;
+});
+function toggleDescription() {
+  showFullDescription.value = !showFullDescription.value;
+}
 
-  const openTarifSlide = (tarif: any) => {
-    selectedTarif.value = tarif;
-    openComponent.onOpen('showTariff');
-  };
-  const openMap = () => {
-    if (!toyxona.value) return;
-    const lat = toyxona.value.latitude;
-    const lon = toyxona.value.longitude;
-    // Google Maps universal link
-    const url = `https://maps.google.com/?q=${lat},${lon}`;
-    window.open(url, '_blank');
-  };
 
-  const showFullDescription = ref(false);
-  const DESCRIPTION_LIMIT = 180;
-  const shortDescription = computed(() => {
-    if (!toyxona.value?.description) return '';
-    return toyxona.value.description.length > DESCRIPTION_LIMIT
-      ? toyxona.value.description.slice(0, DESCRIPTION_LIMIT)
-      : toyxona.value.description;
-  });
-  const isTruncated = computed(() => {
-    return toyxona.value?.description && toyxona.value.description.length > DESCRIPTION_LIMIT;
-  });
-  function toggleDescription() {
-    showFullDescription.value = !showFullDescription.value;
+watchEffect(() => {
+  if (toyxona.value) {
+    useHead({
+      title: `${toyxona.value.name} — Toyxonachi`,
+      meta: [
+        { name: 'description', content: toyxona.value.description?.slice(0, 160) },
+        { property: 'og:title', content: toyxona.value.name },
+        { property: 'og:description', content: toyxona.value.description?.slice(0, 160) },
+        { property: 'og:image', content: toyxona.value.wedding_hall_pictures?.[0]?.image_url || '/logo-splash.svg' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: `https://toyxonachi.uz/toyxona/${toyxona.value.id}` },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: toyxona.value.name },
+        { name: 'twitter:description', content: toyxona.value.description?.slice(0, 100) },
+        { name: 'twitter:image', content: toyxona.value.wedding_hall_pictures?.[0]?.image_url || '/logo-splash.svg' }
+      ]
+    })
   }
+})
 
 </script>
 
@@ -144,7 +165,7 @@
 
         <div class="flex flex-col gap-3 p-3 z-10 bg-white rounded-t-2xl">
           <div>
-            <h1 class="font-bold text-2xl">{{ toyxona.name }}</h1>
+            <h1 class="font-bold text-xl">{{ toyxona.name }}</h1>
             <p class="font-medium text-sm">{{ toyxona.address }}</p>
             <p v-if="userDistance" class="text-text-secondary">
               {{ userDistance.toFixed(1) }} km {{ t('common.fromYou') }}
@@ -152,39 +173,38 @@
           </div>
 
           <!-- Tariffs -->
-          <h2 class="font-medium text-lg text-text-primary">{{ t('venue.tariffs') }}</h2>
+          <h2 class="font-medium text-lg text-text-primary">{{ t('weddingHall.tariffs') }}</h2>
           <UiTarifCard v-for="tarif in tariflarForCard" :key="tarif.id" :tarif="tarif" @click="openTarifSlide(tarif)" />
 
-          <div>
-            <h2 class="font-medium text-lg">{{ t('venue.description') }}</h2>
-            <div class="relative">
-              <transition name="fade-expand">
-                <span v-if="showFullDescription" key="full" class="text-gray-500 text-sm block whitespace-pre-line">
-                  {{ toyxona.description }}
-                </span>
-                <span v-else key="short" class="text-gray-500 text-sm block whitespace-pre-line">
-                  {{ shortDescription }}<span v-if="isTruncated">...</span>
-                </span>
-              </transition>
-              <button v-if="isTruncated" @click="toggleDescription"
-                class="text-green-500 font-medium mt-2 flex items-center gap-1 select-none">
-                <span>{{ showFullDescription ? t('common.readLess') : t('common.readMore') }}</span>
-                <svg :class="{ 'rotate-180': showFullDescription, 'transition-transform': true }" width="16" height="16"
-                  fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 6l4 4 4-4" stroke="#10B981" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
 
         </div>
       </div>
       <!-- O‘ng ustun (1/3) -->
       <div class="flex flex-col gap-4">
+        <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
+          <h2 class="text-xl font-medium text-text-primary mb-4 capitalize ">{{ t('weddingHall.description')
+          }}
+          </h2>
+          <transition name="fade-expand">
+            <span v-if="showFullDescription" key="full" class="text-gray-500 text-sm block whitespace-pre-line">
+              {{ toyxona.description }}
+            </span>
+            <span v-else key="short" class="text-gray-500 text-sm block whitespace-pre-line">
+              {{ shortDescription }}<span v-if="isTruncated">...</span>
+            </span>
+          </transition>
+          <button v-if="isTruncated" @click="toggleDescription"
+            class="text-green-500 font-medium mt-2 flex items-center gap-1 select-none">
+            <span>{{ showFullDescription ? t('common.readLess') : t('common.readMore') }}</span>
+            <svg :class="{ 'rotate-180': showFullDescription, 'transition-transform': true }" width="16" height="16"
+              fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6l4 4 4-4" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
         <!-- Map -->
         <div class="bg-white lg:rounded-lg shadow-sm p-4">
-          <h2 class="text-xl font-bold text-text-primary mb-4 capitalize ">{{ t('venue.location') }}</h2>
+          <h2 class="text-xl font-medium text-text-primary mb-4 capitalize ">{{ t('weddingHall.location') }}</h2>
           <div class="bg-gray-100 rounded-lg overflow-hidden mb-4">
             <YandexMap :center="{ lat: Number(toyxona.latitude), lng: Number(toyxona.longitude) }" :title="toyxona.name"
               class="w-full h-48 md:h-64 lg:h-80" />
@@ -203,22 +223,17 @@
           <UButton variant="soft" color="neutral" class="w-full py-2 flex items-center justify-between"
             @click="openMap">
             <div></div>
-            <span class="text-primary">{{ t('venue.goDirection') }}</span>
+            <span class="text-primary">{{ t('weddingHall.goDirection') }}</span>
             <Icon name="custom:chevron-right" />
           </UButton>
         </div>
         <!-- Contact info -->
         <div class="bg-white lg:rounded-lg shadow-sm p-4 flex flex-col gap-2">
-          <!-- <span class="flex items-center gap-2">
-            <Icon name="material-symbols:call" /> {{ toyxona.phone1 }}
-          </span>
-          <span class="flex items-center gap-2">
-            <Icon name="material-symbols:call" /> {{ toyxona.phone2 }}
-          </span> -->
           <div class="flex items-center gap-3">
             <NuxtLink :to="`https://t.me/${toyxona.telegram}`" target="_blank">
               <Icon name="custom:telegram" />
             </NuxtLink>
+            {{ toyxona.phone1 }}
             <NuxtLink :to="`https://www.instagram.com/${toyxona.instagram}`" target="_blank">
               <Icon name="custom:instagram" />
             </NuxtLink>

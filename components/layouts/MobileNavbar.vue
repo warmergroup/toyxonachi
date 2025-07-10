@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-const route = useRoute();
-const { t } = useI18n();
-const localePath = useLocalePath();
+  const route = useRoute();
+  const { t } = useI18n();
+  const localePath = useLocalePath();
 </script>
 
 <template>
@@ -16,9 +16,9 @@ const localePath = useLocalePath();
       </NuxtLink>
       <NuxtLink :to="localePath('/toyxonalar')"
         :class="{ 'text-[var(--primary-color)]': route.path === localePath('/toyxonalar') }"
-        class="flex flex-col items-center justify-center">
+        class="flex flex-col items-center justify-center whitespace-nowrap">
         <UIcon name="custom:navbar-search" />
-        <span>{{ t('common.venues') }}</span>
+        <span class="whitespace-nowrap">{{ t('common.weddingHalls') }}</span>
       </NuxtLink>
 
       <NuxtLink :to="localePath('/profile')"

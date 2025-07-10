@@ -2,7 +2,7 @@
   "common": {
     "loading": "Загрузка...",
     "currency": "сум",
-    "venues": "Банкетные залы",
+    "weddingHalls": "Банкетные залы",
     "search": "Поиск",
     "main": "Главная",
     "about": "О нас",
@@ -20,15 +20,20 @@
     "appLanguage": "Язык приложения",
     "changeLanguage": "Выберите язык",
     "save": "Сохранить",
+    "delete": "Удалить",
+    "archive": "Архивировать",
+    "activate": "Активировать",
     "cancel": "Отмена",
     "readMore": "Читать все",
-    "readLess": "Свернуть"
+    "readLess": "Свернуть",
+    "mostExpensive": "Самые дорогие банкетные залы",
+    "clickHere": "Нажмите здесь"
   },
   "about": {
     "aboutUs": "О нас",
     "description": "Мы крупнейшая платформа банкетных залов в Узбекистане. С помощью нашей платформы вы можете выбрать банкетный зал, сравнить цены и забронировать его."
   },
-  "venue": {
+  "weddingHall": {
     "title": "Банкетные залы",
     "tariffs": "Тарифы",
     "description": "Описание",
@@ -36,12 +41,12 @@
     "contact": "Контакты",
     "noAddress": "Адрес не указан",
     "notFound": "Банкетные залы не найдены",
-    "peopleCount": "на человека",
+    "peopleCount": "человек",
     "location": "Расположение",
     "goDirection": "Построить маршрут",
     "discounts": "Скидки"
   },
-  "toyxonaStatus":{
+  "weddingHallStatus": {
     "all": "Все",
     "new": "Новый",
     "active": "Активный",
@@ -50,7 +55,17 @@
     "moderation": "Модерация",
     "arxiv": "Архив",
     "inactive": "Не активировано",
-    "notModerated": "Не модерируется"
+    "notModerated": "Не модерируется",
+    "weddingHallDeleted": "Банкетный зал удален",
+    "weddingHallArchived": "Банкетный зал архивирован",
+    "weddingHallActive": "Банкетный зал активен",
+    "weddingHallNotModerated": "Банкетный зал не модерируется",
+    "weddingHallInReview": "Банкетный зал на рассмотрении",
+    "weddingHallRejected": "Банкетный зал отклонен",
+    "weddingHallAccepted": "Банкетный зал принят",
+    "weddingHallNotFound": "Банкетный зал не найден",
+    "weddingHallAlreadyExists": "Этот банкетный зал уже существует",
+    "weddingHallCreationError": "Ошибка создания банкетного зала"
   },
   "users": {
     "all": "Все",
@@ -75,8 +90,9 @@
     "passwordsDoNotMatch": "Пароли не совпадают",
     "loginError": "Ошибка входа",
     "registerError": "Ошибка регистрации",
-    "myVenues": "Мои банкетные залы",
-    "allVenues": "Все банкетные залы",
+    "avatarUpdated": "Аватар успешно загружен",
+    "myWeddingHalls": "Мои банкетные залы",
+    "allWeddingHalls": "Все банкетные залы",
     "status": "Статус",
     "role": "Роль",
     "user": "Пользователь",
@@ -88,33 +104,38 @@
     "tarifCount": "количество тарифов",
     "minPrice" : "минимальная цена",
     "maxPrice" : "максимальная цена",
-    "addToyxona": "Добавить банкетный зал",
-    "editToyxona": "To'yxonani tahrirlash",
-    "deleteToyxona": "To'yxonani o'chirish",
+    "addWeddingHall": "Добавить банкетный зал",
+    "editWeddingHall": "To'yxonani tahrirlash",
+    "deleteWeddingHall": "To'yxonani o'chirish",
     "createTariff": "Tarif yaratish",
     "editButton": "Изменить данные"
   },
   "superadmin": {
     "allWeddingHalls": "Все банкетные залы",
     "allUsers": "Все пользователи",
-    "acceptToyxona": "Принять",
-    "rejectToyxona": "Отклонить",
+    "acceptWeddingHall": "Принять",
+    "rejectWeddingHall": "Отклонить",
     "accepted": "Принято",
-    "rejected": "Отклонено"
-
+    "rejected": "Отклонено",
+    "rejectedReason": "Причина отклонения",
+    "rejectedPlaceholder": "Введите причину отклонения",
+    "sendReason": "Отправить"
   },
   "profileActions": {
     "myProfile": "Мой профиль",
-    "myVenues": "Мои банкетные залы",
+    "myWeddingHalls": "Мои банкетные залы",
     "adminList": "Администраторы",
-    "allVenues": "Все банкетные залы",
+    "allWeddingHalls": "Все банкетные залы",
     "discounts": "Скидки",
     "editProfile": "Редактировать профиль",
     "viewProfile": "Просмотреть профиль",
     "changePassword": "Изменить пароль",
     "deleteAccount": "Удалить аккаунт",
     "accountSettings": "Настройки аккаунта",
-    "addAdmin": "Добавить администратора"
+    "addAdmin": "Добавить администратора",
+    "addWeddingHall": "Добавить банкетный зал",
+    "addDiscounts": "Добавить скидки",
+    "addTariffs": "Добавить тарифы"
   },
   "validation": {
     "registerSuccess": "Регистрация прошла успешно",
@@ -171,19 +192,19 @@
     "goBack": "Вернуться назад",
     "userNotFound": "Пользователь не найден",
     "userAlreadyExists": "Пользователь уже существует",
-    "venueNotFound": "Банкетный зал не найден", 
-    "venueAlreadyExists": "Банкетный зал уже существует",
-    "venueCreationError": "Ошибка создания банкетного зала",
-    "venueUpdateError": "Ошибка обновления банкетного зала",
-    "venueDeletionError": "Ошибка удаления банкетного зала",
-    "venueListError": "Ошибка получения списка банкетных залов"
+    "weddingHallNotFound": "Банкетный зал не найден",
+    "weddingHallAlreadyExists": "Банкетный зал уже существует",
+    "weddingHallCreationError": "Ошибка создания банкетного зала",
+    "weddingHallUpdateError": "Ошибка обновления банкетного зала",
+    "weddingHallDeletionError": "Ошибка удаления банкетного зала",
+    "weddingHallListError": "Ошибка получения списка банкетных залов"
   },
   "modal": {
     "archiveOrDelete": "Вы уверены, что хотите удалить или архивировать банкетный зал?",
     "activeOrDelete": "Вы уверены, что хотите активировать или удалить банкетный зал?"
   },
-  "toyxonaForm":{
-    "imageFild": "Фотографии банкетного зала",
+  "weddingHallForm": {
+    "imageField": "Фотографии банкетного зала",
     "nameField": "Название",
     "descriptionField": "Описание",
     "addressField": "Адрес",
@@ -205,5 +226,17 @@
     "bonuses": "бонусы",
     "firstFood": "Первое блюдо",
     "secondFood": "Основное блюдо"
+  },
+  "tariff": {
+    "meals": "Малы",
+    "salads": "Салаты",
+    "main": "Основное",
+    "weddingTable": "Свадебный стол",
+    "additionalDelicacies": "Дополнительные деликатесы",
+    "bonuses": "Бонусы",
+    "firstMeal": "Первое блюдо",
+    "secondMeal": "Второе блюдо",
+    "noProducts": "Нет продуктов",
+    "noCategoriesOrProducts": "Нет категорий или продуктов"
   }
 }

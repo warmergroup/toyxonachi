@@ -10,6 +10,10 @@ const toast = useToast();
 const authStore = useAuthStore();
 const phonePrefix = '998'; // Faqat raqam, plus belgisisiz
 const user = authStore.user;
+const props = defineProps<{
+    onProfileUpdated?: () => void
+}>();
+
 
 const state = reactive({
     name: user?.name || '',
@@ -32,7 +36,7 @@ const validateForm = (): boolean => {
 };
 
 // Handle successful update
-const handleUpdateSuccess = (data: any) => {
+const handleUpdateSuccess = async (data: any) => {
     try {
         // Save user data to store
         authStore.updateUser({
@@ -40,18 +44,14 @@ const handleUpdateSuccess = (data: any) => {
             name: data.user.name,
             phone: data.user.phone,
             status: data.user.status,
-            role: data.role,
+            role: data.user.role ?? authStore.user?.role,
+            avatar: data.user.avatar
         });
-
-        toast.add({
-            title: t('success.updated'),
-            description: t('success.profileUpdated'),
-            color: 'success',
-        });
-
+        if (props.onProfileUpdated) {
+            props.onProfileUpdated();
+        }
         openComponent.onClose();
     } catch (error) {
-        console.error('Error handling update success:', error);
         toast.add({
             title: t('error.title'),
             description: t('error.unknown'),

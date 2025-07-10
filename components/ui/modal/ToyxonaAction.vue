@@ -1,68 +1,68 @@
 <script setup lang="ts">
-import { useDeleteToyxona, useChangeToyxonaStatus } from '~/data';
+    import { useDeleteToyxona, useChangeToyxonaStatus } from '~/data';
 
-const { t } = useI18n();
-const props = defineProps<{
-    modelValue: boolean;
-    toyxona: any;
-    tab: 'active' | 'archive';
-}>();
-const emit = defineEmits(['update:modelValue', 'action-success', 'close']);
-const toast = useToast();
+    const { t } = useI18n();
+    const props = defineProps<{
+        modelValue: boolean;
+        toyxona: any;
+        tab: 'active' | 'archive';
+    }>();
+    const emit = defineEmits(['update:modelValue', 'action-success', 'close']);
+    const toast = useToast();
 
-const show = computed({
-    get: () => props.modelValue,
-    set: v => emit('update:modelValue', v)
-});
-
-const { mutate: deleteToyxona, isPending: isDeleting } = useDeleteToyxona();
-const { mutate: changeStatus, isPending: isChanging } = useChangeToyxonaStatus();
-
-const handleDelete = () => {
-    if (!props.toyxona) return;
-    deleteToyxona(props.toyxona.id, {
-        onSuccess: () => {
-            toast.add({ title: 'Success', description: 'Toyxona o‘chirildi', color: 'primary' });
-            emit('close', 'success');
-        },
-        onError: (e: any) => {
-            toast.add({ title: 'Xatolik', description: e.message, color: 'error' });
-        }
+    const show = computed({
+        get: () => props.modelValue,
+        set: v => emit('update:modelValue', v)
     });
-};
 
-const handleArchive = () => {
-    if (!props.toyxona) return;
-    changeStatus({ wedding_hall_id: props.toyxona.id, status: 'arxiv' }, {
-        onSuccess: () => {
-            toast.add({ title: 'Success', description: 'Toyxona arxivlandi', color: 'primary' });
-            emit('close', 'success');
-        },
-        onError: (e: any) => {
-            toast.add({ title: 'Xatolik', description: e.message, color: 'error' });
-        }
+    const { mutate: deleteToyxona, isPending: isDeleting } = useDeleteToyxona();
+    const { mutate: changeStatus, isPending: isChanging } = useChangeToyxonaStatus();
+
+    const handleDelete = () => {
+        if (!props.toyxona) return;
+        deleteToyxona(props.toyxona.id, {
+            onSuccess: () => {
+                toast.add({ title: 'Success', description: t('weddingHallStatus.weddingHallDeleted'), color: 'primary' });
+                emit('close', 'success');
+            },
+            onError: (e: any) => {
+                toast.add({ title: t('error.title'), description: e.message, color: 'error' });
+            }
+        });
+    };
+
+    const handleArchive = () => {
+        if (!props.toyxona) return;
+        changeStatus({ wedding_hall_id: props.toyxona.id, status: 'arxiv' }, {
+            onSuccess: () => {
+                toast.add({ description: t('weddingHallStatus.weddingHallArchived'), color: 'primary' });
+                emit('close', 'success');
+            },
+            onError: (e: any) => {
+                toast.add({ title: t('error.title'), description: e.message, color: 'error' });
+            }
+        });
+    };
+
+    const handleActivate = () => {
+        if (!props.toyxona) return;
+        changeStatus({ wedding_hall_id: props.toyxona.id, status: 'active' }, {
+            onSuccess: () => {
+                toast.add({ description: t('weddingHallStatus.weddingHallActive'), color: 'primary' });
+                emit('close', 'success');
+            },
+            onError: (e: any) => {
+                toast.add({ title: t('error.title'), description: e.message, color: 'error' });
+            }
+        });
+    };
+
+    const modalText = computed(() => {
+        if (!props.toyxona) return '';
+        if (props.tab === 'active') return t('modal.activeOrDelete', { name: props.toyxona?.name });
+        if (props.tab === 'archive') return t('modal.archiveOrDelete', { name: props.toyxona?.name });
+        return '';
     });
-};
-
-const handleActivate = () => {
-    if (!props.toyxona) return;
-    changeStatus({ wedding_hall_id: props.toyxona.id, status: 'active' }, {
-        onSuccess: () => {
-            toast.add({ title: 'Success', description: 'Toyxona aktiv qilindi', color: 'primary' });
-            emit('close', 'success');
-        },
-        onError: (e: any) => {
-            toast.add({ title: 'Xatolik', description: e.message, color: 'error' });
-        }
-    });
-};
-
-const modalText = computed(() => {
-    if (!props.toyxona) return '';
-    if (props.tab === 'active') return t('modal.activeOrDelete', { name: props.toyxona?.name });
-    if (props.tab === 'archive') return t('modal.archiveOrDelete', { name: props.toyxona?.name });
-    return '';
-});
 </script>
 
 <template>
@@ -76,12 +76,12 @@ const modalText = computed(() => {
 
         <template #body>
             <div class="flex gap-2">
-                <UButton class="w-full flex justify-center" size="xl" label="O'chirish" color="neutral" variant="soft"
-                    :loading="isDeleting" @click="handleDelete" />
-                <UButton class="w-full flex justify-center" v-if="props.tab === 'active'" size="xl" label="Arxiv"
-                    color="secondary" :loading="isChanging" @click="handleArchive" />
-                <UButton class="w-full flex justify-center" v-if="props.tab === 'archive'" size="xl" label="Aktiv"
-                    color="primary" :loading="isChanging" @click="handleActivate" />
+                <UButton class="w-full flex justify-center" size="xl" :label="t('common.delete')" color="neutral"
+                    variant="soft" :loading="isDeleting" @click="handleDelete" />
+                <UButton class="w-full flex justify-center" v-if="props.tab === 'active'" size="xl"
+                    :label="t('common.archive')" color="secondary" :loading="isChanging" @click="handleArchive" />
+                <UButton class="w-full flex justify-center" v-if="props.tab === 'archive'" size="xl"
+                    :label="t('common.activate')" color="primary" :loading="isChanging" @click="handleActivate" />
             </div>
         </template>
     </UModal>

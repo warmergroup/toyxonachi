@@ -30,13 +30,13 @@
     const items = computed(() => {
         if (role.value === 'admin') {
             return [
-                { label: t('toyxonaStatus.active'), slot: 'active' },
-                { label: t('toyxonaStatus.arxiv'), slot: 'archive' }
+                { label: t('weddingHallStatus.active'), slot: 'active' },
+                { label: t('weddingHallStatus.arxiv'), slot: 'archive' }
             ]
         } else if (role.value === 'superadmin') {
             return [
-                { label: t('toyxonaStatus.all'), slot: 'all' },
-                { label: t('toyxonaStatus.moderation'), slot: 'moderation' }
+                { label: t('weddingHallStatus.all'), slot: 'all' },
+                { label: t('weddingHallStatus.moderation'), slot: 'moderation' }
             ]
         } else { return [] }
     });
@@ -117,7 +117,7 @@
                                 toyxona.name }}</h3>
                             <span class="w-fit py-1 px-3 text-xs font-medium rounded-md"
                                 :class="statusColors[toyxona.status] || 'bg-gray-100 text-gray-600'">
-                                {{ t('toyxonaStatus.' + toyxona.status) }}
+                                {{ t('weddingHallStatus.' + toyxona.status) }}
                             </span>
                         </div>
                         <div class="flex items-center justify-between">
@@ -141,11 +141,11 @@
             </template>
         </UTabs>
         <template v-if="role === 'admin'">
-            <div
-                class="container mx-auto absolute bottom-0 left-0 right-0 flex items-center justify-center bg-white w-full min-h-16 border-t border-gray-300 px-5 py-3 z-30">
-                <UButton class="w-full flex items-center justify-center" color="secondary" size="xl" icon="custom:plus"
-                    :label="t('admin.addToyxona')" @click="openComponent.onOpen('addToyxona')" />
-            </div>
+                    <div
+                        class="container mx-auto absolute bottom-0 left-0 right-0 flex items-center justify-center bg-white w-full min-h-16 border-t border-gray-300 px-5 py-3 z-30">
+                        <UButton class="w-full flex items-center justify-center" color="secondary" size="xl" icon="custom:plus"
+                            :label="t('admin.addWeddingHall')" @click="openComponent.onOpen('addToyxona')" />
+                    </div>
         </template>
     </div>
 </template>
