@@ -53,7 +53,7 @@ useHead({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Toyxonachi",
-        "url": "https://toyxonachi.uz/"
+        "url": "https://toyxonachiuz.vercel.app/"
       })
     }
   ]

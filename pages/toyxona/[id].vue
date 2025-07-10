@@ -114,16 +114,17 @@ function toggleDescription() {
 
 watchEffect(() => {
   if (toyxona.value) {
-    const img = getFullImageUrl(toyxona.value.wedding_hall_pictures?.[0]?.image_url)
+    const defaultImg = '/logo-splash.svg'
+    const img = getFullImageUrl(toyxona.value.wedding_hall_pictures?.[0]?.image_url) || defaultImg
     useHead({
       title: `${toyxona.value.name} — Toyxonachi`,
       meta: [
         { name: 'description', content: toyxona.value.description?.slice(0, 160) },
         { property: 'og:title', content: toyxona.value.name },
         { property: 'og:description', content: toyxona.value.description?.slice(0, 160) },
-        { property: 'og:image', content: img || '/logo-splash.svg' },
+        { property: 'og:image', content: img || defaultImg },
         { property: 'og:type', content: 'website' },
-        { property: 'og:url', content: `https://toyxonachi.uz/toyxona/${toyxona.value.id}` },
+        { property: 'og:url', content: `https://toyxonachiuz.vercel.app/toyxona/${toyxona.value.id}` },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: toyxona.value.name },
         { name: 'twitter:description', content: toyxona.value.description?.slice(0, 100) },
