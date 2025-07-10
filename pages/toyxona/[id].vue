@@ -8,13 +8,18 @@ import { openState } from '~/stores/isOpen.store';
 
 const config = useRuntimeConfig()
 const imageUrl = config.public.imageUrl
+const baseURL = config.public.apiUrl
 const openComponent = openState();
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const { isLargeScreen } = useScreenSize();
 const locationStore = useLocationStore()
-const { data: toyxona } = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
+const { data: toyxona, error: toyxonaError } = await useAsyncData<IToyxonalar>('toyxona', () =>
+  $fetch(`/api/wedding-halls/show/${route.params.id}`, {
+    baseURL
+  })
+)
 const error = ref<string | null>(null);
 const selectedTarif = ref<any | null>(null);
 
@@ -116,6 +121,7 @@ watchEffect(() => {
   if (toyxona.value) {
     const defaultImg = '/logo-splash.svg'
     const img = getFullImageUrl(toyxona.value.wedding_hall_pictures?.[0]?.image_url) || defaultImg
+    console.log("imageurl", img)
     useHead({
       title: `${toyxona.value.name} — Toyxonachi`,
       meta: [
