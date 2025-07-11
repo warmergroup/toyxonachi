@@ -21,6 +21,7 @@ export default defineNuxtConfig({
 
     // Client tomonida ham mavjud bo'lgan muhit o'zgaruvchilari
     public: {
+      baseUrl:process.env.NUXT_PUBLIC_BASE_URL,
       apiUrl: process.env.NUXT_PUBLIC_API_URL,
       yandexMapsApiKey: process.env.YANDEX_MAPS_API_KEY,
       imageUrl: process.env.NUXT_PUBLIC_IMG_URL,

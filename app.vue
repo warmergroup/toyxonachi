@@ -3,7 +3,8 @@ import * as locales from '@nuxt/ui/locale'
 import { useGetMeQuery } from '~/data';
 import { onMessage, messaging } from '~/utils/firebase'
 
-
+const config = useRuntimeConfig()
+const baseUrl = config.public.baseUrl
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
 const lang = computed(() => locales[locale.value].code)
@@ -50,7 +51,7 @@ useHead({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Toyxonachi",
-        "url": "https://toyxonachiuz.vercel.app/"
+        "url": baseUrl
       })
     }
   ]

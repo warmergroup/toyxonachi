@@ -3,6 +3,8 @@ import { useInfiniteToyxonalarQuery } from '~/data'
 import { getDiscounts } from "~/data"
 import { useSearchStore } from '~/stores/search.store'
 
+const config = useRuntimeConfig()
+const baseUrl = config.public.baseUrl
 const searchStore = useSearchStore()
 const { isLargeScreen } = useScreenSize();
 const { t } = useI18n()
@@ -19,16 +21,18 @@ useHead({
     { name: 'description', content: t('seo.homeDescription') },
     { property: 'og:title', content: t('seo.homeTitle') },
     { property: 'og:description', content: t('seo.homeDescription') },
-    { property: 'og:image', content: 'https://toyxonachiuz.vercel.app/preview-logo.png' },
+    { property: 'og:image', content: `${baseUrl}/preview-logo.png` },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: 'https://toyxonachiuz.vercel.app/' },
+    { property: 'og:url', content: `${baseUrl}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: t('seo.homeTitle') },
     { name: 'twitter:description', content: t('seo.homeDescription') },
-    { name: 'twitter:image', content: 'https://toyxonachiuz.vercel.app/preview-logo.png' }
+    {
+      name: 'twitter:image', content: `${baseUrl}/preview-logo.png`
+    }
   ],
   link: [
-    { rel: 'canonical', href: 'https://toyxonachiuz.vercel.app/' }
+    { rel: 'canonical', href: `${baseUrl}` }
   ]
 })
 

@@ -6,7 +6,8 @@ import { openState } from '~/stores/isOpen.store';
 
 const config = useRuntimeConfig()
 const imageUrl = config.public.imageUrl
-const baseURL = config.public.apiUrl
+const apiUrl = config.public.apiUrl
+const baseUrl = config.public.baseUrl
 const openComponent = openState();
 const router = useRouter();
 const route = useRoute();
@@ -15,7 +16,7 @@ const { isLargeScreen } = useScreenSize();
 const locationStore = useLocationStore()
 const { data: toyxona, error: toyxonaError } = await useAsyncData<IToyxonalar>('toyxona', () =>
   $fetch(`/api/wedding-halls/show/${route.params.id}`, {
-    baseURL
+    baseURL: apiUrl
   })
 )
 
@@ -129,10 +130,10 @@ useHead({
     { property: 'og:image:width', content: '1920' },
     { property: 'og:image:height', content: '1080' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `https://toyxonachiuz.vercel.app/uz/toyxona/${toyxona.value?.id}` },
+    { property: 'og:url', content: `${baseUrl}/uz/toyxona/${toyxona.value?.id}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: toyxona.value?.name || 'toyxonachi.uz' },
-    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 150) || t('seo.listDescription') },
+    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 160) || t('seo.listDescription') },
     { name: 'twitter:image', content: img }
   ]
 })

@@ -3,6 +3,8 @@ import { useGetToyxonalarQuery } from "~/data";
 import type { IToyxonalar } from "~/interfaces";
 import { useSearchStore } from '~/stores/search.store'
 
+const config = useRuntimeConfig()
+const baseUrl = config.public.baseUrl
 const searchStore = useSearchStore()
 const price = ref(true)
 const { isLargeScreen } = useScreenSize()
@@ -16,13 +18,15 @@ useHead({
     { name: 'description', content: t('seo.listDescription') },
     { property: 'og:title', content: t('seo.listTitle') },
     { property: 'og:description', content: t('seo.listDescription') },
-    { property: 'og:image', content: 'https://toyxonachiuz.vercel.app/preview-logo.png' },
+    {
+      property: 'og:image', content: `${baseUrl}/preview-logo.png`
+    },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: 'https://toyxonachiuz.vercel.app/toyxonalar' },
+    { property: 'og:url', content: `${baseUrl}/toyxonalar` },
     { name: 'twitter:card', content: 'summary_large_image' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://toyxonachiuz.vercel.app/toyxonalar' }
+    { rel: 'canonical', href: `${baseUrl}/toyxonalar` }
   ]
 })
 
