@@ -4,7 +4,7 @@ import type { IToyxonalar } from "~/interfaces";
 import { useSearchStore } from '~/stores/search.store'
 
 const config = useRuntimeConfig()
-const baseUrl = config.public.baseUrl
+const siteUrl = config.public.siteUrl
 const searchStore = useSearchStore()
 const price = ref(true)
 const { isLargeScreen } = useScreenSize()
@@ -19,14 +19,18 @@ useHead({
     { property: 'og:title', content: t('seo.listTitle') },
     { property: 'og:description', content: t('seo.listDescription') },
     {
-      property: 'og:image', content: `${baseUrl}/preview-logo.png`
+      property: 'og:image', content: `${siteUrl}/preview-logo.png`
     },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `${baseUrl}/toyxonalar` },
+    { property: 'og:url', content: `${siteUrl}/toyxonalar` },
     { name: 'twitter:card', content: 'summary_large_image' }
   ],
   link: [
-    { rel: 'canonical', href: `${baseUrl}/toyxonalar` }
+    { rel: 'canonical', href: `${siteUrl}/toyxonalar` },
+    { rel: 'alternate', hreflang: 'uz', href: `${siteUrl}/uz/toyxonalar` },
+    { rel: 'alternate', hreflang: 'ru', href: `${siteUrl}/ru/toyxonalar` },
+    { rel: 'alternate', hreflang: 'en', href: `${siteUrl}/en/toyxonalar` },
+
   ]
 })
 

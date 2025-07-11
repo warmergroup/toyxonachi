@@ -7,7 +7,7 @@ import { openState } from '~/stores/isOpen.store';
 const config = useRuntimeConfig()
 const imageUrl = config.public.imageUrl
 const apiUrl = config.public.apiUrl
-const baseUrl = config.public.baseUrl
+const siteUrl = config.public.siteUrl
 const openComponent = openState();
 const router = useRouter();
 const route = useRoute();
@@ -119,6 +119,18 @@ function toggleDescription() {
 const defaultImg = '/logo-splash.svg'
 const img = getFullImageUrl(toyxona.value?.wedding_hall_pictures?.[0]?.image_url) || defaultImg
 
+const structuredData = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'EventVenue',
+  name: toyxona.value?.name,
+  description: toyxona.value?.description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: toyxona.value?.address
+  },
+  telephone: toyxona.value?.phone1,
+  image: toyxona.value?.wedding_hall_pictures?.[0]?.image_url
+}))
 
 useHead({
   title: toyxona.value ? `${toyxona.value.name} — Toyxonachi` : 'toyxonachi.uz',
@@ -130,11 +142,22 @@ useHead({
     { property: 'og:image:width', content: '1920' },
     { property: 'og:image:height', content: '1080' },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `${baseUrl}/uz/toyxona/${toyxona.value?.id}` },
+    { property: 'og:url', content: `${siteUrl}/uz/toyxona/${toyxona.value?.id}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: toyxona.value?.name || 'toyxonachi.uz' },
     { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 160) || t('seo.listDescription') },
     { name: 'twitter:image', content: img }
+  ],
+  link: [
+    { rel: 'alternate', hreflang: 'uz', href: `${siteUrl}/uz` },
+    { rel: 'alternate', hreflang: 'ru', href: `${siteUrl}/ru` },
+    { rel: 'alternate', hreflang: 'en', href: `${siteUrl}/en` }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(structuredData.value)
+    }
   ]
 })
 

@@ -4,7 +4,7 @@ import { getDiscounts } from "~/data"
 import { useSearchStore } from '~/stores/search.store'
 
 const config = useRuntimeConfig()
-const baseUrl = config.public.baseUrl
+const siteUrl = config.public.siteUrl
 const searchStore = useSearchStore()
 const { isLargeScreen } = useScreenSize();
 const { t } = useI18n()
@@ -21,18 +21,21 @@ useHead({
     { name: 'description', content: t('seo.homeDescription') },
     { property: 'og:title', content: t('seo.homeTitle') },
     { property: 'og:description', content: t('seo.homeDescription') },
-    { property: 'og:image', content: `${baseUrl}/preview-logo.png` },
+    { property: 'og:image', content: `${siteUrl}/preview-logo.png` },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `${baseUrl}` },
+    { property: 'og:url', content: `${siteUrl}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: t('seo.homeTitle') },
     { name: 'twitter:description', content: t('seo.homeDescription') },
     {
-      name: 'twitter:image', content: `${baseUrl}/preview-logo.png`
+      name: 'twitter:image', content: `${siteUrl}/preview-logo.png`
     }
   ],
   link: [
-    { rel: 'canonical', href: `${baseUrl}` }
+    { rel: 'canonical', href: `${siteUrl}` },
+    { rel: 'alternate', hreflang: 'uz', href: `${siteUrl}/uz` },
+    { rel: 'alternate', hreflang: 'ru', href: `${siteUrl}/ru` },
+    { rel: 'alternate', hreflang: 'en', href: `${siteUrl}/en` }
   ]
 })
 

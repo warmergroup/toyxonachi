@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
+    // '@nuxtjs/sitemap'
   ],
   css: ['~/assets/css/main.css'],
   ui: {
@@ -21,7 +22,7 @@ export default defineNuxtConfig({
 
     // Client tomonida ham mavjud bo'lgan muhit o'zgaruvchilari
     public: {
-      baseUrl:process.env.NUXT_PUBLIC_BASE_URL,
+      siteUrl:process.env.NUXT_PUBLIC_SITE_URL,
       apiUrl: process.env.NUXT_PUBLIC_API_URL,
       yandexMapsApiKey: process.env.YANDEX_MAPS_API_KEY,
       imageUrl: process.env.NUXT_PUBLIC_IMG_URL,
