@@ -6,7 +6,7 @@
     "search": "Search",
     "main": "Main",
     "about": "About",
-    "contact": "Contact",
+    "contact": "Contact us",
     "searchPlaceholder": "Search",
     "profile": "Profile",
     "error": "An error occurred",
@@ -238,5 +238,31 @@
     "secondMeal": "Second meal",
     "noProducts": "No products",
     "noCategoriesOrProducts": "No categories or products"
-  }
+  },
+  "discount": {
+    "discounts": "Discounts",
+    "addDiscount": "Add Discount",
+    "editDiscount": "Edit Discount",
+    "deleteDiscount": "Delete Discount",
+    "discountName": "Discount Name",
+    "discountValue": "Discount Value",
+    "discountDescription": "Discount Description",
+    "noDiscounts": "No discounts available",
+    "discountsList": "List of Discounts",
+    "discountsCount": "Number of Discounts",
+    "addedSuccesfull": "Discount added successfully",
+    "discountDeleted": "Discount removed",
+    "discountArchived":"Discount archived",
+    "discountActivated":"Discount activated",
+    "addError": "An error occurred while adding the discount",
+    "editError": "An error occurred while editing the discount",
+    "deleteError": "An error occurred while deleting the discount",
+    "selectImageAndHallError": "Please select an image and a wedding hall!"
+  },
+  "seo": {
+  "homeTitle": "To‘yxonachi — Top Wedding Venues",
+  "listTitle": "All Wedding Venues — To‘yxonachi",
+  "mostExpensive": "Most Expensive Wedding Venues",
+  "listDescription": "Find the best restaurants and wedding venues for your special event"
+}
 }

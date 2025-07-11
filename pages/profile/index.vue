@@ -22,7 +22,9 @@ const superadminListRef = ref()
 const openComponent = openState();
 const onClose = () => openComponent.onClose();
 const showAddAdmins = ref(false);
-const showAddDiscount = ref(false);
+const showAddDiscount = ref(false)
+const showDiscountList = ref(true)
+const discountListRef = ref() 
 onBeforeRouteLeave(onClose)
 
 // Logout mutation
@@ -51,8 +53,19 @@ async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
   }
 }
 
+function openAddDiscount() {
+  showAddDiscount.value = true
+}
+function onDiscountAdded() {
+  showAddDiscount.value = false
+  showDiscountList.value = true
+  // DiscountList componentining ichidagi refetch funksiyasini chaqirish
+  discountListRef.value?.refetch?.()
+}
+
 function refreshDiscounts() {
-  openComponent.onOpen('discounts')
+  showAddDiscount.value = false
+  // openComponent.onOpen('discounts')
 }
 
 const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: number, name: string }[] }) => {
@@ -77,6 +90,7 @@ const { slideovers, drawers } = useProfileModals({
   adminListRef,
   superadminListRef,
   showAddDiscount,
+  discountListRef, // <-- QO‘SHING
   showAddAdmins,
   handleToyxonaCreated,
   refreshToyxonalarList,

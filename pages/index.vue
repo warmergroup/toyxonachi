@@ -2,33 +2,40 @@
 import { useInfiniteToyxonalarQuery } from '~/data'
 import { getDiscounts } from "~/data"
 import { useSearchStore } from '~/stores/search.store'
-useHead({
-  title: 'Toyxonachi — Eng yaxshi to‘yxonalar va banket zallari',
-  meta: [
-    { name: 'description', content: 'O‘zbekistondagi eng yaxshi to‘yxonalar, narxlar, joylashuv va chegirmalar. Toyxonachi bilan orzuingizdagi to‘yxonani toping!' },
-    { name: 'keywords', content: 'toyxona, banket zali, to‘yxonalar, narxlar, chegirma, uzbekistan, tashkent, Samarqand', },
-    { property: 'og:title', content: 'Toyxonachi — Eng yaxshi to‘yxonalar' },
-    { property: 'og:description', content: 'O‘zbekistondagi eng yaxshi to‘yxonalar va narxlar.' },
-    { property: 'og:image', content: '/logo-splash.svg' },
-    { property: 'og:url', content: 'https://toyxonachi.uz/' },
-    { name: 'twitter:card', content: 'summary_large_image' }
-  ]
-})
 
 const searchStore = useSearchStore()
 const { isLargeScreen } = useScreenSize();
 const { t } = useI18n()
+const localePath = useLocalePath();
 const router = useRouter()
 const { data: toyxonalarData, isLoading: toyxonaLoading, fetchNextPage, isFetchingNextPage, error } = useInfiniteToyxonalarQuery()
 const { data: banners, isLoading: isBannersLoading } = getDiscounts()
 const infiniteScrollTrigger = ref<null | HTMLElement>(null)
 const toyxonalar = computed(() => (toyxonalarData.value?.pages || []).flat())
 
+useHead({
+  title: t('seo.homeTitle'),
+  meta: [
+    { name: 'description', content: t('seo.homeDescription') },
+    { property: 'og:title', content: t('seo.homeTitle') },
+    { property: 'og:description', content: t('seo.homeDescription') },
+    { property: 'og:image', content: 'https://toyxonachiuz.vercel.app/logo-splash.svg' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: 'https://toyxonachiuz.vercel.app/' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: t('seo.homeTitle') },
+    { name: 'twitter:description', content: t('seo.homeDescription') },
+    { name: 'twitter:image', content: 'https://toyxonachiuz.vercel.app/logo-splash.svg' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://toyxonachiuz.vercel.app/' }
+  ]
+})
+
 const filteredToyxonalar = computed(() => {
   if (!searchStore.query) return toyxonalar.value
   return toyxonalar.value.filter(t =>
     t.name?.toLowerCase().includes(searchStore.query.toLowerCase())
-    // yoki boshqa maydonlar bo‘yicha ham filter qilishingiz mumkin
   )
 })
 
@@ -40,12 +47,12 @@ const carouselItems = computed(() =>
   }))
 )
 
-function handleBannerClick(item: { wedding_hall_id?: string | number }) {
+const handleBannerClick = (item: { wedding_hall_id?: string | number }) => {
   if (item.wedding_hall_id) {
-    router.push(`/toyxona/${item.wedding_hall_id}`)
+    const path = localePath(`/toyxona/${item.wedding_hall_id}`);
+    router.push(path);
   }
-}
-
+};
 
 onMounted(() => {
   const { getCurrentPosition } = useCurrentPosition()

@@ -2,8 +2,6 @@
 import type { IToyxonalar } from '~/interfaces';
 import { useLocationStore } from '~/stores/location.store';
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
-import { getToyxonaById } from '~/data';
-import type { UseQueryReturnType } from '@tanstack/vue-query';
 import { openState } from '~/stores/isOpen.store';
 
 const config = useRuntimeConfig()
@@ -20,6 +18,7 @@ const { data: toyxona, error: toyxonaError } = await useAsyncData<IToyxonalar>('
     baseURL
   })
 )
+
 const error = ref<string | null>(null);
 const selectedTarif = ref<any | null>(null);
 
@@ -119,20 +118,21 @@ function toggleDescription() {
 const defaultImg = '/logo-splash.svg'
 const img = getFullImageUrl(toyxona.value?.wedding_hall_pictures?.[0]?.image_url) || defaultImg
 
+
 useHead({
   title: toyxona.value ? `${toyxona.value.name} — Toyxonachi` : 'toyxonachi.uz',
   meta: [
-    { name: 'description', content: toyxona.value?.description?.slice(0, 160) || 'Find the perfect venue for your event' },
+    { name: 'description', content: toyxona.value?.description?.slice(0, 160) || t('seo.listDescription') },
     { property: 'og:title', content: toyxona.value?.name || 'toyxonachi.uz' },
-    { property: 'og:description', content: toyxona.value?.description?.slice(0, 160) || 'Find the perfect venue for your event' },
+    { property: 'og:description', content: toyxona.value?.description?.slice(0, 160) || t('seo.listDescription') },
     { property: 'og:image', content: img },
-    { property: 'og:image:width', content: '1200' },
-    { property: 'og:image:height', content: '630' },
+    { property: 'og:image:width', content: '1920' },
+    { property: 'og:image:height', content: '1080' },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `https://toyxonachiuz.vercel.app/uz/toyxona/${toyxona.value?.id}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: toyxona.value?.name || 'toyxonachi.uz' },
-    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 150) || 'Find the perfect venue for your event' },
+    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 150) || t('seo.listDescription') },
     { name: 'twitter:image', content: img }
   ]
 })
@@ -242,16 +242,18 @@ useHead({
           </UButton>
         </div>
         <!-- Contact info -->
-        <div class="bg-white lg:rounded-lg shadow-sm p-4 flex flex-col gap-2">
+        <div class="bg-white lg:rounded-lg shadow-sm p-4 flex flex-col gap-3">
           <div class="flex items-center gap-3">
-            <NuxtLink :to="`https://t.me/${toyxona.telegram}`" target="_blank">
-              <Icon name="custom:telegram" />
+            <NuxtLink class="w-10 h-10 flex items-center justify-center  rounded-full border border-stone-100"
+              :to="`https://www.instagram.com/${toyxona.instagram}`" target="_blank">
+              <Icon size="24px" class="w-10 h-10" name="custom:instagram" />
             </NuxtLink>
-            {{ toyxona.phone1 }}
-            <NuxtLink :to="`https://www.instagram.com/${toyxona.instagram}`" target="_blank">
-              <Icon name="custom:instagram" />
+            <NuxtLink class="w-10 h-10 flex items-center justify-center rounded-full border border-stone-100"
+              :to="`https://t.me/${toyxona.telegram}`" target="_blank">
+              <Icon size="24px" class="w-full h-full" name="custom:logos-telegram" />
             </NuxtLink>
           </div>
+          <UiPhoneDropdown :phone1="toyxona.phone1" :phone2="toyxona.phone2" />
         </div>
       </div>
     </div>

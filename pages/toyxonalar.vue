@@ -10,6 +10,22 @@ const { isLoading, error, data: toyxonalarData } = useGetToyxonalarQuery(0, 10, 
 const toyxonalar = computed<IToyxonalar[]>(() => toyxonalarData.value);
 const { t } = useI18n()
 
+useHead({
+  title: t('seo.mostExpensive'),
+  meta: [
+    { name: 'description', content: t('seo.listDescription') },
+    { property: 'og:title', content: t('seo.listTitle') },
+    { property: 'og:description', content: t('seo.listDescription') },
+    { property: 'og:image', content: 'https://toyxonachiuz.vercel.app/logo-splash.svg' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: 'https://toyxonachiuz.vercel.app/toyxonalar' },
+    { name: 'twitter:card', content: 'summary_large_image' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://toyxonachiuz.vercel.app/toyxonalar' }
+  ]
+})
+
 const filteredToyxonalar = computed(() => {
   if (!searchStore.query) return toyxonalar.value
   return toyxonalar.value.filter((t: IToyxonalar) =>

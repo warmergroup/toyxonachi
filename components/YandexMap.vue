@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
+const config = useRuntimeConfig();
+const apiKey = config.public.yandexMapsApiKey;
+const mapContainer = ref<HTMLElement | null>(null);
+const error = ref<string | null>(null);
+let yandexMap: any = null;
+const languageStore = useLanguageStore();
+const langCode = getYandexLangCode(languageStore.getLang());
+
 const props = defineProps({
   center: {
     type: Object as () => { lat: number; lng: number },
@@ -12,12 +20,14 @@ const props = defineProps({
   },
 });
 
-const config = useRuntimeConfig();
-const apiKey = config.public.yandexMapsApiKey;
 
-const mapContainer = ref<HTMLElement | null>(null);
-const error = ref<string | null>(null);
-let yandexMap: any = null;
+function getYandexLangCode(lang: string) {
+  if (lang === 'ru') return 'ru_RU';
+  if (lang === 'en') return 'en_US';
+  if (lang === 'uz') return 'uz_UZ';
+  return 'ru_RU'; // default
+}
+
 
 function loadYandexMapsScript(): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -36,7 +46,7 @@ function loadYandexMapsScript(): Promise<void> {
     }
     const script = document.createElement('script');
     script.id = 'ymaps-script';
-    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU`;
+    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=${langCode}`;
     script.async = true;
     script.onload = () => resolve();
     script.onerror = () => reject(new Error('Yandex Maps API yuklanmadi'));

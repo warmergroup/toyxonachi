@@ -6,7 +6,7 @@
     "search": "Поиск",
     "main": "Главная",
     "about": "О нас",
-    "contact": "Контакты",
+    "contact": "Контакт",
     "searchPlaceholder": "Поиск",
     "profile": "Профиль",
     "error": "Произошла ошибка",
@@ -238,5 +238,32 @@
     "secondMeal": "Второе блюдо",
     "noProducts": "Нет продуктов",
     "noCategoriesOrProducts": "Нет категорий или продуктов"
-  }
+  },
+  "discount": {
+    "discounts": "Скидки",
+    "addDiscount": "Добавить скидку",
+    "editDiscount": "Редактировать скидку",
+    "deleteDiscount": "Удалить скидку",
+    "discountName": "Название скидки",
+    "discountValue": "Размер скидки",
+    "discountDescription": "Описание скидки",
+    "noDiscounts": "Скидки отсутствуют",
+    "discountsList": "Список скидок",
+    "discountsCount": "Количество скидок",
+    "addedSuccesfull": "Скидка успешно добавлена",
+    "discountDeleted":"Скидка удалена",
+    "discountArchived":"Скидка заархивирована",
+    "discountActivated":"Скидка активирована",
+    "addError": "Произошла ошибка при добавлении скидки",
+    "editError": "Произошла ошибка при редактировании скидки",
+    "deleteError": "Произошла ошибка при удалении скидки",
+     "selectImageAndHallError": "Выберите изображение и банкетный зал!"
+  },
+  "seo": {
+  "homeTitle": "To‘yxonachi — Лучшие свадебные залы",
+  "listTitle": "Все свадебные залы — To‘yxonachi",
+  "mostExpensive": "Самые дорогие свадебные залы",
+  "listDescription": "Найдите лучшие рестораны и банкетные залы для вашего торжества"
+}
+
 }

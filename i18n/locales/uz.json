@@ -6,7 +6,7 @@
     "search": "Qidirish",
     "main": "Asosiy",
     "about": "Biz haqimizda",
-    "contact": "Aloqa",
+    "contact": "Aloqaga chiqish",
     "searchPlaceholder": "Qidirish",
     "profile": "Profil",
     "error": "Xatolik yuz berdi",
@@ -22,7 +22,7 @@
     "save": "Saqlash",
     "delete": "O'chirish",
     "archive": "Arxivlash",
-    "activate": "Faollashtirish",
+    "activate": "Aktivlash",
     "cancel": "Bekor qilish",
     "readMore": "Barchasini o'qish",
     "readLess": "Kamroq",
@@ -252,6 +252,20 @@
     "discountDescription": "Chegirma tavsifi",
     "noDiscounts": "Chegirmalar mavjud emas",
     "discountsList": "Chegirmalar ro'yxati",
-    "discountsCount": "Chegirmalar soni"
+    "discountsCount": "Chegirmalar soni",
+    "addedSuccesfull": "Chegirma muvaffaqiyatli qo'shildi",
+    "discountDeleted": "Chegirma o'chirildi",
+    "discountArchived":"Chegirma arxivda",
+    "discountActivated":"Chegirma faollashtirildi",
+    "addError": "Chegirma qo‘shishda xatolik yuz berdi",
+    "editError": "Chegirmani tahrirlashda xatolik yuz berdi",
+    "deleteError": "Chegirmani o‘chirishda xatolik yuz berdi",
+    "selectImageAndHallError": "Rasm va to‘yxona tanlang!"
+  },
+  "seo": {
+    "homeTitle": "To‘yxonachi — Eng yaxshi to‘yxonalar",
+    "listTitle":"Barcha to‘yxonalar — To‘yxonachi",
+    "mostExpensive": "Eng qimmat to‘yxonalar",
+    "listDescription": "Tadbiringiz uchun eng yaxshi restoran va to‘yxonalarni toping"
   }
 } 

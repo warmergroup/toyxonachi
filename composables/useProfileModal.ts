@@ -8,6 +8,7 @@ import TheAbout from '~/components/TheAbout.vue'
 import UiToyxonalarList from '~/components/ui/toyxonalarList/index.vue'
 import UiDiscountList from '~/components/ui/discountList/index.vue'
 import SuperadminAdmins from '~/components/Superadmin/admins.vue'
+import SuperadminAddDiscount from '~/components/Superadmin/addDiscount.vue'
 import AdminToyxonaCreate from '~/components/admin/toyxona/create.vue'
 import AdminTarif from '~/components/admin/tarif/index.vue'
 import MobileChangeLanguage from '~/components/mobile/ChangeLanguage.vue'
@@ -20,6 +21,7 @@ interface ProfileModalsParams {
   adminListRef: Ref<any>
   superadminListRef: Ref<any>
   showAddDiscount: Ref<boolean>
+  discountListRef: Ref<any> // <-- QO‘SHING
   showAddAdmins: Ref<boolean>
   handleToyxonaCreated: (args: { id: number, tariffs: { id: number, name: string }[] }) => void
   refreshToyxonalarList: () => void
@@ -31,7 +33,8 @@ export function useProfileModals(params: ProfileModalsParams) {
   const {
     t, isLargeScreen, openComponent,
     adminListRef, superadminListRef,
-    showAddDiscount, showAddAdmins,
+    showAddDiscount, discountListRef, // <-- QO‘SHING
+    showAddAdmins,
     handleToyxonaCreated, refreshToyxonalarList,
     openToyxonaActionModal,
     refetchMe
@@ -78,7 +81,22 @@ export function useProfileModals(params: ProfileModalsParams) {
       show: computed(() => openComponent.isOpen && openComponent.componentType === 'discounts'),
       title: () => t('weddingHall.discounts'),
       component: UiDiscountList,
-      props: { onAddDiscounts: () => showAddDiscount.value = true }
+      props: { onAddDiscounts: () => showAddDiscount.value = true,ref: discountListRef }
+    },
+    {
+      key: 'addDiscount',
+      show: computed(() => showAddDiscount.value),
+      title: () => t('profileActions.addDiscounts'),
+      component: SuperadminAddDiscount,
+      props: {
+        onSuccess: () => {
+          showAddDiscount.value = false
+          // discounts slideoverini qayta ochish
+          openComponent.onOpen('discounts')
+          // discountListni yangilash
+          discountListRef.value?.refetch?.()
+        }
+      }
     },
     {
       key: 'admins',
