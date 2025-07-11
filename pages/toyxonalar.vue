@@ -16,7 +16,7 @@ useHead({
     { name: 'description', content: t('seo.listDescription') },
     { property: 'og:title', content: t('seo.listTitle') },
     { property: 'og:description', content: t('seo.listDescription') },
-    { property: 'og:image', content: 'https://toyxonachiuz.vercel.app/logo-splash.svg' },
+    { property: 'og:image', content: 'https://toyxonachiuz.vercel.app/preview-logo.png' },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: 'https://toyxonachiuz.vercel.app/toyxonalar' },
     { name: 'twitter:card', content: 'summary_large_image' }
