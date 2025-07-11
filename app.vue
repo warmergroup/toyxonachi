@@ -43,9 +43,6 @@ useHead({
     lang,
     dir
   },
-  link: [
-    { rel: 'icon', type: 'image/png', href: '/logo-splash.svg' }
-  ],
   script: [
     {
       type: 'application/ld+json',
