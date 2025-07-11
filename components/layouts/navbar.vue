@@ -18,8 +18,10 @@ const showSearchInput = computed(() => {
   <ClientOnly>
     <nav
       class="xl:container mx-auto lg:mx-auto fixed top-0 left-0 right-0 flex justify-between items-center bg-white z-50 w-full h-16 border-b border-gray-300 px-5 py-5">
-      <NuxtLink :to="localePath('/')" class="hidden md:block">
-        <!-- <NuxtImg src="/TOYXONACHI-02 png (oq orqa fonsiz).png" /> -->
+      <NuxtLink :to="localePath('/')" class="flex items-center justify-center">
+        <div class="h-16 w-16">
+          <NuxtImg class="h-full w-full" src="/TOYXONACHI-02 png (oq).png" />
+        </div>
         <h1 class="text-2xl font-bold">To'yxonachi</h1>
       </NuxtLink>
 

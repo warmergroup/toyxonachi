@@ -31,7 +31,7 @@ const filteredToyxonalar = computed(() => {
       </div>
       <!--    <div v-else-if="error" class="text-center text-red-500">{{ error.message }}</div>-->
       <div v-else-if="!toyxonalar" class="text-center text-gray-500">
-        {{ t('venue.notFound') }}
+        {{ t('weddingHall.notFound') }}
       </div>
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <VenueCard v-for="toyxona in filteredToyxonalar" :key="`wedding-${toyxona.id}`" :toyxona="toyxona" />
