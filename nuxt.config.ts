@@ -65,7 +65,6 @@ export default defineNuxtConfig({
       meta: [
         {charset: 'utf-8'},
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-        {name: 'description', content: 'Find the perfect venue for your event'},
       ]
     },
     rootAttrs: {
