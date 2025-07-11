@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   // useRuntimeConfig o'rniga process.env ishlating
-  const apiUrl = process.env.NUXT_PUBLIC_API_URL || 'https://toyxonachi.uz/api'
+  const apiUrl = process.env.NUXT_PUBLIC_API_URL || 'https://api.toyxonachi.uz/api'
   
   try {
     const response = await $fetch('/wedding-halls/all', {
