@@ -106,7 +106,8 @@ function handleAccept() {
         },
         onError: (err) => {
             toast.add({
-                description: (err.message || 'Xatolik yuz berdi'),
+                title: t('error.title'),
+                description: (err.message),
                 color: 'error',
             })
         }
@@ -129,7 +130,8 @@ function handleReject(reason: string) {
         },
         onError: (err) => {
             toast.add({
-                description: (err.message || 'Xatolik yuz berdi'),
+                title: t('error.title'),
+                description: (err.message),
                 color: 'error',
             })
         }

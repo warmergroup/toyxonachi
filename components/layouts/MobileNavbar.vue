@@ -7,7 +7,7 @@ const localePath = useLocalePath();
 
 <template>
   <nav
-    class="container mx-auto fixed bottom-0 flex justify-between items-center bg-white w-full min-h-16 border-t border-gray-300 px-5 py-3 z-40">
+    class="container mx-auto fixed bottom-0 flex justify-between items-center bg-white w-full h-16 border-t border-gray-300 px-5 py-3 z-40">
     <div class="container mx-auto px-5 w-full md:w-3/5 lg:w-fit flex gap-5 justify-between items-center ">
       <NuxtLink :to="localePath('/')" :class="{ 'text-[var(--primary-color)]': route.path === localePath('/') }"
         class="flex flex-col items-center justify-center">
