@@ -7,12 +7,16 @@ export const useLanguageStore = defineStore('language', {
   actions: {
     setLang(lang: string) {
       this.lang = lang
-      localStorage.setItem('selectedLang', lang)
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('selectedLang', lang)
+      }
     },
     getLang() {
-      const storedLang = localStorage.getItem('selectedLang')
-      if (storedLang) {
-        this.lang = storedLang
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const storedLang = localStorage.getItem('selectedLang')
+        if (storedLang) {
+          this.lang = storedLang
+        }
       }
       return this.lang
     }

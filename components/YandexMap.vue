@@ -7,7 +7,7 @@ const mapContainer = ref<HTMLElement | null>(null);
 const error = ref<string | null>(null);
 let yandexMap: any = null;
 const languageStore = useLanguageStore();
-const langCode = getYandexLangCode(languageStore.getLang());
+const langCode = computed(() => getYandexLangCode(languageStore.getLang()));
 
 const props = defineProps({
   center: {
@@ -46,7 +46,7 @@ function loadYandexMapsScript(): Promise<void> {
     }
     const script = document.createElement('script');
     script.id = 'ymaps-script';
-    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=${langCode}`;
+    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=${langCode.value}`;
     script.async = true;
     script.onload = () => resolve();
     script.onerror = () => reject(new Error('Yandex Maps API yuklanmadi'));

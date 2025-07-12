@@ -53,6 +53,10 @@ const emit = defineEmits<{
 // Skriptni faqat bir marta yuklash uchun
 function loadYandexMapsScript(): Promise<void> {
   return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined') {
+      reject(new Error('Window is not available'));
+      return;
+    }
     if (window.ymaps) {
       resolve();
       return;
