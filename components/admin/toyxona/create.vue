@@ -87,7 +87,6 @@ const handleSubmit = async () => {
         <AdminToyxonaYandexMap title="Manzil" address-placeholder="Manzil tanlang..."
             :initial-latitude="coords?.latitude" :initial-longitude="coords?.longitude" :zoom="16"
             @location-change="handleLocationChange" />
-        <pre>{{ handleLocationChange }}</pre>
         <UButton class="w-full flex items-center justify-center" color="secondary" label="Saqlash"
             :loading="createToyxonaMutation.isPending.value" @click="handleSubmit" />
     </div>
