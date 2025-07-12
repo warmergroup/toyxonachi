@@ -14,13 +14,18 @@ const route = useRoute();
 const { t } = useI18n();
 const { isLargeScreen } = useScreenSize();
 const locationStore = useLocationStore()
-const { data: toyxona, error: toyxonaError } = await useAsyncData<IToyxonalar>('toyxona', () =>
+const { data: toyxona, error: toyxonaError, pending } = await useAsyncData<IToyxonalar>('toyxona', () =>
   $fetch(`/api/wedding-halls/show/${route.params.id}`, {
     baseURL: apiUrl
   })
 )
 
-const error = ref<string | null>(null);
+const error = computed(() => {
+  if (toyxonaError.value) {
+    return toyxonaError.value?.message || 'Toyxona ma\'lumotlari yuklanmadi';
+  }
+  return null;
+});
 const selectedTarif = ref<any | null>(null);
 
 const goback = () => {
@@ -335,10 +340,20 @@ useHead({
     </div>
   </div>
 
-  <div v-else class="mx-auto mt-50vh flex items-center justify-center h-64" role="status" aria-live="polite">
+  <div v-else-if="pending && !toyxona" class="mx-auto mt-50vh flex items-center justify-center h-64" role="status"
+    aria-live="polite">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
       <p class="text-text-secondary">{{ t('common.loading') }}</p>
+    </div>
+  </div>
+  <div v-else class="mx-auto mt-50vh flex items-center justify-center h-64" role="status" aria-live="polite">
+    <div class="text-center">
+      <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
+      </svg>
+      <p class="text-text-secondary">Toyxona topilmadi</p>
     </div>
   </div>
   <UiSlideOver :isOpen="openComponent.isOpen && openComponent.componentType === 'showTariff'"
