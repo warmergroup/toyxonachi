@@ -11,32 +11,34 @@ const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
 onMounted(() => {
-  const savedLang = localStorage.getItem('selectedLang')
+  // localStorage'ni browser'da mavjudligini tekshirish
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const savedLang = localStorage.getItem('selectedLang')
 
-  if (savedLang && savedLang !== locale.value) {
-    changeLanguage(savedLang as 'uz' | 'ru' | 'en')
+    if (savedLang && savedLang !== locale.value) {
+      changeLanguage(savedLang as 'uz' | 'ru' | 'en')
+    }
+
+    const token = localStorage.getItem('token')
+    if (token) {
+      const { refetch } = useGetMeQuery()
+      refetch()
+    }
+
+    if (messaging) {
+      onMessage(messaging, (payload) => {
+        if (Notification.permission === 'granted' && payload.notification) {
+          new Notification(
+            payload.notification.title ?? 'Yangi xabar',
+            {
+              body: payload.notification.body ?? '',
+              icon: payload.notification.icon ?? '/logo-splash.svg'
+            }
+          );
+        }
+      });
+    }
   }
-
-  const token = localStorage.getItem('token')
-  if (token) {
-    const { refetch } = useGetMeQuery()
-    refetch()
-  }
-
-  if (messaging) {
-    onMessage(messaging, (payload) => {
-      if (Notification.permission === 'granted' && payload.notification) {
-        new Notification(
-          payload.notification.title ?? 'Yangi xabar',
-          {
-            body: payload.notification.body ?? '',
-            icon: payload.notification.icon ?? '/logo-splash.svg'
-          }
-        );
-      }
-    });
-  }
-
 })
 
 useHead({
