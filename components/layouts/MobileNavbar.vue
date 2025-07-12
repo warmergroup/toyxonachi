@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-  const route = useRoute();
-  const { t } = useI18n();
-  const localePath = useLocalePath();
+const route = useRoute();
+const { t } = useI18n();
+const localePath = useLocalePath();
 </script>
 
 <template>

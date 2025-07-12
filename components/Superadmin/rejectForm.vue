@@ -1,14 +1,14 @@
 <script setup lang="ts">
-    const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit'])
 
-    const { t } = useI18n()
-    const state = reactive({
-        reject_reason: '',
-    })
+const { t } = useI18n()
+const state = reactive({
+    reject_reason: '',
+})
 
-    function submitForm() {
-        emit('submit', state.reject_reason)
-    }
+function submitForm() {
+    emit('submit', state.reject_reason)
+}
 </script>
 
 <template>

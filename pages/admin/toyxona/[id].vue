@@ -211,7 +211,7 @@ function toggleDescription() {
 
                 <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
                     <h2 class="text-xl font-medium text-text-primary mb-4 capitalize ">{{ t('weddingHall.description')
-                    }}
+                        }}
                     </h2>
                     <transition name="fade-expand">
                         <span v-if="showFullDescription" key="full"

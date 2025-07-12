@@ -1,93 +1,93 @@
 <script lang="ts" setup>
-  import { openState } from '~/stores/isOpen.store';
-  import { useUploadImage, useUploadAvatar } from '~/data';
+import { openState } from '~/stores/isOpen.store';
+import { useUploadImage, useUploadAvatar } from '~/data';
 
-  const config = useRuntimeConfig()
-  const baseImgUrl = config.public.imgUrl || 'https://api.toyxonachi.uz/storage/images'
+const config = useRuntimeConfig()
+const baseImgUrl = config.public.imgUrl || 'https://api.toyxonachi.uz/storage/images'
 
-  const { formatPhone } = useFormat();
-  const openComponent = openState();
-  const { t } = useI18n();
+const { formatPhone } = useFormat();
+const openComponent = openState();
+const { t } = useI18n();
 
-  const props = defineProps<{
-    name: string;
-    phone: string;
-    status: string;
-    role: string;
-    avatar?: string;
-    isLoading: boolean;
-    onAvatarUpdated?: () => void
-  }>();
+const props = defineProps<{
+  name: string;
+  phone: string;
+  status: string;
+  role: string;
+  avatar?: string;
+  isLoading: boolean;
+  onAvatarUpdated?: () => void
+}>();
 
-  const isUploading = ref(false);
-  const fileInput = ref<HTMLInputElement | null>(null);
+const isUploading = ref(false);
+const fileInput = ref<HTMLInputElement | null>(null);
 
-  const { mutateAsync: uploadImage, isPending: isImageUploading } = useUploadImage();
-  const { mutateAsync: uploadAvatar, isPending: isAvatarUploading } = useUploadAvatar();
+const { mutateAsync: uploadImage, isPending: isImageUploading } = useUploadImage();
+const { mutateAsync: uploadAvatar, isPending: isAvatarUploading } = useUploadAvatar();
 
-  const loading = computed(() => props.isLoading || isUploading.value || isImageUploading.value || isAvatarUploading.value);
+const loading = computed(() => props.isLoading || isUploading.value || isImageUploading.value || isAvatarUploading.value);
 
-  // Role matnini olish
-  const roleText = computed(() => {
-    switch (props.role) {
-      case 'user':
-        return t('profile.user');
-      case 'admin':
-        return t('profile.admin');
-      case 'superadmin':
-        return t('profile.superadmin');
-      default:
-        return t('profile.user');
-    }
-  });
-  // Avatar URL ni tekshirish
-  const avatarUrl = computed(() => {
-    return props.avatar === 'https://toyxonachi.uz/storage/images' ? '/avatar.jpg' : props.avatar;
-  });
-  const image = computed(() => {
-    if (
-      !props.avatar ||
-      props.avatar === baseImgUrl ||
-      props.avatar === baseImgUrl + '/' ||
-      props.avatar === 'https://toyxonachi.uz/storage/images' ||
-      props.avatar === 'https://toyxonachi.uz/storage/images/'
-    ) {
-      return '/avatar.jpg'
-    }
-    if (!props.avatar.startsWith('http')) {
-      return `${baseImgUrl}/${props.avatar}`
-    }
-    return props.avatar
-  })
-
-  // Fayl tanlash oynasini ochish
-  function openFileDialog() {
-    if (!loading.value && fileInput.value) {
-      fileInput.value.value = ''; // eski faylni tozalash
-      fileInput.value.click();
-    }
+// Role matnini olish
+const roleText = computed(() => {
+  switch (props.role) {
+    case 'user':
+      return t('profile.user');
+    case 'admin':
+      return t('profile.admin');
+    case 'superadmin':
+      return t('profile.superadmin');
+    default:
+      return t('profile.user');
   }
-
-  // Fayl tanlanganda yuklash
-  async function onFileChange(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const file = target.files?.[0];
-    if (!file) return;
-    isUploading.value = true;
-    try {
-
-      const uploadRes = await uploadImage(file);
-      await uploadAvatar(uploadRes.image);
-      if (props.onAvatarUpdated) {
-        props.onAvatarUpdated();
-      }
-      useToast().add({ description: t('profile.avatarUpdated'), color: 'success' });
-    } catch (err) {
-      useToast().add({ description: t('error.title'), color: 'error' });
-    } finally {
-      isUploading.value = false;
-    }
+});
+// Avatar URL ni tekshirish
+const avatarUrl = computed(() => {
+  return props.avatar === 'https://toyxonachi.uz/storage/images' ? '/avatar.jpg' : props.avatar;
+});
+const image = computed(() => {
+  if (
+    !props.avatar ||
+    props.avatar === baseImgUrl ||
+    props.avatar === baseImgUrl + '/' ||
+    props.avatar === 'https://toyxonachi.uz/storage/images' ||
+    props.avatar === 'https://toyxonachi.uz/storage/images/'
+  ) {
+    return '/avatar.jpg'
   }
+  if (!props.avatar.startsWith('http')) {
+    return `${baseImgUrl}/${props.avatar}`
+  }
+  return props.avatar
+})
+
+// Fayl tanlash oynasini ochish
+function openFileDialog() {
+  if (!loading.value && fileInput.value) {
+    fileInput.value.value = ''; // eski faylni tozalash
+    fileInput.value.click();
+  }
+}
+
+// Fayl tanlanganda yuklash
+async function onFileChange(e: Event) {
+  const target = e.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (!file) return;
+  isUploading.value = true;
+  try {
+
+    const uploadRes = await uploadImage(file);
+    await uploadAvatar(uploadRes.image);
+    if (props.onAvatarUpdated) {
+      props.onAvatarUpdated();
+    }
+    useToast().add({ description: t('profile.avatarUpdated'), color: 'success' });
+  } catch (err) {
+    useToast().add({ description: t('error.title'), color: 'error' });
+  } finally {
+    isUploading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -124,22 +124,22 @@
 </template>
 
 <style scoped>
-  .loader {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #10b981;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 0.8s linear infinite;
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #10b981;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
   }
+}
 </style>

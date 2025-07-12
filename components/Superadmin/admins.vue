@@ -1,25 +1,25 @@
 <script setup lang="ts">
-  import { filteredAdminUsers } from "~/data";
+import { filteredAdminUsers } from "~/data";
 
-  const { formatPhone } = useFormat();
-  const { t } = useI18n()
-  const { data, isLoading, error } = filteredAdminUsers();
-  const search = ref('')
-  const items = [
-    { label: t('users.all'), value: 'all' },
-    { label: t('users.superadmin'), value: 'superadmin' },
-    { label: t('users.admin'), value: 'admin' }
-  ];
-  const selectedRole = ref('all');
+const { formatPhone } = useFormat();
+const { t } = useI18n()
+const { data, isLoading, error } = filteredAdminUsers();
+const search = ref('')
+const items = [
+  { label: t('users.all'), value: 'all' },
+  { label: t('users.superadmin'), value: 'superadmin' },
+  { label: t('users.admin'), value: 'admin' }
+];
+const selectedRole = ref('all');
 
-  const filteredUsers = computed(() => {
-    if (!data.value) return []
-    return data.value.filter(user => {
-      const matchName = user.name.toLowerCase().includes(search.value.toLowerCase())
-      const matchRole = selectedRole.value === 'all' || user.role === selectedRole.value
-      return matchName && matchRole
-    })
+const filteredUsers = computed(() => {
+  if (!data.value) return []
+  return data.value.filter(user => {
+    const matchName = user.name.toLowerCase().includes(search.value.toLowerCase())
+    const matchRole = selectedRole.value === 'all' || user.role === selectedRole.value
+    return matchName && matchRole
   })
+})
 </script>
 
 <template>

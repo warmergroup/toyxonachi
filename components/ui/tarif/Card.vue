@@ -1,17 +1,17 @@
 <script setup lang="ts">
 
-  const { t } = useI18n();
+const { t } = useI18n();
 
-  defineProps<{
-    tarif: {
-      name: string
-      tariff_types: {
-        id: number | string
-        person_count: string
-        price: string
-      }[]
-    }
-  }>()
+defineProps<{
+  tarif: {
+    name: string
+    tariff_types: {
+      id: number | string
+      person_count: string
+      price: string
+    }[]
+  }
+}>()
 
 </script>
 

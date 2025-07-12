@@ -99,7 +99,7 @@ export interface IRoleInfo extends IWithId, CreatedAndUpdatedAt {
   pivot?: Pivot;
 }
 
-export interface IUser extends IWithId, CreatedAndUpdatedAt {
+export interface IUser extends IWithId {
   name: string;
   phone: string;
   status: string;

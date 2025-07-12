@@ -1,115 +1,115 @@
 <script setup lang="ts">
-  import { useGetTarifDetailQuery } from '~/data/tariffs'
-  import { openState } from '~/stores/isOpen.store'
+import { useGetTarifDetailQuery } from '~/data/tariffs'
+import { openState } from '~/stores/isOpen.store'
 
-  const { t } = useI18n()
-  const openComponent = openState()
-  const props = defineProps<{
-    tarifId?: number | string,
-    isAdmin?: boolean
-  }>()
+const { t } = useI18n()
+const openComponent = openState()
+const props = defineProps<{
+  tarifId?: number | string,
+  isAdmin?: boolean
+}>()
 
-  const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''))
+const { data: tarifDetail, isLoading, error } = useGetTarifDetailQuery(String(props.tarifId || ''))
 
-  interface TariffType {
-    id: number
-    person_count: number
-    price: number | string
-  }
-  interface Product {
-    id: number
-    name: string
-    description: string
-    image_url: string
-    type: string
-    category_id?: string | number
-  }
-  interface TariffDetail {
-    name: string
-    tariff_types: TariffType[]
-    tariff_products: Product[]
-  }
-  interface Tab {
-    label: string
-    keys: readonly string[]
-  }
-  interface Section {
-    label: string
-    items: Product[]
-  }
+interface TariffType {
+  id: number
+  person_count: number
+  price: number | string
+}
+interface Product {
+  id: number
+  name: string
+  description: string
+  image_url: string
+  type: string
+  category_id?: string | number
+}
+interface TariffDetail {
+  name: string
+  tariff_types: TariffType[]
+  tariff_products: Product[]
+}
+interface Tab {
+  label: string
+  keys: readonly string[]
+}
+interface Section {
+  label: string
+  items: Product[]
+}
 
-  const onClose = () => {
-    openComponent.onClose();
-  }
-  // Tablar va bo'limlar
-  const tabs: readonly Tab[] = [
-    { label: t('tariff.meals'), keys: ['meals'] },
-    { label: t('tariff.salads'), keys: ['salads'] },
-    { label: t('tariff.weddingTable'), keys: ['wedding_table'] },
-    { label: t('tariff.bonuses'), keys: ['bonuses'] }
-  ] as const
+const onClose = () => {
+  openComponent.onClose();
+}
+// Tablar va bo'limlar
+const tabs: readonly Tab[] = [
+  { label: t('tariff.meals'), keys: ['meals'] },
+  { label: t('tariff.salads'), keys: ['salads'] },
+  { label: t('tariff.weddingTable'), keys: ['wedding_table'] },
+  { label: t('tariff.bonuses'), keys: ['bonuses'] }
+] as const
 
-  const activeTab: Ref<string> = ref(tabs[0].label)
+const activeTab: Ref<string> = ref(tabs[0].label)
 
-  // Ajratilgan bo'limlar uchun computed
-  const mealsSections: ComputedRef<Section[]> = computed(() => {
-    const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'meals')
-    return [
-      {
-        label: t('tariff.firstMeal'),
-        items: products.filter((p: Product) => String(p.category_id) === '1')
-      },
-      {
-        label: t('tariff.secondMeal'),
-        items: products.filter((p: Product) => String(p.category_id) === '2')
-      }
-    ]
-  })
-  const weddingSections: ComputedRef<Section[]> = computed(() => {
-    const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'wedding_table')
-    return [
-      {
-        label: t('tariff.main'),
-        items: products.filter((p: Product) => String(p.category_id) === '1')
-      },
-      {
-        label: t('tariff.additionalDelicacies'),
-        items: products.filter((p: Product) => String(p.category_id) === '2')
-      }
-    ]
-  })
-  const saladsSection: ComputedRef<Section[]> = computed(() => [
+// Ajratilgan bo'limlar uchun computed
+const mealsSections: ComputedRef<Section[]> = computed(() => {
+  const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'meals')
+  return [
     {
-      label: t('tariff.salads'),
-      items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'salads')
-    }
-  ])
-  const bonusesSection: ComputedRef<Section[]> = computed(() => [
-    {
-      label: t('tariff.bonuses'),
-      items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'bonuses')
-    }
-  ])
-
-  const tabSections: ComputedRef<Section[]> = computed(() => {
-    if (activeTab.value === t('tariff.meals')) return mealsSections.value
-    if (activeTab.value === t('tariff.weddingTable')) return weddingSections.value
-    if (activeTab.value === t('tariff.salads')) return saladsSection.value
-    if (activeTab.value === t('tariff.bonuses')) return bonusesSection.value
-    return []
-  })
-
-  // Tabni avtomatik birinchi mavjud bo'limga o'zgartirish (ma'lumot kelganda)
-  watch(
-    () => tarifDetail.value?.tariff_products,
-    (products: Product[]) => {
-      if (products?.length) {
-        const firstType = tabs.find((tab: Tab) => products.some((p: Product) => tab.keys.includes(p.type)))
-        if (firstType) activeTab.value = firstType.label
-      }
+      label: t('tariff.firstMeal'),
+      items: products.filter((p: Product) => String(p.category_id) === '1')
     },
-    { immediate: true }
-  )
+    {
+      label: t('tariff.secondMeal'),
+      items: products.filter((p: Product) => String(p.category_id) === '2')
+    }
+  ]
+})
+const weddingSections: ComputedRef<Section[]> = computed(() => {
+  const products: Product[] = (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'wedding_table')
+  return [
+    {
+      label: t('tariff.main'),
+      items: products.filter((p: Product) => String(p.category_id) === '1')
+    },
+    {
+      label: t('tariff.additionalDelicacies'),
+      items: products.filter((p: Product) => String(p.category_id) === '2')
+    }
+  ]
+})
+const saladsSection: ComputedRef<Section[]> = computed(() => [
+  {
+    label: t('tariff.salads'),
+    items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'salads')
+  }
+])
+const bonusesSection: ComputedRef<Section[]> = computed(() => [
+  {
+    label: t('tariff.bonuses'),
+    items: (tarifDetail.value?.tariff_products || []).filter((p: Product) => p.type === 'bonuses')
+  }
+])
+
+const tabSections: ComputedRef<Section[]> = computed(() => {
+  if (activeTab.value === t('tariff.meals')) return mealsSections.value
+  if (activeTab.value === t('tariff.weddingTable')) return weddingSections.value
+  if (activeTab.value === t('tariff.salads')) return saladsSection.value
+  if (activeTab.value === t('tariff.bonuses')) return bonusesSection.value
+  return []
+})
+
+// Tabni avtomatik birinchi mavjud bo'limga o'zgartirish (ma'lumot kelganda)
+watch(
+  () => tarifDetail.value?.tariff_products,
+  (products: Product[]) => {
+    if (products?.length) {
+      const firstType = tabs.find((tab: Tab) => products.some((p: Product) => tab.keys.includes(p.type)))
+      if (firstType) activeTab.value = firstType.label
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -169,12 +169,12 @@
 </template>
 
 <style scoped>
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 </style>

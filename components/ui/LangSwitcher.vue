@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {useLanguageStore} from '~/stores/language'
+import { useLanguageStore } from '~/stores/language'
 
 type Language = {
   code: 'uz' | 'ru' | 'en'
@@ -9,12 +9,12 @@ type Language = {
 }
 
 const languages: Language[] = [
-  {code: 'uz', name: 'O\'zbek', flag: 'uz-flag'},
-  {code: 'ru', name: 'Русский', flag: 'ru-flag'},
-  {code: 'en', name: 'English', flag: 'en-flag'}
+  { code: 'uz', name: 'O\'zbek', flag: 'uz-flag' },
+  { code: 'ru', name: 'Русский', flag: 'ru-flag' },
+  { code: 'en', name: 'English', flag: 'en-flag' }
 ]
 
-const {changeLanguage} = useLanguage()
+const { changeLanguage } = useLanguage()
 const langStore = useLanguageStore()
 const currentLang = computed(() => langStore.lang)
 const isOpen = ref(false)
@@ -40,17 +40,15 @@ onUnmounted(() => {
 <template>
   <div class="relative" @click.stop>
     <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" @click="isOpen = !isOpen">
-      <Icon :name="`custom:${currentLang}-flag`" class="w-6 h-6"/>
+      <Icon :name="`custom:${currentLang}-flag`" class="w-6 h-6" />
     </button>
 
-    <div
-      v-if="isOpen"
+    <div v-if="isOpen"
       class="absolute right-0 mt-2 w-36 rounded-lg bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800 py-1 z-50">
-      <button
-        v-for="lang in languages" v-show="currentLang !== lang.code" :key="lang.code"
+      <button v-for="lang in languages" v-show="currentLang !== lang.code" :key="lang.code"
         class="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
         @click="handleLanguageChange(lang.code)">
-        <Icon :name="`custom:${lang.flag}`" class="w-5 h-5"/>
+        <Icon :name="`custom:${lang.flag}`" class="w-5 h-5" />
         <span>{{ lang.name }}</span>
       </button>
     </div>

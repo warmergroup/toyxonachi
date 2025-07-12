@@ -24,7 +24,7 @@ const onClose = () => openComponent.onClose();
 const showAddAdmins = ref(false);
 const showAddDiscount = ref(false)
 const showDiscountList = ref(true)
-const discountListRef = ref() 
+const discountListRef = ref()
 onBeforeRouteLeave(onClose)
 
 // Logout mutation
