@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/vue-query';
-import { getToken, messaging } from '~/utils/firebase';
+import { getFCMToken } from '~/utils/firebase';
 import $axios from '~/http';
 import type { IRegisterResponse } from '~/interfaces';
 
@@ -10,18 +10,13 @@ interface RegisterFormData {
   role: number;
 }
 
-export const useRegister = (vapidKey: string) => {
+export const useRegister = (vapidKey?: string) => {
   return useMutation({
     mutationKey: ['register'],
     mutationFn: async (formData: RegisterFormData) => {
-      let fcmToken = null;
-      if (messaging) {
-        try {
-          fcmToken = await getToken(messaging, { vapidKey });
-        } catch (err) {
-          console.warn('FCM token olishda xatolik:', err);
-        }
-      }
+      // FCM token olish (faqat client-side'da)
+      const fcmToken = process.client ? await getFCMToken(vapidKey) : null;
+      
       const payload = { ...formData, fcm_token: fcmToken };
       try {
         const response = await $axios.post<IRegisterResponse>('register', payload);

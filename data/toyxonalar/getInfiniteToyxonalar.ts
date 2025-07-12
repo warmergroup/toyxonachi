@@ -13,9 +13,9 @@ export const useInfiniteToyxonalarQuery = (
       queryFn: async ({pageParam = 1}) => {
         try {
           const params: any = {
-            page: pageParam,
-            limit: itemsPerPage
-          }
+              page: pageParam,
+              limit: itemsPerPage
+            }
           
           // Public mode uchun faqat active statusdagilar
           if (mode === 'public') {

@@ -3,12 +3,13 @@ importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js')
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBPz6LqUzM3aluyXTwmzwBqGUNNJDN-o2E",
-  authDomain: "toyxonachi-e5ab6.firebaseapp.com",
-  projectId: "toyxonachi-e5ab6",
-  storageBucket: "toyxonachi-e5ab6.appspot.com",
-  messagingSenderId: "145501933049",
-  appId: "1:145501933049:web:d9242e6e1fca537d720128"
+  apiKey: "AIzaSyDXPRtRax8xNzu4yHe5Lk2Uk4QH-9dw2CY",
+  authDomain: "toyxonachi-47293.firebaseapp.com",
+  projectId: "toyxonachi-47293",
+  storageBucket: "toyxonachi-47293.firebasestorage.app",
+  messagingSenderId: "205020384733",
+  appId: "1:205020384733:web:76396fc8013eff01de3a34",
+  measurementId: "G-GVJ7P9KLHD"
 })
 
 const messaging = firebase.messaging()
@@ -16,10 +17,10 @@ const messaging = firebase.messaging()
 messaging.onBackgroundMessage(function (payload) {
   console.log('[firebase-messaging-sw.js] Background message:', payload)
 
-  const notificationTitle = payload.notification.title
+  const notificationTitle = payload.notification.title || 'Yangi xabar'
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon
+    body: payload.notification.body || '',
+    icon: payload.notification.icon || '/logo-splash.svg'
   }
 
   self.registration.showNotification(notificationTitle, notificationOptions)

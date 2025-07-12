@@ -1,18 +1,19 @@
 <script lang="ts" setup>
 import * as locales from '@nuxt/ui/locale'
 import { useGetMeQuery } from '~/data';
-import { onMessage, messaging } from '~/utils/firebase'
+import { setupForegroundListener, getFCMToken } from '~/utils/firebase'
 
 const config = useRuntimeConfig()
 const baseUrl = config.public.baseUrl
+const vapidKey = config.public.vapidKey
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
 onMounted(() => {
-  // localStorage'ni browser'da mavjudligini tekshirish
-  if (typeof window !== 'undefined' && window.localStorage) {
+  // Faqat client-side'da ishlaydi
+  if (process.client) {
     const savedLang = localStorage.getItem('selectedLang')
 
     if (savedLang && savedLang !== locale.value) {
@@ -25,19 +26,13 @@ onMounted(() => {
       refetch()
     }
 
-    if (messaging) {
-      onMessage(messaging, (payload) => {
-        if (Notification.permission === 'granted' && payload.notification) {
-          new Notification(
-            payload.notification.title ?? 'Yangi xabar',
-            {
-              body: payload.notification.body ?? '',
-              icon: payload.notification.icon ?? '/logo-splash.svg'
-            }
-          );
-        }
-      });
+    // Firebase messaging'ni login oldin ham ishga tushirish
+    if (vapidKey) {
+      getFCMToken(vapidKey)
     }
+
+    // FCM foreground listener'ni ishga tushirish
+    setupForegroundListener()
   }
 })
 

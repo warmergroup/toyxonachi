@@ -1,24 +1,19 @@
 import { useMutation } from '@tanstack/vue-query';
 import $authApi from '~/http/authApi';
 import type { ILoginResponse } from '~/interfaces';
-import { getToken, messaging } from '~/utils/firebase';
+import { getFCMToken } from '~/utils/firebase';
 
 interface LoginFormData {
     phone: string;
 }
 
-export const useLogin = (vapidKey: string) => {
+export const useLogin = (vapidKey?: string) => {
     return useMutation({
         mutationKey: ['login'],
         mutationFn: async (formData: LoginFormData) => {
-            let fcmToken = null;
-            if (messaging) {
-                try {
-                    fcmToken = await getToken(messaging, { vapidKey });
-                } catch (err) {
-                    console.warn('FCM token olishda xatolik:', err);
-                }
-            }
+            // FCM token olish (faqat client-side'da)
+            const fcmToken = process.client ? await getFCMToken(vapidKey) : null;
+            
             const payload = { ...formData, fcm_token: fcmToken };
             try {
                 const { data } = await $authApi.post<ILoginResponse>('login', payload);

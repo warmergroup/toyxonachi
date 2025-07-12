@@ -2,11 +2,10 @@
 import { useRegister } from '~/data';
 import { useAuthStore } from '~/stores/auth.store';
 import { openState } from '~/stores/isOpen.store'
-import { getToken, messaging } from '~/utils/firebase'
 import { vMaska } from 'maska/vue';
 
-const config = useRuntimeConfig();
-const vapidKey = config.public.vapidKey;
+// VAPID key'ni faqat client-side'da olish
+const vapidKey = process.client ? useRuntimeConfig().public.vapidKey : undefined;
 
 const authType = useAuthType();
 const openComponent = openState()
@@ -48,12 +47,14 @@ const handleRegistrationSuccess = (data: any) => {
       role: data.role,
     });
 
-    // Save token
-    localStorage.setItem('token', data.token);
+    // Save token (faqat client-side'da)
+    if (process.client) {
+      localStorage.setItem('token', data.token);
+    }
 
     // Show success message
     toast.add({
-      description: t('success.welcomeMessage', { name: state.name }),
+      description: t('register.toastMessage', { name: state.name }),
       color: 'success',
     });
 
@@ -92,23 +93,6 @@ const onSubmit = async (event: SubmitEvent) => {
     },
   });
 };
-
-onMounted(async () => {
-  if (messaging) {
-    try {
-      const fcmToken = await getToken(messaging, { vapidKey });
-      if (fcmToken) {
-        console.log('FCM Token:', fcmToken);
-      } else {
-        console.warn('Foydalanuvchi FCM token olishga ruxsat bermadi');
-      }
-    } catch (err) {
-      console.warn('FCM token olishda xatolik:', err);
-    }
-  } else {
-    console.warn('Messaging is not initialized.');
-  }
-});
 
 </script>
 

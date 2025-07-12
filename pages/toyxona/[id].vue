@@ -270,7 +270,7 @@ useHead({
       <div class="flex flex-col gap-4">
         <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
           <h2 class="text-xl font-medium text-text-primary mb-4 capitalize ">{{ t('weddingHall.description')
-          }}
+            }}
           </h2>
           <transition name="fade-expand">
             <span v-if="showFullDescription" key="full" :id="`description-${toyxona.id}`"
@@ -296,7 +296,7 @@ useHead({
         <div class="bg-white lg:rounded-lg shadow-sm p-4">
           <h2 class="text-xl font-medium text-text-primary mb-4 capitalize" id="location-heading">{{
             t('weddingHall.location')
-          }}</h2>
+            }}</h2>
           <div class="bg-gray-100 rounded-lg overflow-hidden mb-4" role="region" aria-labelledby="location-heading">
             <YandexMap :center="{ lat: Number(toyxona.latitude), lng: Number(toyxona.longitude) }" :title="toyxona.name"
               :zoom="16" height="h-48 md:h-64 lg:h-80" />

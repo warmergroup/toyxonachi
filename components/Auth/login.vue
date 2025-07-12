@@ -6,9 +6,8 @@ import { vMaska } from 'maska/vue';
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
 
-
-const config = useRuntimeConfig();
-const vapidKey = config.public.vapidKey;
+// VAPID key'ni faqat client-side'da olish
+const vapidKey = process.client ? useRuntimeConfig().public.vapidKey : undefined;
 const authType = useAuthType();
 const openComponent = openState();
 const { t } = useI18n();
@@ -46,8 +45,10 @@ const handleLoginSuccess = (data: { user: any; token: string }) => {
             role: data.user.role,
         });
 
-        // Save token
-        localStorage.setItem('token', data.token);
+        // Save token (faqat client-side'da)
+        if (process.client) {
+            localStorage.setItem('token', data.token);
+        }
 
         // Show success message
         toast.add({
@@ -60,7 +61,6 @@ const handleLoginSuccess = (data: { user: any; token: string }) => {
     } catch (error) {
         console.error('Error handling login success:', error);
         toast.add({
-
             description: t('error.unknown'),
             color: 'error',
         });
@@ -74,14 +74,12 @@ const { mutate, isPending } = useLogin(vapidKey);
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     const formData = {
         phone: phoneCode + event.data.phone.replace(/\D/g, ''),
-
     };
 
     mutate(formData, {
         onSuccess: handleLoginSuccess,
         onError: (error: unknown) => {
             toast.add({
-
                 description: error instanceof Error ? error.message : t('error.unknown'),
                 color: 'error',
             });

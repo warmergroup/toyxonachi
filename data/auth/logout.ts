@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/vue-query';
 import $authApi from '~/http/authApi';
-import { getToken, messaging } from '~/utils/firebase';
+import { getFCMToken } from '~/utils/firebase';
 
 interface LogoutResponse {
     message: string;
 }
 
-export const useLogout = (vapidKey: string) => {
+export const useLogout = (vapidKey?: string) => {
     const toast = useToast();
     const { t } = useI18n();
     const authStore = useAuthStore();
@@ -15,22 +15,25 @@ export const useLogout = (vapidKey: string) => {
     return useMutation({
         mutationKey: ['logout'],
         mutationFn: async () => {
+            // Logout qilganda FCM token yuborish kerak (faqat client-side'da)
             let fcmToken = null;
-            if (messaging) {
-                try {
-                    fcmToken = await getToken(messaging, { vapidKey });
-                } catch (err) {
-                    console.warn('FCM token olishda xatolik:', err);
-                }
+            if (process.client && vapidKey) {
+                fcmToken = await getFCMToken(vapidKey);
             }
-            const { data } = await $authApi.post<LogoutResponse>('users/logout', { fcm_token: fcmToken });
+            
+            const { data } = await $authApi.post<LogoutResponse>('users/logout', { 
+                fcm_token: fcmToken 
+            });
             return data;
         },
         onSuccess: () => {
             // Clear auth store
             authStore.logout();
-            // Remove token from localStorage
-            localStorage.removeItem('token');
+            // Remove token from localStorage (faqat client-side'da)
+            if (process.client) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('fcm_token');
+            }
             
             // Show success message
             toast.add({

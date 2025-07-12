@@ -9,7 +9,8 @@ import { useQueryClient } from '@tanstack/vue-query';
 
 
 const config = useRuntimeConfig();
-const vapidKey = config.public.vapidKey;
+// VAPID key'ni faqat client-side'da olish
+const vapidKey = process.client ? config.public.vapidKey : undefined;
 const { isLargeScreen } = useScreenSize();
 const { refetch: refetchMe } = useGetMeQuery()
 const authStore = useAuthStore();
