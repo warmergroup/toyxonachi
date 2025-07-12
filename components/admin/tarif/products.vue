@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useCreateTariffProduct, useUploadImage, useDeleteTariffProduct, useGetTarifDetailQuery } from '~/data'
+import { useCreateTariffProduct, useUploadImage, useDeleteTariffProduct, useGetTarifDetailQuery, useChangeToyxonaStatus } from '~/data'
+import { useQueryClient } from '@tanstack/vue-query'
 import type { Product, FormState, Section } from '~/interfaces'
 
 const config = useRuntimeConfig()
@@ -7,6 +8,7 @@ const imageUrl = config.public.imageUrl
 
 const props = defineProps<{
     tariffId: number | null,
+    toyxonaId?: number | null, // Yangi prop qo'shamiz
     initialProducts?: Array<{
         id: number
         name: string
@@ -54,6 +56,8 @@ watchEffect(() => {
 const uploadImage = useUploadImage()
 const createProduct = useCreateTariffProduct()
 const deleteProduct = useDeleteTariffProduct()
+const changeStatus = useChangeToyxonaStatus()
+const queryClient = useQueryClient()
 
 function handleImageUpload(e: Event, form: FormState) {
     const file = (e.target as HTMLInputElement).files?.[0]
@@ -110,6 +114,20 @@ function addProduct(section: Section) {
             section.form.description = ''
             section.form.image_url = ''
             section.isCreating = false
+            // Mahsulot qo'shilganda toyxona statusini review ga o'tkazish
+            if (props.toyxonaId) {
+                changeStatus.mutate({
+                    wedding_hall_id: props.toyxonaId,
+                    status: 'review'
+                }, {
+                    onSuccess: () => {
+                        // Cache'ni invalidate qilish
+                        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+                        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'superadmin'] });
+                        queryClient.invalidateQueries({ queryKey: ['toyxona-by-id', props.toyxonaId] });
+                    }
+                })
+            }
         },
         onError() {
             section.isCreating = false
@@ -123,6 +141,20 @@ function removeProduct(section: Section, id: number) {
         deleteProduct.mutate(id, {
             onSuccess() {
                 section.items = section.items.filter(i => i.id !== id)
+                // Mahsulot o'chirilganda toyxona statusini review ga o'tkazish
+                if (props.toyxonaId) {
+                    changeStatus.mutate({
+                        wedding_hall_id: props.toyxonaId,
+                        status: 'review'
+                    }, {
+                        onSuccess: () => {
+                            // Cache'ni invalidate qilish
+                            queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+                            queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'superadmin'] });
+                            queryClient.invalidateQueries({ queryKey: ['toyxona-by-id', props.toyxonaId] });
+                        }
+                    })
+                }
             },
             onError(error: any) {
                 alert(error.message || 'Xatolik yuz berdi')

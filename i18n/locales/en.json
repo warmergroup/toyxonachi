@@ -27,7 +27,8 @@
     "readMore": "Read More",
     "readLess": "Less",
     "mostExpensive": "Most Expensive Wedding Halls",
-    "clickHere": "Click Here"
+    "clickHere": "Click Here",
+    "noImage": "No pictures available"
   },
   "about": {
     "aboutUs": "About Us",
@@ -201,7 +202,8 @@
   },
   "modal": {
     "archiveOrDelete": "Will you delete or archive the wedding hall?",
-    "activeOrDelete": "Will you activate or delete the wedding hall?"
+    "activeOrDelete": "Will you activate or delete the wedding hall?",
+    "cannotArchiveReviewRejected": "Cannot archive halls with review or rejected status"
   },
   "weddingHallForm": {
     "imageField": "Wedding hall pictures",
@@ -242,6 +244,7 @@
   "discount": {
     "discounts": "Discounts",
     "addDiscount": "Add Discount",
+    "selectWeddingHall":"Select a wedding hall",
     "editDiscount": "Edit Discount",
     "deleteDiscount": "Delete Discount",
     "discountName": "Discount Name",

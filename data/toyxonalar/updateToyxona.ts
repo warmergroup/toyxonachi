@@ -8,7 +8,6 @@ export const useUpdateToyxona = (toyxona_id: number) => {
         mutationFn: async (formData: ToyxonaFormData) => {
             try {
                 const response = await $authApi.put(`wedding-halls/update/${toyxona_id}`, formData);
-                console.log("Update response data:", response.data);
                 return response.data;
             } catch (error: any) {
                 // API error handling

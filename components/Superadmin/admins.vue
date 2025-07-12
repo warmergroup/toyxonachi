@@ -3,7 +3,10 @@ import { filteredAdminUsers } from "~/data";
 
 const { formatPhone } = useFormat();
 const { t } = useI18n()
-const { data, isLoading, error } = filteredAdminUsers();
+const { data, isLoading, error, refetch } = filteredAdminUsers();
+
+// Parent componentga refetch funksiyasini expose qilish
+defineExpose({ refetch });
 const search = ref('')
 const items = [
   { label: t('users.all'), value: 'all' },

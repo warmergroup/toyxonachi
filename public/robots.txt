@@ -7,3 +7,10 @@ Sitemap: https://toyxonachiuz.vercel.app/sitemap.xml
 # Admin va profile sahifalarni noindex qilish
 Disallow: /admin/
 Disallow: /profile/
+
+# Performance optimizations
+Crawl-delay: 1
+
+# Accessibility improvements
+Allow: /sitemap.xml
+Allow: /manifest.json

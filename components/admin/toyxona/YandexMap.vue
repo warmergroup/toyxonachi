@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { useLanguageStore } from '~/stores/language'
+import { useLanguageStore } from '~/stores/language';
 
 const languageStore = useLanguageStore();
 const config = useRuntimeConfig();
 const apiKey = config.public.yandexMapsApiKey;
+
 const mapContainer = ref<HTMLElement>();
 const currentAddress = ref<string>('');
 const isLoading = ref<boolean>(true);
@@ -12,11 +13,11 @@ const isLoading = ref<boolean>(true);
 let yandexMap: any = null;
 let updateTimeout: number | null = null;
 
-function getYandexLangCode(lang: string) {
+function getYandexLangCode(lang: string): string {
   if (lang === 'ru') return 'ru_RU';
   if (lang === 'en') return 'en_US';
   if (lang === 'uz') return 'uz_UZ';
-  return 'ru_RU'; // default
+  return 'ru_RU';
 }
 
 interface LocationData {
@@ -38,39 +39,35 @@ declare global {
     ymaps: any;
   }
 }
+
 const props = withDefaults(defineProps<Props>(), {
   title: 'Manzil',
-  addressPlaceholder: 'Manzil tanlang...',
+  addressPlaceholder: 'Manzil kiriting...',
   initialLatitude: 41.2995,
   initialLongitude: 69.2401,
   zoom: 15
 });
 
 const emit = defineEmits<{
-  locationChange: [location: LocationData];
+  (e: 'locationChange', location: LocationData): void;
 }>();
 
-// Skriptni faqat bir marta yuklash uchun
-function loadYandexMapsScript(): Promise<void> {
+async function loadYandexMapsScript(): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (typeof window === 'undefined') {
-      reject(new Error('Window is not available'));
-      return;
-    }
-    if (window.ymaps) {
-      resolve();
-      return;
-    }
-    // Skript allaqachon yuklanayotgan bo‘lsa, kutamiz
+    if (typeof window === 'undefined') return reject(new Error('Window not available'));
+
+    if (window.ymaps) return resolve();
+
     if (document.getElementById('ymaps-script')) {
-      const check = setInterval(() => {
+      const interval = setInterval(() => {
         if (window.ymaps) {
-          clearInterval(check);
+          clearInterval(interval);
           resolve();
         }
       }, 100);
       return;
     }
+
     const script = document.createElement('script');
     script.id = 'ymaps-script';
     const langCode = getYandexLangCode(languageStore.getLang());
@@ -82,13 +79,12 @@ function loadYandexMapsScript(): Promise<void> {
   });
 }
 
-const initializeMap = async () => {
+async function initializeMap(): Promise<void> {
   if (!mapContainer.value) return;
+
   try {
     await loadYandexMapsScript();
-    await new Promise<void>((resolve) => {
-      window.ymaps.ready(() => resolve());
-    });
+    await new Promise<void>((res) => window.ymaps.ready(res));
 
     yandexMap = new window.ymaps.Map(mapContainer.value, {
       center: [props.initialLatitude, props.initialLongitude],
@@ -99,70 +95,71 @@ const initializeMap = async () => {
     yandexMap.events.add('boundschange', handleMapMove);
 
     await updateAddress(props.initialLatitude, props.initialLongitude);
-
     isLoading.value = false;
   } catch (error) {
-    console.error('Error initializing Yandex Map:', error);
+    console.error(error);
     currentAddress.value = 'Xarita yuklanmadi';
     isLoading.value = false;
   }
-};
+}
 
-const handleMapMove = () => {
-  if (updateTimeout) {
-    clearTimeout(updateTimeout);
-  }
+function handleMapMove(): void {
+  if (updateTimeout) clearTimeout(updateTimeout);
   updateTimeout = window.setTimeout(async () => {
     if (yandexMap) {
       const center = yandexMap.getCenter();
       await updateAddress(center[0], center[1]);
     }
   }, 300);
-};
+}
 
-const updateAddress = async (latitude: number, longitude: number) => {
+async function updateAddress(latitude: number, longitude: number): Promise<void> {
   try {
-    if (!window.ymaps) throw new Error('Yandex Maps API not available');
-    const geocodeResult = await window.ymaps.geocode([latitude, longitude], {
-      kind: 'house',
-      results: 1
-    });
-    const firstResult = geocodeResult.geoObjects.get(0);
-
-    let address = '';
-    if (firstResult) {
-      // getAddressLine() har doim ham bo'lmasligi mumkin, shuning uchun .get('name') va .get('description') ni ham tekshiramiz
-      address =
-        (typeof firstResult.getAddressLine === 'function' && firstResult.getAddressLine()) ||
-        firstResult.get('text') ||
-        firstResult.get('name') ||
-        firstResult.get('description') ||
-        'Manzil topilmadi';
-    } else {
-      address = 'Manzil aniqlanmadi';
-    }
+    const result = await window.ymaps.geocode([latitude, longitude], { kind: 'house', results: 1 });
+    const geoObj = result.geoObjects.get(0);
+    let address = geoObj?.getAddressLine?.() || geoObj?.get('text') || geoObj?.get('name') || geoObj?.get('description') || 'Manzil topilmadi';
 
     currentAddress.value = address;
+
     emit('locationChange', {
-      latitude: Number(latitude.toFixed(6)),
-      longitude: Number(longitude.toFixed(6)),
+      latitude: +latitude.toFixed(6),
+      longitude: +longitude.toFixed(6),
       address
     });
   } catch (error) {
-    console.error('Error getting address:', error);
+    console.error(error);
     currentAddress.value = 'Manzil olishda xatolik';
-    emit('locationChange', {
-      latitude: Number(latitude.toFixed(6)),
-      longitude: Number(longitude.toFixed(6)),
-      address: 'Manzil olishda xatolik'
-    });
   }
-};
+}
+
+async function searchByAddress(address: string): Promise<void> {
+  try {
+    const result = await window.ymaps.geocode(address);
+    const geoObj = result.geoObjects.get(0);
+
+    if (geoObj) {
+      const coords = geoObj.geometry.getCoordinates();
+      const foundAddress = geoObj?.getAddressLine?.() || geoObj?.get('text') || geoObj?.get('name') || geoObj?.get('description') || address;
+
+      yandexMap.setCenter(coords, props.zoom);
+      currentAddress.value = foundAddress;
+
+      emit('locationChange', {
+        latitude: +coords[0].toFixed(6),
+        longitude: +coords[1].toFixed(6),
+        address: foundAddress
+      });
+    } else {
+      currentAddress.value = 'Manzil topilmadi';
+    }
+  } catch (error) {
+    console.error(error);
+    currentAddress.value = 'Manzil topishda xatolik';
+  }
+}
 
 onMounted(() => {
-  setTimeout(() => {
-    initializeMap();
-  }, 500);
+  setTimeout(() => initializeMap(), 500);
 });
 
 onUnmounted(() => {
@@ -173,7 +170,6 @@ onUnmounted(() => {
 
 <template>
   <div class="w-full max-w-md mx-auto">
-
     <div class="bg-white rounded-2xl overflow-hidden">
       <div ref="mapContainer" class="relative w-full h-72 bg-gray-100 flex items-center justify-center">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
@@ -188,9 +184,9 @@ onUnmounted(() => {
       </div>
       <div class="p-5 bg-white">
         <h2 class="text-2xl font-semibold text-gray-900 mb-5 text-left">{{ title }}</h2>
-        <UInput v-model="currentAddress" type="text"
+        <UInput v-model="currentAddress" type="text" :placeholder="addressPlaceholder"
           class="w-full text-base font-normal text-gray-900 bg-gray-50 border border-gray-200 rounded-lg outline-none transition focus:border-green-500 focus:bg-white placeholder-gray-400"
-          :placeholder="addressPlaceholder" />
+          @keydown.enter.prevent="searchByAddress(currentAddress)" />
       </div>
     </div>
   </div>

@@ -1,80 +1,112 @@
 <script setup lang="ts">
-    import { ref, reactive, watch } from 'vue'
-    import { useCreateTariffType, useDeleteTariffType } from '~/data'
-    import { vMaska } from 'maska/vue'
+import { ref, reactive, watch } from 'vue'
+import { useCreateTariffType, useDeleteTariffType, useChangeToyxonaStatus } from '~/data'
+import { useQueryClient } from '@tanstack/vue-query'
+import { vMaska } from 'maska/vue'
 
-    const { t } = useI18n()
-    const props = defineProps<{
-        tariffId: number | null,
-        initialPrices?: Array<{
-            id: number
-            tariff_id: string
-            person_count: string
-            price: string
-            created_at: string
-            updated_at: string
-        }>
-    }>()
+const { t } = useI18n()
+const props = defineProps<{
+    tariffId: number | null,
+    toyxonaId?: number | null, // Yangi prop qo'shamiz
+    initialPrices?: Array<{
+        id: number
+        tariff_id: string
+        person_count: string
+        price: string
+        created_at: string
+        updated_at: string
+    }>
+}>()
 
-    // Form state
-    const state = reactive({
-        person_count: '',
-        price: ''
-    })
+// Form state
+const state = reactive({
+    person_count: '',
+    price: ''
+})
 
-    // Tariflar ro'yxati
-    const prices = ref(props.initialPrices || [])
+// Tariflar ro'yxati
+const prices = ref(props.initialPrices || [])
 
-    // Watch for changes in initialPrices
-    watch(
-        () => props.initialPrices,
-        (newPrices) => {
-            if (newPrices) {
-                prices.value = newPrices
+// Watch for changes in initialPrices
+watch(
+    () => props.initialPrices,
+    (newPrices) => {
+        if (newPrices) {
+            prices.value = newPrices
+        }
+    },
+    { immediate: true }
+)
+
+const { mutate: createTariffType, isPending: isCreating } = useCreateTariffType()
+const changeStatus = useChangeToyxonaStatus()
+const queryClient = useQueryClient()
+
+function addPrice() {
+    if (!state.person_count || !state.price || !props.tariffId) return;
+    createTariffType({
+        tariff_id: props.tariffId,
+        person_count: Number(state.person_count),
+        price: Number(state.price.replace(/\s/g, ''))
+    }, {
+        onSuccess(data) {
+            prices.value = Array.isArray(data) ? data : [data, ...prices.value];
+            state.person_count = '';
+            state.price = '';
+            // Narx o'zgartirilganda toyxona statusini review ga o'tkazish
+            if (props.toyxonaId) {
+                changeStatus.mutate({
+                    wedding_hall_id: props.toyxonaId,
+                    status: 'review'
+                }, {
+                    onSuccess: () => {
+                        // Cache'ni invalidate qilish
+                        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+                        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'superadmin'] });
+                        queryClient.invalidateQueries({ queryKey: ['toyxona-by-id', props.toyxonaId] });
+                    }
+                })
+            }
+        }
+    });
+}
+
+const { mutate: deleteTariffType, isPending: isDeleting } = useDeleteTariffType()
+
+function removePrice(id: number) {
+    deleteTariffType(id, {
+        onSuccess() {
+            prices.value = prices.value.filter(item => item.id !== id)
+            // Narx o'chirilganda toyxona statusini review ga o'tkazish
+            if (props.toyxonaId) {
+                changeStatus.mutate({
+                    wedding_hall_id: props.toyxonaId,
+                    status: 'review'
+                }, {
+                    onSuccess: () => {
+                        // Cache'ni invalidate qilish
+                        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+                        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'superadmin'] });
+                        queryClient.invalidateQueries({ queryKey: ['toyxona-by-id', props.toyxonaId] });
+                    }
+                })
             }
         },
-        { immediate: true }
-    )
-
-    const { mutate: createTariffType, isPending: isCreating } = useCreateTariffType()
-
-    function addPrice() {
-        if (!state.person_count || !state.price || !props.tariffId) return;
-        createTariffType({
-            tariff_id: props.tariffId,
-            person_count: Number(state.person_count),
-            price: Number(state.price.replace(/\s/g, ''))
-        }, {
-            onSuccess(data) {
-                prices.value = Array.isArray(data) ? data : [data, ...prices.value];
-                state.person_count = '';
-                state.price = '';
-            }
-        });
-    }
-
-    const { mutate: deleteTariffType, isPending: isDeleting } = useDeleteTariffType()
-
-    function removePrice(id: number) {
-        deleteTariffType(id, {
-            onSuccess() {
-                prices.value = prices.value.filter(item => item.id !== id)
-            },
-            onError(error: any) {
-                alert(error.message || 'Xatolik yuz berdi')
-            }
-        })
-    }
-    function reset() {
-        state.person_count = ''
-        state.price = ''
-        prices.value = []
-    }
-    defineExpose({ prices, reset })
-    // Agar parentdan tarifId o'zgarsa, eski narxlarni tozalash (optional)
-    watch(() => props.tariffId, () => {
-        prices.value = []
+        onError(error: any) {
+            alert(error.message || 'Xatolik yuz berdi')
+        }
     })
+}
+function reset() {
+    state.person_count = ''
+    state.price = ''
+    prices.value = []
+}
+defineExpose({ prices, reset })
+// Agar parentdan tarifId o'zgarsa, eski narxlarni tozalash (optional)
+watch(() => props.tariffId, () => {
+    prices.value = []
+})
 </script>
 
 <template>

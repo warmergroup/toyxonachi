@@ -2,9 +2,12 @@
 import { useUpdateToyxona } from '~/data';
 import { useToyxonaFormStore } from '~/stores/toyxonaForm.store';
 import { openState } from '~/stores/isOpen.store';
+import { useQueryClient } from '@tanstack/vue-query';
+
 const openComponent = openState();
 const coords = useLocationStore().coords;
 const toast = useToast();
+const queryClient = useQueryClient();
 const emit = defineEmits(['close', 'updated']);
 
 interface LocationData {
@@ -64,6 +67,7 @@ const handleSubmit = async () => {
     }
     const payload = {
         ...formState,
+        status: 'review', // Tahrirlashda status review ga o'tadi
         phone1: normalizePhone(formState.phone1),
         phone2: normalizePhone(formState.phone2),
         latitude: String(selectedLocation.value.latitude),
@@ -88,6 +92,11 @@ const handleSubmit = async () => {
     try {
         await updateToyxonaMutation.mutateAsync(payload);
         toast.add({ title: 'Toyxona yangilandi!', color: 'success' });
+
+        // Cache'ni invalidate qilish va listni yangilash - admin va superadmin uchun
+        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+        queryClient.invalidateQueries({ queryKey: ['toyxona-by-id', props.toyxona.id] });
+
         emit('updated');
         emit('close');
         toyxonaFormStore.cleareImage();

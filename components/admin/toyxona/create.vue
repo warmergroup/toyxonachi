@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useCreateToyxona } from '~/data';
 import { useToyxonaFormStore } from '~/stores/toyxonaForm.store';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const coords = useLocationStore().coords;
 const storeImages = useToyxonaFormStore();
 const toast = useToast();
+const queryClient = useQueryClient();
 const emit = defineEmits(['created'])
 interface Tariff {
     id: number;
@@ -46,7 +48,7 @@ const handleSubmit = async () => {
     const payload = {
         name: formState.name,
         description: formState.description,
-        status: 'review',
+        status: 'review', // Yangi yaratilgan toyxona review statusda bo'ladi
         tariff_count: Number(formState.tariff_count),
         phone1: normalizePhone(formState.phone1),
         phone2: normalizePhone(formState.phone2),
@@ -65,6 +67,10 @@ const handleSubmit = async () => {
     try {
         const result = await createToyxonaMutation.mutateAsync(payload);
         toast.add({ title: 'Toyxona muvaffaqiyatli yaratildi!', color: 'success' });
+
+        // Cache'ni invalidate qilish va listni yangilash - admin va superadmin uchun
+        queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+
         emit('created', { id: result.id, tariffs: result.tariffs.map((t: Tariff) => ({ id: t.id, name: t.name })) } as CreatedEventPayload);
         // Reset form (ixtiyoriy)
     } catch (error: any) {

@@ -35,6 +35,8 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
+const emit = defineEmits(['success']);
+
 const { mutate, isPending } = useAttachRole();
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
@@ -45,16 +47,11 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
     mutate(formData, {
         onSuccess: () => {
-            toast.add({
-                title: t('form.success'),
-                description: t('form.adminAdded'),
-                color: 'primary',
-            });
             state.phone = '';
             state.role = 1;
+            emit('success');
         },
         onError: (error: unknown) => {
-            console.error('Error attaching role:', error);
             if (error instanceof Error && error.message.includes('already exists')) {
                 toast.add({
                     title: t('error.title'),

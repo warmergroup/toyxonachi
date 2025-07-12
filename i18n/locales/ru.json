@@ -27,7 +27,8 @@
     "readMore": "Читать все",
     "readLess": "Свернуть",
     "mostExpensive": "Самые дорогие банкетные залы",
-    "clickHere": "Нажмите здесь"
+    "clickHere": "Нажмите здесь",
+    "noImage": "Фотографии отсутствуют."
   },
   "about": {
     "aboutUs": "О нас",
@@ -201,7 +202,8 @@
   },
   "modal": {
     "archiveOrDelete": "Вы уверены, что хотите удалить или архивировать банкетный зал?",
-    "activeOrDelete": "Вы уверены, что хотите активировать или удалить банкетный зал?"
+    "activeOrDelete": "Вы уверены, что хотите активировать или удалить банкетный зал?",
+    "cannotArchiveReviewRejected": "Нельзя архивировать залы со статусом review или rejected"
   },
   "weddingHallForm": {
     "imageField": "Фотографии банкетного зала",
@@ -242,6 +244,7 @@
   "discount": {
     "discounts": "Скидки",
     "addDiscount": "Добавить скидку",
+    "selectWeddingHall": "Выбрать свадебный зал",
     "editDiscount": "Редактировать скидку",
     "deleteDiscount": "Удалить скидку",
     "discountName": "Название скидки",

@@ -5,6 +5,7 @@ import { useLogout, useGetMeQuery } from '~/data';
 import { LazyUiModalToyxonaAction } from '#components';
 import { useOverlay } from '#imports'
 import type { IToyxonalar } from '~/interfaces';
+import { useQueryClient } from '@tanstack/vue-query';
 
 
 const config = useRuntimeConfig();
@@ -16,6 +17,7 @@ const user = computed(() => authStore.user);
 const isLoading = computed(() => authStore.isLoading);
 
 const { t } = useI18n();
+const queryClient = useQueryClient();
 const toyxonalarListRef = ref()
 const adminListRef = ref()
 const superadminListRef = ref()
@@ -47,9 +49,17 @@ async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
   const instance = modal.open()
   const result = await instance.result
   if (result === 'success') {
-    toyxonalarListRef.value?.refreshList()
-    adminListRef.value?.refreshList()
-    superadminListRef.value?.refreshList()
+    // Cache'ni invalidate qilish va yangi ma'lumotlarni olish
+    queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+    // Faqat mavjud ref'larni chaqirish
+    toyxonalarListRef.value?.refreshList?.()
+    // Slideover'lardagi ref'larni yangilash
+    if (openComponent.isOpen && openComponent.componentType === 'adminToyxonalar') {
+      adminListRef.value?.refreshList?.()
+    }
+    if (openComponent.isOpen && openComponent.componentType === 'allVenues') {
+      superadminListRef.value?.refreshList?.()
+    }
   }
 }
 
@@ -65,21 +75,44 @@ function onDiscountAdded() {
 
 function refreshDiscounts() {
   showAddDiscount.value = false
-  // openComponent.onOpen('discounts')
+  // Discount query'sini invalidate qilish
+  queryClient.invalidateQueries({ queryKey: ['banners', 'admin'] });
+  // DiscountList componentini yangilash
+  discountListRef.value?.refetch?.()
+}
+
+function handleAdminAdded() {
+  showAddAdmins.value = false
+  // Admin qo'shilgandan keyin users query'sini invalidate qilish
+  queryClient.invalidateQueries({ queryKey: ['users'] });
 }
 
 const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: number, name: string }[] }) => {
   onClose();
-  toyxonalarListRef.value?.refreshList();
-  adminListRef.value?.refreshList?.();
-  superadminListRef.value?.refreshList?.();
+  // Cache'ni invalidate qilish - admin va superadmin uchun
+  queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+  toyxonalarListRef.value?.refreshList?.();
+  // Slideover'lardagi ref'larni yangilash
+  if (openComponent.isOpen && openComponent.componentType === 'adminToyxonalar') {
+    adminListRef.value?.refreshList?.();
+  }
+  if (openComponent.isOpen && openComponent.componentType === 'allVenues') {
+    superadminListRef.value?.refreshList?.();
+  }
   openComponent.onOpen('createTariff', { toyxonaId: id, tariffs });
 };
 
 function refreshToyxonalarList() {
-  toyxonalarListRef.value?.refreshList();
-  adminListRef.value?.refreshList?.();
-  superadminListRef.value?.refreshList?.();
+  // Cache'ni invalidate qilish - admin va superadmin uchun
+  queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+  toyxonalarListRef.value?.refreshList?.();
+  // Slideover'lardagi ref'larni yangilash
+  if (openComponent.isOpen && openComponent.componentType === 'adminToyxonalar') {
+    adminListRef.value?.refreshList?.();
+  }
+  if (openComponent.isOpen && openComponent.componentType === 'allVenues') {
+    superadminListRef.value?.refreshList?.();
+  }
 }
 
 
@@ -146,7 +179,7 @@ const { slideovers, drawers } = useProfileModals({
       <SuperadminAddDiscount @success="refreshDiscounts" />
     </UiSlideOver>
     <UiSlideOver :is-open="showAddAdmins" :title="t('profileActions.addAdmin')" @close="showAddAdmins = false">
-      <SuperadminAddAdmins />
+      <SuperadminAddAdmins @success="handleAdminAdded" />
     </UiSlideOver>
   </div>
 </template>

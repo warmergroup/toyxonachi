@@ -11,6 +11,7 @@ import { getToyxonaById } from '~/data/toyxonalar';
 import type { UseQueryReturnType } from '@tanstack/vue-query';
 import { openState } from '~/stores/isOpen.store';
 import { useChangeToyxonaStatus } from '~/data'
+import { useQueryClient } from '@tanstack/vue-query';
 
 const auth = useAuthStore();
 const openComponent = openState();
@@ -20,6 +21,7 @@ const { t } = useI18n();
 const { isLargeScreen } = useScreenSize();
 const locationStore = useLocationStore()
 const changeStatus = useChangeToyxonaStatus()
+const queryClient = useQueryClient();
 const toyxonaQuery = getToyxonaById(route.params.id as string) as UseQueryReturnType<IToyxonalar, Error>;
 const toyxona = toyxonaQuery.data;
 const error = ref<string | null>(null);
@@ -103,6 +105,9 @@ function handleAccept() {
                 description: `${t('superadmin.accepted')}`,
                 color: 'success',
             })
+            // Cache'ni invalidate qilish va listni yangilash
+            queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+            queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'superadmin'] });
         },
         onError: (err) => {
             toast.add({
@@ -125,8 +130,11 @@ function handleReject(reason: string) {
             toast.add({
                 description: `${t('superadmin.rejected')}`,
                 color: 'success',
-            }),
-                isRejectDrawerOpen.value = false
+            })
+            isRejectDrawerOpen.value = false
+            // Cache'ni invalidate qilish va listni yangilash
+            queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
+            queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'superadmin'] });
         },
         onError: (err) => {
             toast.add({
@@ -179,6 +187,7 @@ function toggleDescription() {
                         <NuxtImg v-else-if="toyxona && toyxona.wedding_hall_pictures.length > 0"
                             :src="toyxona.wedding_hall_pictures[0].image_url" :alt="toyxona.name"
                             class="w-full aspect-video object-cover" />
+                        <UiNoImage v-else class="w-full aspect-video" />
                         <div
                             class="absolute w-full h-full top-0 left-0 p-3 inset-0 pointer-events-none bg-gradient-to-b from-black to-transparent opacity-30">
                             <div class="flex items-center justify-between pointer-events-auto">
@@ -273,7 +282,8 @@ function toggleDescription() {
             </div>
 
             <div class="relative">
-                <SuperadminAcceptReject @reject="isRejectDrawerOpen = true" @accept="handleAccept" />
+                <SuperadminAcceptReject :status="toyxona?.status" @reject="isRejectDrawerOpen = true"
+                    @accept="handleAccept" />
                 <AdminEditBtn :show="true" @click="openComponent.onOpen('editToyxona')" />
             </div>
         </div>
@@ -293,9 +303,11 @@ function toggleDescription() {
                 <div class="flex flex-col items-center justify-between bg-white p-4 rounded-lg">
                     <AdminTarifNameForm :toyxona-id="Number(toyxona.id)" :tariff-id="selectedTarif.id"
                         :default-name="selectedTarif.name" />
-                    <AdminTarifPrices :tariff-id="selectedTarif.id" :initial-prices="selectedTarif.tariff_types" />
+                    <AdminTarifPrices :tariff-id="selectedTarif.id" :toyxona-id="Number(toyxona.id)"
+                        :initial-prices="selectedTarif.tariff_types" />
                 </div>
-                <AdminTarifProducts :tariff-id="selectedTarif.id" :initial-products="selectedTarif.products" />
+                <AdminTarifProducts :tariff-id="selectedTarif.id" :toyxona-id="Number(toyxona.id)"
+                    :initial-products="selectedTarif.products" />
                 <!-- YANGI: Saqlash tugmasi -->
                 <UButton class="flex items-center justify-center mt-4" color="secondary" :label="t('common.save')"
                     @click="handleEditClose" />

@@ -24,7 +24,6 @@ function getImageSrc(img: ImageType) {
     if (!img) return '';
     const url = typeof img === 'string' ? img : img.image_url;
     if (!url) return '';
-    console.log('getImageSrc:', url);
     if (url.startsWith('http://') || url.startsWith('https://')) {
         return url;
     }
@@ -77,7 +76,7 @@ async function removeImage(idx: number) {
             <!-- Upload button always visible, but disabled if max reached -->
             <div class="w-22 h-22 md:w-28  md:h-28 border border-dashed rounded-lg flex items-center justify-center cursor-pointer bg-gray-50 relative"
                 :class="{ 'opacity-50 pointer-events-none': images.length >= max }">
-                <label class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+                <label class="w-full h-full flex flex-col items-center justify-center p-2 cursor-pointer">
                     <Icon name="custom:plus-image" />
                     <p class="text-gray-400 mt-2 select-none">{{ t('common.clickHere') }}</p>
                     <input type="file" class="hidden" accept="image/*" @change="onFileChange"

@@ -10,7 +10,8 @@ export default defineEventHandler(async (event) => {
     const toyxonalar = response.data || response || []
     
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+                xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
         <url>
             <loc>https://toyxonachi.uz/</loc>
             <lastmod>${new Date().toISOString()}</lastmod>
@@ -29,6 +30,13 @@ export default defineEventHandler(async (event) => {
             <lastmod>${toyxona.updated_at || new Date().toISOString()}</lastmod>
             <changefreq>weekly</changefreq>
             <priority>0.8</priority>
+            ${toyxona.wedding_hall_pictures?.[0]?.image_url ? `
+            <image:image>
+                <image:loc>${toyxona.wedding_hall_pictures[0].image_url}</image:loc>
+                <image:title>${toyxona.name}</image:title>
+                <image:caption>${toyxona.name} - ${toyxona.address}</image:caption>
+            </image:image>
+            ` : ''}
         </url>
         `).join('')}
         </urlset>`

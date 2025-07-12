@@ -63,10 +63,20 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
         { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
+        // Preconnect for performance
+        { rel: 'preconnect', href: 'https://api-maps.yandex.ru' },
+        { rel: 'dns-prefetch', href: 'https://api-maps.yandex.ru' },
       ],
       meta: [
         {charset: 'utf-8'},
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+        {name: 'theme-color', content: '#22c55e'},
+        {name: 'color-scheme', content: 'light'},
+        {name: 'format-detection', content: 'telephone=no'},
+        // Performance optimizations
+        {name: 'description', content: 'To\'yxonalar va ziyofatxonalar topish platformasi'},
+        {property: 'og:type', content: 'website'},
+        {property: 'og:site_name', content: 'toyxonachi.uz'},
       ]
     },
     rootAttrs: {
@@ -101,9 +111,4 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
   },
-  vite: {
-    build: {
-      target: 'esnext'
-    }
-  }
 })
