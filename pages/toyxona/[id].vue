@@ -77,8 +77,8 @@ const imagelItems = computed(() =>
 const shareLink = () => {
   if (navigator.share) {
     navigator.share({
-      title: toyxona.value?.name,
-      text: toyxona.value?.description,
+      title: "Chekout this weddingHall",
+      text: "toyxonachi.uz",
       url: window.location.href,
     })
       .then(() => console.log('Shared successfully'))
