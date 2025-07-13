@@ -15,7 +15,6 @@ export const useLogout = (vapidKey?: string) => {
     return useMutation({
         mutationKey: ['logout'],
         mutationFn: async () => {
-            // Logout qilganda FCM token yuborish kerak (faqat client-side'da)
             let fcmToken = null;
             if (process.client && vapidKey) {
                 fcmToken = await getFCMToken(vapidKey);
@@ -27,15 +26,11 @@ export const useLogout = (vapidKey?: string) => {
             return data;
         },
         onSuccess: () => {
-            // Clear auth store
             authStore.logout();
-            // Remove token from localStorage (faqat client-side'da)
             if (process.client) {
             localStorage.removeItem('token');
                 localStorage.removeItem('fcm_token');
             }
-            
-            // Show success message
             toast.add({
                 description: t('logout.successMessage'),
                 color: 'success',

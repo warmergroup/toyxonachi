@@ -16,7 +16,6 @@ export const useInfiniteToyxonalarQuery = (
               page: pageParam,
               limit: itemsPerPage
             }
-            
           const {data} = await api.get('wedding-halls/all', {
             params
           })

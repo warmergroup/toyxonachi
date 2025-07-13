@@ -14,7 +14,6 @@ export const useCreateTarif = () => {
                 const response = await $authApi.post('tariffs/add', formData);
                 return response.data;
             } catch (error: any) {
-                // API error handling
                 const errorMessage = error.response?.data?.message || "Tarif yaratishda muammo bo'ldi";
                 throw new Error(errorMessage);
             }

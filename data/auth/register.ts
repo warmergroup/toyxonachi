@@ -14,9 +14,7 @@ export const useRegister = (vapidKey?: string) => {
   return useMutation({
     mutationKey: ['register'],
     mutationFn: async (formData: RegisterFormData) => {
-      // FCM token olish (faqat client-side'da)
       const fcmToken = process.client ? await getFCMToken(vapidKey) : null;
-      
       const payload = { ...formData, fcm_token: fcmToken };
       try {
         const response = await $axios.post<IRegisterResponse>('register', payload);

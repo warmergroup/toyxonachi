@@ -1,9 +1,6 @@
 import { z } from 'zod';
 import type { FormError } from '#ui/types';
 
-/**
- * Create phone validation schema
- */
 const createPhoneSchema = (t: ReturnType<typeof useI18n>['t']) => {
     return z.string()
         .min(1, t('validation.phoneRequired'))
@@ -14,18 +11,12 @@ const createPhoneSchema = (t: ReturnType<typeof useI18n>['t']) => {
         );
 };
 
-/**
- * Create login form schema
- */
 const createLoginSchema = (t: ReturnType<typeof useI18n>['t']) => {
     return z.object({
         phone: createPhoneSchema(t),
     });
 };
 
-/**
- * Create register form schema
- */
 const createRegisterSchema = (t: ReturnType<typeof useI18n>['t']) => {
     return z.object({
         name: z.string()
@@ -35,25 +26,16 @@ const createRegisterSchema = (t: ReturnType<typeof useI18n>['t']) => {
     });
 };
 
-/**
- * Hook to get login schema
- */
 export const useLoginSchema = () => {
     const { t } = useI18n();
     return createLoginSchema(t);
 };
 
-/**
- * Hook to get register schema
- */
 export const useRegisterSchema = () => {
     const { t } = useI18n();
     return createRegisterSchema(t);
 };
 
-/**
- * Convert Zod errors to form errors
- */
 export const zodErrorsToFormErrors = (error: z.ZodError): FormError[] => {
     return error.errors.map(err => ({
         path: err.path.join('.'),
@@ -61,9 +43,6 @@ export const zodErrorsToFormErrors = (error: z.ZodError): FormError[] => {
     }));
 };
 
-/**
- * Extract error message from various error types
- */
 export const extractErrorMessage = (error: unknown): string => {
     const { t } = useI18n();
     

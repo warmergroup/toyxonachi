@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/vue-query';
 import $authApi from '~/http/authApi';
 import type { AttachRoleFormData } from '~/interfaces';
 
-
 export const useAttachRole = () => {
     return useMutation({
         mutationKey: ['attach-role'],

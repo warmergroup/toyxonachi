@@ -1,9 +1,8 @@
-
 export interface IWithId {
   id: string;
 }
 
-export interface CreatedAndUpdatedAt { // 🔧 Typo to'g'rilandi: CretedAndUpdatedAtt → CreatedAndUpdatedAt
+export interface CreatedAndUpdatedAt {
   created_at: string;
   updated_at: string;
 }
@@ -137,6 +136,7 @@ export interface WeddingHallFormState {
   address: string;
   wedding_hall_pictures: { image_url: string }[];
 }
+
 export interface ToyxonaFormData {
   name: string;
   description: string;

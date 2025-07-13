@@ -15,7 +15,6 @@ export const useCreateTariffType = () => {
                 const response = await $authApi.post('tariff-types/add', formData);
                 return response.data;
             } catch (error: any) {
-                // API error handling
                 const errorMessage = error.response?.data?.message || "Tarif narxlarini yaratishda mummo bo'ldi";
                 throw new Error(errorMessage);
             }

@@ -10,7 +10,6 @@ export const useGetMeQuery = () => {
       authStore.setIsLoading(true);
       try {
         const { data } = await $authApi.get<IUser>('users/me');
-        // console.log("getMe data:", data)
         authStore.setUser(data);
         return data;
       } catch (e) {

@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/vue-query'
 import $authApi from '~/http/authApi'
-
 interface UpdateDiscountPayload {
   id: number | string;
   notes?: string;

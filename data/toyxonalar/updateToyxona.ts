@@ -10,7 +10,6 @@ export const useUpdateToyxona = (toyxona_id: number) => {
                 const response = await $authApi.put(`wedding-halls/update/${toyxona_id}`, formData);
                 return response.data;
             } catch (error: any) {
-                // API error handling
                 const errorMessage = error.response?.data?.message || "Toyxona yangilashda muammo bo'ldi";
                 console.error("Error updating toyxona:", errorMessage);
                 throw new Error(errorMessage);

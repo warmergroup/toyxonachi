@@ -17,7 +17,6 @@ export const useLanguage = () => {
       langStore.setLang(lang)
       localStorage.setItem('selectedLang', lang)
       
-      // Faqat boshqa sahifaga o'tishda router.replace ni ishlatamiz
       const currentPath = route.fullPath
       if (currentPath.startsWith('/' + lang)) {
         return

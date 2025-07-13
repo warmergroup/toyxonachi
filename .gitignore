@@ -1,24 +1,36 @@
-# Nuxt dev/build outputs
-.output
-.data
-.nuxt
-.nitro
-.cache
-dist
+# Node.js modules
+node_modules/
 
-# Node dependencies
-node_modules
+# Build natijalari
+dist/
+.output/
+.nuxt/
 
-# Logs
-logs
-*.log
+# Kesh va vaqtinchalik fayllar
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.cache/
+.vite/
+*.local
 
-# Misc
+# OS va IDE fayllari
 .DS_Store
-.fleet
-.idea
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
 
-# Local env files
+# Env fayllar (maxfiy ma’lumotlar)
 .env
-.env.*
-!.env.example
+.env.*.local
+
+# Test natijalari
+coverage/
+
+# Lock fayllar (agar bir nechta package manager ishlatilsa, faqat bittasini qoldiring)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

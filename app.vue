@@ -4,7 +4,7 @@ import { useGetMeQuery } from '~/data';
 import { setupForegroundListener, getFCMToken } from '~/utils/firebase'
 
 const config = useRuntimeConfig()
-const baseUrl = config.public.baseUrl
+const siteUrl = config.public.siteUrl
 const vapidKey = config.public.vapidKey
 const { locale } = useI18n()
 const { changeLanguage } = useLanguage()
@@ -47,8 +47,8 @@ useHead({
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Toyxonachi",
-        "url": baseUrl
+        "name": "To'yxonachi",
+        "url": siteUrl
       })
     }
   ]

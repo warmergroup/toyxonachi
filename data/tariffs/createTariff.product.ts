@@ -6,7 +6,7 @@ interface CreateTariffFormData {
     type: string, //meals, salads, wedding_table, bonuses
     name: string,
     description: string,
-    image_url: string // 64c02d31-9ad2-47b5-aea4-080ef7202bc2.png",
+    image_url: string
     category_id:number
 }
 

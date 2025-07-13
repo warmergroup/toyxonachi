@@ -1,7 +1,6 @@
 export const useFormat = () => {
   const formatPhone = (phone: string): string => {
-    // Faqat raqamlarni olib, 998 97 030 29 31 ko'rinishida formatlash
-    const digits = phone.replace(/\D/g, '');
+    const digits = phone.replace(/\D/g, ''); //998 97 030 29 31
     if (digits.length !== 12) return phone;
     return `${digits.slice(0,3)} ${digits.slice(3,5)} ${digits.slice(5,8)} ${digits.slice(8,10)} ${digits.slice(10,12)}`;
   }

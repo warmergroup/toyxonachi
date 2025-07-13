@@ -13,7 +13,6 @@ import AdminToyxonaCreate from '~/components/admin/toyxona/create.vue'
 import AdminTarif from '~/components/admin/tarif/index.vue'
 import MobileChangeLanguage from '~/components/mobile/ChangeLanguage.vue'
 
-
 interface ProfileModalsParams {
   t: Function
   isLargeScreen: Ref<boolean>

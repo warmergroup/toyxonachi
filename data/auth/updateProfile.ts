@@ -18,7 +18,6 @@ export const useUpdateProfile = (userId:string) => {
         const response = await $authApi.put<IRegisterResponse>(`users/update/${userId}`, formData);
         return response.data;
       } catch (error: any) {
-        // API error handling
         const errorMessage = error.response?.data?.message || 'Registration failed';
         console.error('Update Profile Error:', error);
         throw new Error(errorMessage);

@@ -11,7 +11,6 @@ export const useGetTariflarQuery = (wedding_hall_id: string) => {
           return data.data; 
         }
         throw new Error(data.message || 'Tariflarni yuklashda xatolik yuz berdi');
-
       } catch (error) {
         throw new Error('Tariflarni yuklashda xatolik yuz berdi');
       }
