@@ -40,6 +40,7 @@
     "description": "Description",
     "pricing": "Pricing",
     "contact": "Contact",
+    "enterAddress":"Enter address...'",
     "noAddress": "No address provided",
     "notFound": "No wedding halls found",
     "peopleCount": "people",

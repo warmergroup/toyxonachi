@@ -40,6 +40,7 @@
     "description": "Tavsif",
     "pricing": "Narxlar",
     "contact": "Aloqa",
+    "enterAddress":"Manzilni kiriting...",
     "noAddress": "Manzil kiritilmagan",
     "notFound": "To‘yxonalar topilmadi",
     "peopleCount": "Kishi",

@@ -36,17 +36,28 @@ interface Props {
 
 declare global {
   interface Window {
-    ymaps: any;
+    ymaps: {
+      ready: (callback: () => void) => void;
+      Map: new (element: HTMLElement, options: any) => any;
+      Placemark: new (coordinates: [number, number], properties?: any, options?: any) => any;
+      geocode: (query: string, options?: any) => Promise<any>;
+      // add other methods if needed
+    };
   }
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  title: 'Manzil',
-  addressPlaceholder: 'Manzil kiriting...',
+  title: '',
+  addressPlaceholder: '',
   initialLatitude: 41.2995,
   initialLongitude: 69.2401,
   zoom: 15
 });
+
+const { t } = useI18n();
+
+const title = computed(() => props.title || t('weddingHall.location'));
+const addressPlaceholder = computed(() => props.addressPlaceholder || t('weddingHall.enterAddress'));
 
 const emit = defineEmits<{
   (e: 'locationChange', location: LocationData): void;
@@ -115,7 +126,7 @@ function handleMapMove(): void {
 
 async function updateAddress(latitude: number, longitude: number): Promise<void> {
   try {
-    const result = await window.ymaps.geocode([latitude, longitude], { kind: 'house', results: 1 });
+    const result = await window.ymaps.geocode(`${latitude},${longitude}`, { kind: 'house', results: 1 });
     const geoObj = result.geoObjects.get(0);
     let address = geoObj?.getAddressLine?.() || geoObj?.get('text') || geoObj?.get('name') || geoObj?.get('description') || 'Manzil topilmadi';
 
@@ -183,8 +194,8 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="p-5 bg-white">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-5 text-left">{{ title }}</h2>
-        <UInput v-model="currentAddress" type="text" :placeholder="addressPlaceholder"
+        <h2 class="text-2xl font-semibold text-gray-900 mb-5 text-left">{{ t('weddingHall.location') }}</h2>
+        <UInput v-model="currentAddress" type="text" :placeholder="t('weddingHall.enterAddress')"
           class="w-full text-base font-normal text-gray-900 bg-gray-50 border border-gray-200 rounded-lg outline-none transition focus:border-green-500 focus:bg-white placeholder-gray-400"
           @keydown.enter.prevent="searchByAddress(currentAddress)" />
       </div>
