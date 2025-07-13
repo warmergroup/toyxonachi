@@ -11,7 +11,7 @@ const { changeLanguage } = useLanguage()
 const lang = computed(() => locales[locale.value].code)
 const dir = computed(() => locales[locale.value].dir)
 
-onMounted(() => {
+onMounted(async () => {
   // Faqat client-side'da ishlaydi
   if (process.client) {
     const savedLang = localStorage.getItem('selectedLang')
@@ -28,11 +28,11 @@ onMounted(() => {
 
     // Firebase messaging'ni login oldin ham ishga tushirish
     if (vapidKey) {
-      getFCMToken(vapidKey)
+      await getFCMToken(vapidKey)
     }
 
     // FCM foreground listener'ni ishga tushirish
-    setupForegroundListener()
+    await setupForegroundListener()
   }
 })
 

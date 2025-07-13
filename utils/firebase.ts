@@ -15,53 +15,52 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 let messaging: ReturnType<typeof getMessaging> | null = null;
+let listenerInitialized = false;
 
-// Firebase messaging'ni ishga tushirish
-const initializeMessaging = async () => {
-  // Faqat client-side'da ishlaydi
-  if (process.client && typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+// Messaging obyektini asinxron olish
+const getMessagingInstance = async () => {
+  if (!process.client || typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+    return null;
+  }
+  if (!messaging) {
     try {
       const supported = await isSupported();
       if (supported) {
         messaging = getMessaging(app);
-        
       } else {
         console.warn('Firebase messaging qo\'llab-quvvatlanmaydi');
+        messaging = null;
       }
     } catch (error) {
       console.warn('Firebase messaging ishga tushirilmadi:', error);
+      messaging = null;
     }
   }
+  return messaging;
 };
 
 // FCM token olish funksiyasi
 export async function getFCMToken(vapidKey?: string): Promise<string | null> {
-  // Faqat client-side'da ishlaydi
   if (!process.client) {
     console.warn('FCM token faqat client-side\'da olinadi');
     return null;
   }
 
-  if (!messaging) {
-    await initializeMessaging();
-  }
-  
-  if (!messaging) {
+  const messagingInstance = await getMessagingInstance();
+  if (!messagingInstance) {
     console.warn('Firebase messaging mavjud emas');
     return null;
   }
 
   try {
-    // Notification permission so'rash
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
       console.warn('Notification permission berilmadi');
       return null;
     }
 
-    // VAPID key mavjud bo'lsa FCM token olish
     if (vapidKey) {
-      const token = await getToken(messaging, { vapidKey });
+      const token = await getToken(messagingInstance, { vapidKey });
       if (token) {
         localStorage.setItem('fcm_token', token);
         return token;
@@ -69,7 +68,6 @@ export async function getFCMToken(vapidKey?: string): Promise<string | null> {
     } else {
       console.warn('VAPID key mavjud emas, FCM token olinmaydi');
     }
-    
     return null;
   } catch (error) {
     console.error('FCM token olishda xatolik:', error);
@@ -78,21 +76,22 @@ export async function getFCMToken(vapidKey?: string): Promise<string | null> {
 }
 
 // Foreground message'lar uchun listener
-export function setupForegroundListener() {
-  // Faqat client-side'da ishlaydi
+export async function setupForegroundListener() {
   if (!process.client) {
     console.warn('Foreground listener faqat client-side\'da o\'rnatiladi');
     return;
   }
+  if (listenerInitialized) return; // Bir marta o‘rnatiladi
 
-  if (!messaging) {
+  const messagingInstance = await getMessagingInstance();
+  if (!messagingInstance) {
     console.warn('Messaging mavjud emas, foreground listener o\'rnatilmaydi');
     return;
   }
 
-  onMessage(messaging, (payload) => {
+  onMessage(messagingInstance, (payload) => {
     console.log('🔔 Notification kelgan:', payload);
-    
+
     if (Notification.permission === 'granted' && payload.notification) {
       new Notification(
         payload.notification.title ?? 'Yangi xabar',
@@ -103,7 +102,7 @@ export function setupForegroundListener() {
       );
     }
   });
+  listenerInitialized = true;
 }
 
-// Messaging'ni export qilish
-export { messaging, getToken, onMessage };
+export { getToken, onMessage };

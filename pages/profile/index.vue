@@ -9,14 +9,12 @@ import { useQueryClient } from '@tanstack/vue-query';
 
 
 const config = useRuntimeConfig();
-// VAPID key'ni faqat client-side'da olish
 const vapidKey = process.client ? config.public.vapidKey : undefined;
 const { isLargeScreen } = useScreenSize();
 const { refetch: refetchMe } = useGetMeQuery()
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 const isLoading = computed(() => authStore.isLoading);
-
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const toyxonalarListRef = ref()
@@ -28,6 +26,9 @@ const showAddAdmins = ref(false);
 const showAddDiscount = ref(false)
 const showDiscountList = ref(true)
 const discountListRef = ref()
+const overlay = useOverlay()
+const selectedToyxona = ref<IToyxonalar | null>(null)
+const selectedTab = ref<'active' | 'archive'>('active')
 onBeforeRouteLeave(onClose)
 
 // Logout mutation
@@ -35,10 +36,6 @@ const { mutate: logout, isPending: isLoggingOut } = useLogout(vapidKey);
 const handleLogout = () => {
   if (confirm(t('logout.confirmMessage'))) logout();
 };
-
-const overlay = useOverlay()
-const selectedToyxona = ref<IToyxonalar | null>(null)
-const selectedTab = ref<'active' | 'archive'>('active')
 
 async function openToyxonaActionModal(toyxona: IToyxonalar, tab: string) {
   if (tab !== 'active' && tab !== 'archive') return;
@@ -95,9 +92,11 @@ const handleToyxonaCreated = ({ id, tariffs }: { id: number, tariffs: { id: numb
   toyxonalarListRef.value?.refreshList?.();
   // Slideover'lardagi ref'larni yangilash
   if (openComponent.isOpen && openComponent.componentType === 'adminToyxonalar') {
+    queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
     adminListRef.value?.refreshList?.();
   }
   if (openComponent.isOpen && openComponent.componentType === 'allVenues') {
+    queryClient.invalidateQueries({ queryKey: ['venues-infinite', 'admin'] });
     superadminListRef.value?.refreshList?.();
   }
   openComponent.onOpen('createTariff', { toyxonaId: id, tariffs });
@@ -116,6 +115,10 @@ function refreshToyxonalarList() {
   }
 }
 
+function handleTariffCompleted() {
+  adminListRef.value?.refreshList?.();
+  superadminListRef.value?.refreshList?.();
+}
 
 const { slideovers, drawers } = useProfileModals({
   t,
@@ -171,7 +174,8 @@ const { slideovers, drawers } = useProfileModals({
     <!-- SlideOverlar (desktop va universal) -->
     <template v-for="item in slideovers" :key="item.key">
       <UiSlideOver v-if="item.show" :is-open="item.show.value" :title="item.title()" @close="onClose">
-        <component :is="item.component" v-bind="typeof item.props === 'function' ? item.props() : item.props" />
+        <component :is="item.component" v-bind="typeof item.props === 'function' ? item.props() : item.props"
+          @completed="handleTariffCompleted" />
       </UiSlideOver>
     </template>
 

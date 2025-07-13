@@ -54,11 +54,10 @@ async function handleSave() {
     }
 }
 
-const emit = defineEmits(['completed'])
+const emit = defineEmits<{ (e: 'completed'): void }>()
 
 function handleGoProfile() {
     openComponent.onClose()
-    // Yangi event emit qilamiz
     emit('completed')
     const path = localePath('/profile');
     router.push(path);
@@ -70,9 +69,11 @@ function handleGoProfile() {
         <div class="flex flex-col items-center justify-between bg-white p-4 rounded-lg">
             <AdminTarifNameForm ref="nameFormRef" :key="currentTariff?.id" :toyxonaId="props.toyxonaId ?? null"
                 :tariffId="currentTariff?.id ?? null" :defaultName="currentTariff?.name ?? ''" />
-            <AdminTarifPrices ref="pricesRef" :tariffId="currentTariff?.id ?? null" :toyxonaId="props.toyxonaId ?? null" />
+            <AdminTarifPrices ref="pricesRef" :tariffId="currentTariff?.id ?? null"
+                :toyxonaId="props.toyxonaId ?? null" />
         </div>
-        <AdminTarifProducts ref="productsRef" :key="currentTariff?.id" :tariffId="currentTariff?.id ?? null" :toyxonaId="props.toyxonaId ?? null" />
+        <AdminTarifProducts ref="productsRef" :key="currentTariff?.id" :tariffId="currentTariff?.id ?? null"
+            :toyxonaId="props.toyxonaId ?? null" />
 
         <UButton class="w-full flex items-center justify-center" color="secondary" label="Saqlash"
             :disabled="!isSaveEnabled" @click="handleSave" />

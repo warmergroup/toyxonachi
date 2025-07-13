@@ -21,7 +21,7 @@ interface ProfileModalsParams {
   adminListRef: Ref<any>
   superadminListRef: Ref<any>
   showAddDiscount: Ref<boolean>
-  discountListRef: Ref<any> // <-- QO‘SHING
+  discountListRef: Ref<any>
   showAddAdmins: Ref<boolean>
   handleToyxonaCreated: (args: { id: number, tariffs: { id: number, name: string }[] }) => void
   refreshToyxonalarList: () => void
@@ -33,7 +33,7 @@ export function useProfileModals(params: ProfileModalsParams) {
   const {
     t, isLargeScreen, openComponent,
     adminListRef, superadminListRef,
-    showAddDiscount, discountListRef, // <-- QO‘SHING
+    showAddDiscount, discountListRef,
     showAddAdmins,
     handleToyxonaCreated, refreshToyxonalarList,
     openToyxonaActionModal,

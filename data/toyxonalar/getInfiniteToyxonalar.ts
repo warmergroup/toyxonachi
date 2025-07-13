@@ -16,12 +16,7 @@ export const useInfiniteToyxonalarQuery = (
               page: pageParam,
               limit: itemsPerPage
             }
-          
-          // Public mode uchun faqat active statusdagilar
-          if (mode === 'public') {
-            params.status = 'active'
-          }
-          
+            
           const {data} = await api.get('wedding-halls/all', {
             params
           })

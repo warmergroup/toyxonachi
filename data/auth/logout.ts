@@ -19,7 +19,7 @@ export const useLogout = (vapidKey?: string) => {
             let fcmToken = null;
             if (process.client && vapidKey) {
                 fcmToken = await getFCMToken(vapidKey);
-            }
+                }
             
             const { data } = await $authApi.post<LogoutResponse>('users/logout', { 
                 fcm_token: fcmToken 
@@ -31,7 +31,7 @@ export const useLogout = (vapidKey?: string) => {
             authStore.logout();
             // Remove token from localStorage (faqat client-side'da)
             if (process.client) {
-                localStorage.removeItem('token');
+            localStorage.removeItem('token');
                 localStorage.removeItem('fcm_token');
             }
             
