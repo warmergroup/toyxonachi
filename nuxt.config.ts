@@ -84,10 +84,7 @@ export default defineNuxtConfig({
       'class': 'bg-default'
     }
   },
-  devServer: {
-    host: '0.0.0.0',
-    port: 3000,
-  },
+
   i18n: {
     locales: [{
       code: 'uz',
