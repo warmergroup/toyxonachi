@@ -174,7 +174,7 @@ useHead({
     { property: 'og:url', content: `${siteUrl}/uz/toyxona/${toyxona.value?.id}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: toyxona.value?.name || 'toyxonachi.uz' },
-    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 200) || t('seo.listDescription') },
+    { name: 'twitter:description', content: toyxona.value?.description?.slice(0, 350) || t('seo.listDescription') },
     { name: 'twitter:image', content: img }
   ],
   link: [
