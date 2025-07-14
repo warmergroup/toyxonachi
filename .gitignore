@@ -4,6 +4,7 @@ node_modules/
 # Build natijalari
 dist/
 .output/
+.output.zip
 .nuxt/
 
 # Kesh va vaqtinchalik fayllar

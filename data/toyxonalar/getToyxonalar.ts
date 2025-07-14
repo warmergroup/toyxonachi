@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/vue-query';
 import $axios from "~/http";
 
 export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number, price: boolean) => {
-  const toyxonalarStore = useToyxonalarStore();
+  
   return useQuery({
     queryKey: ['get-toyxonalar', currentPage],
     queryFn: async () => {
