@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { filteredAdminUsers } from "~/data";
+import { useAvatarImage } from '~/composables/useAvatarImage'
 
+const config = useRuntimeConfig()
+const getAvatar = useAvatarImage(config)
 const { formatPhone } = useFormat();
 const { t } = useI18n()
 const { data, isLoading, error, refetch } = filteredAdminUsers();
 
-// Parent componentga refetch funksiyasini expose qilish
 defineExpose({ refetch });
 const search = ref('')
 const items = [
@@ -50,9 +52,7 @@ const filteredUsers = computed(() => {
         <li class="flex w-full items-center justify-between py-2">
           <div class="flex items-center gap-4 lg:gap-5 ">
             <div class="w-16 h-16 flex items-center justify-center rounded-full">
-              <NuxtImg v-if="user.avatar" :src="user.avatar" loading="lazy"
-                class="w-full rounded-full aspect-square object-cover" />
-              <NuxtImg v-else src="/avatar.jpg" alt="user avatar"
+              <NuxtImg :src="getAvatar(user.avatar)" loading="lazy"
                 class="w-full rounded-full aspect-square object-cover" />
             </div>
             <div class="flex flex-col gap-1">

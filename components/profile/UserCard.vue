@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { openState } from '~/stores/isOpen.store';
 import { useUploadImage, useUploadAvatar } from '~/data';
+import { useAvatarImage } from '~/composables/useAvatarImage'
 
 const config = useRuntimeConfig()
-const baseImgUrl = config.public.imgUrl || 'https://api.toyxonachi.uz/storage/images'
+const getAvatar = useAvatarImage(config)
 
 const { formatPhone } = useFormat();
 const openComponent = openState();
@@ -44,21 +45,7 @@ const roleText = computed(() => {
 const avatarUrl = computed(() => {
   return props.avatar === 'https://toyxonachi.uz/storage/images' ? '/avatar.jpg' : props.avatar;
 });
-const image = computed(() => {
-  if (
-    !props.avatar ||
-    props.avatar === baseImgUrl ||
-    props.avatar === baseImgUrl + '/' ||
-    props.avatar === 'https://toyxonachi.uz/storage/images' ||
-    props.avatar === 'https://toyxonachi.uz/storage/images/'
-  ) {
-    return '/avatar.jpg'
-  }
-  if (!props.avatar.startsWith('http')) {
-    return `${baseImgUrl}/${props.avatar}`
-  }
-  return props.avatar
-})
+const image = computed(() => getAvatar(props.avatar))
 
 // Fayl tanlash oynasini ochish
 function openFileDialog() {
