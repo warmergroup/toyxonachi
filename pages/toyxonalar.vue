@@ -47,7 +47,7 @@ const filteredToyxonalar = computed(() => {
 <template>
   <div>
     <LayoutsMobileTopbar v-if="!isLargeScreen" />
-    <section class="space-y-3 bg-[var(--background-color)] px-5 pt-20">
+    <section class="space-y-3 bg-[var(--background-color)] px-5 pt-20 pb-20">
       <h2 class="text-lg md:text-xl font-bold text-text-primary py-2">{{ t('common.mostExpensive') }}</h2>
       <div v-if="isLoading" class="fixed w-full h-full flex flex-col items-center justify-center ">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary" />
