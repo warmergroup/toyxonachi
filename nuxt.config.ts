@@ -17,10 +17,10 @@ export default defineNuxtConfig({
     colorMode: false
   },
   runtimeConfig: {
-    // Server tomonida mavjud bo'lgan muhit o'zgaruvchilari
+    // Server
     apiKey: process.env.NUXT_API_KEY,
 
-    // Client tomonida ham mavjud bo'lgan muhit o'zgaruvchilari
+    // Client
     public: {
       siteUrl:process.env.NUXT_PUBLIC_SITE_URL,
       apiUrl: process.env.NUXT_PUBLIC_API_URL,
@@ -55,7 +55,6 @@ export default defineNuxtConfig({
     head: {
       title: 'toyxonachi.uz',
       link: [
-        // Faviconlar
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
         { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/android-chrome-192x192.png' },
@@ -63,7 +62,6 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
         { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
-        // Preconnect for performance
         { rel: 'preconnect', href: 'https://api-maps.yandex.ru' },
         { rel: 'dns-prefetch', href: 'https://api-maps.yandex.ru' },
       ],
@@ -73,8 +71,7 @@ export default defineNuxtConfig({
         {name: 'theme-color', content: '#22c55e'},
         {name: 'color-scheme', content: 'light'},
         {name: 'format-detection', content: 'telephone=no'},
-        // Performance optimizations
-        {name: 'description', content: 'To\'yxonalar va ziyofatxonalar topish platformasi'},
+        {name: 'description', content: 'To\'yxonalar va bazmgohlar topish platformasi'},
         {property: 'og:type', content: 'website'},
         {property: 'og:site_name', content: 'toyxonachi.uz'},
       ]
@@ -108,4 +105,12 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
   },
+  nitro: {
+    publicAssets: [
+      {
+        baseURL: '/',
+        dir: 'public'
+      }
+    ]
+  }
 })

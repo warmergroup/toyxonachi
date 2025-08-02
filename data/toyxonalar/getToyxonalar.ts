@@ -11,10 +11,9 @@ export const useGetToyxonalarQuery = (currentPage: number, itemsPerpage: number,
           params: {
             limit: itemsPerpage,
             price: price,
-            serarch: '',
+            search: '',
           }
         });
-      
         return data.data;
       } catch (error: any) {
         throw new Error('To\'yxonalarni yuklashda xatolik yuz berdi', error);

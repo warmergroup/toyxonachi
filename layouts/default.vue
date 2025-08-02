@@ -14,9 +14,9 @@ onMounted(() => {
     :class="{ 'opacity-0 pointer-events-none': !isAppLoading }">
     <NuxtImg src="/logo-splash.svg" alt="Splash" class="w-64 h-64 lg:w-72 lg:h-72 animate-pulse" />
   </div>
-  <LayoutsNavbar v-if="isLargeScreen" />
+  <LazyLayoutsNavbar v-if="isLargeScreen" />
   <section>
     <slot />
   </section>
-  <LayoutsMobileNavbar v-if="!isLargeScreen" class="lg:hidden" />
+  <LazyLayoutsMobileNavbar v-if="!isLargeScreen" class="lg:hidden" />
 </template>

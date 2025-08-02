@@ -1,4 +1,17 @@
 <script setup lang="ts">
+// --- Image Preview Modal for Carousel ---
+const isImagePreviewOpen = ref(false)
+const previewImageSrc = ref<string | null>(null)
+const handleCarouselImageClick = (item: { src: string }) => {
+  previewImageSrc.value = item.src
+  isImagePreviewOpen.value = true
+  document.body.classList.add('overflow-hidden')
+}
+const closeImagePreview = () => {
+  isImagePreviewOpen.value = false
+  previewImageSrc.value = null
+  document.body.classList.remove('overflow-hidden')
+}
 import type { IToyxonalar } from '~/interfaces';
 import { useLocationStore } from '~/stores/location.store';
 import { getDistanceFromLatLonInKm } from '~/utils/distance'
@@ -222,13 +235,24 @@ useHead({
         </template>
         <div v-if="!isLargeScreen" ref="imageRef" class="sticky top-0 w-full h-auto">
           <div class="relative">
-            <UiCarousel
-              v-if="toyxona && Array.isArray(toyxona.wedding_hall_pictures) && toyxona.wedding_hall_pictures.length > 1"
-              :items="imagelItems" :rounded="false" :arrows="false" />
-            <NuxtImg v-else-if="toyxona && toyxona.wedding_hall_pictures.length > 0"
-              :src="toyxona.wedding_hall_pictures[0].image_url" :alt="toyxona.name"
-              class="w-full aspect-video object-cover" />
-            <UiNoImage v-else class="w-full aspect-video" />
+
+            <template
+              v-if="toyxona && Array.isArray(toyxona.wedding_hall_pictures) && toyxona.wedding_hall_pictures.length > 1">
+              <UiCarousel :items="imagelItems" :rounded="false" :arrows="false"
+                :onItemClick="handleCarouselImageClick" />
+            </template>
+            <template v-else-if="toyxona && toyxona.wedding_hall_pictures.length > 0">
+              <NuxtImg :src="toyxona.wedding_hall_pictures[0].image_url" :alt="toyxona.name"
+                class="w-full aspect-video object-cover cursor-pointer"
+                @click="handleCarouselImageClick({ src: toyxona.wedding_hall_pictures[0].image_url })" />
+            </template>
+            <template v-else>
+              <UiNoImage class="w-full aspect-video" />
+            </template>
+
+            <!-- Image Preview Modal -->
+
+
             <div
               class="absolute w-full h-full top-0 left-0 p-3 inset-0 pointer-events-none bg-gradient-to-b from-black to-transparent opacity-30">
               <div class="flex items-center justify-between pointer-events-auto">
@@ -251,47 +275,39 @@ useHead({
         <div class="flex flex-col gap-3 p-3 z-10 bg-white rounded-t-2xl">
           <div>
             <h1 class="font-bold text-xl" tabindex="0">{{ toyxona.name }}</h1>
-            <p class="font-medium text-sm">{{ toyxona.address }}</p>
-            <p v-if="userDistance" class="text-text-secondary">
-              {{ userDistance.toFixed(1) }} km {{ t('common.fromYou') }}
-            </p>
+            <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
+              <transition name="fade-expand">
+                <span v-if="showFullDescription" key="full" :id="`description-${toyxona.id}`"
+                  class="text-gray-500 text-sm block whitespace-pre-line">
+                  {{ toyxona.description }}
+                </span>
+                <span v-else key="short" :id="`description-${toyxona.id}`"
+                  class="text-gray-500 text-sm block whitespace-pre-line">
+                  {{ shortDescription }}<span v-if="isTruncated">...</span>
+                </span>
+              </transition>
+              <button v-if="isTruncated" @click="toggleDescription"
+                class="text-green-500 font-medium mt-2 flex items-center gap-1 select-none hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded"
+                :aria-expanded="showFullDescription" :aria-controls="`description-${toyxona.id}`">
+                <span>{{ showFullDescription ? t('common.readLess') : t('common.readMore') }}</span>
+                <svg :class="{ 'rotate-180': showFullDescription, 'transition-transform': true }" width="16" height="16"
+                  fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M4 6l4 4 4-4" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
           </div>
-
           <!-- Tariffs -->
           <h2 class="font-medium text-lg text-text-primary">{{ t('weddingHall.tariffs') }}</h2>
           <UiTarifCard v-for="tarif in tariflarForCard" :key="tarif.id" :tarif="tarif" @click="openTarifSlide(tarif)"
             @keydown.enter="openTarifSlide(tarif)" @keydown.space="openTarifSlide(tarif)" :data-tarif-trigger="tarif.id"
             tabindex="0" role="button" :aria-label="`${tarif.name} tarifini ko'rish`" />
-
-
         </div>
       </div>
       <!-- O‘ng ustun (1/3) -->
-      <div class="flex flex-col gap-4">
-        <div class="relative bg-white p-4 rounded-b-lg lg:rounded-lg">
-          <h2 class="text-xl font-medium text-text-primary mb-4 capitalize ">{{ t('weddingHall.description')
-          }}
-          </h2>
-          <transition name="fade-expand">
-            <span v-if="showFullDescription" key="full" :id="`description-${toyxona.id}`"
-              class="text-gray-500 text-sm block whitespace-pre-line">
-              {{ toyxona.description }}
-            </span>
-            <span v-else key="short" :id="`description-${toyxona.id}`"
-              class="text-gray-500 text-sm block whitespace-pre-line">
-              {{ shortDescription }}<span v-if="isTruncated">...</span>
-            </span>
-          </transition>
-          <button v-if="isTruncated" @click="toggleDescription"
-            class="text-green-500 font-medium mt-2 flex items-center gap-1 select-none hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded"
-            :aria-expanded="showFullDescription" :aria-controls="`description-${toyxona.id}`">
-            <span>{{ showFullDescription ? t('common.readLess') : t('common.readMore') }}</span>
-            <svg :class="{ 'rotate-180': showFullDescription, 'transition-transform': true }" width="16" height="16"
-              fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M4 6l4 4 4-4" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
+      <div class="flex z-10 flex-col gap-4">
+
         <!-- Map -->
         <div class="bg-white lg:rounded-lg shadow-sm p-4">
           <h2 class="text-xl font-medium text-text-primary mb-4 capitalize" id="location-heading">{{
@@ -309,7 +325,13 @@ useHead({
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span>{{ toyxona.address }}</span>
+            <div class="flex fl">
+              <span>{{ toyxona.address }}</span>
+              <p class="font-medium text-sm">{{ toyxona.address }}</p>
+              <p v-if="userDistance" class="text-text-secondary">
+                {{ userDistance.toFixed(1) }} km {{ t('common.fromYou') }}
+              </p>
+            </div>
           </div>
           <UButton variant="soft" color="neutral" class="w-full py-2 flex items-center justify-between" @click="openMap"
             :aria-label="`${t('weddingHall.goDirection')} - ${toyxona.address}`">
@@ -340,6 +362,8 @@ useHead({
     </div>
   </div>
 
+
+
   <div v-else-if="pending && !toyxona" class="mx-auto mt-50vh flex items-center justify-center h-64" role="status"
     aria-live="polite">
     <div class="text-center">
@@ -356,8 +380,32 @@ useHead({
       <p class="text-text-secondary">Toyxona topilmadi</p>
     </div>
   </div>
+
+  <div name="fade">
+    <div v-if="isImagePreviewOpen"
+      class="preview-modal fixed inset-0 z-[99999] flex items-center justify-center bg-black/80"
+      @click.self="closeImagePreview">
+      <div class="relative max-w-full max-h-full flex items-center justify-center">
+        <button @click="closeImagePreview"
+          class="absolute top-2 right-2 bg-white/80 rounded-full p-2 z-10 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <NuxtImg :src="previewImageSrc || ''" alt="Preview"
+          class="max-h-[80vh] max-w-[90vw] rounded-xl shadow-lg object-contain" />
+      </div>
+    </div>
+  </div>
   <UiSlideOver :isOpen="openComponent.isOpen && openComponent.componentType === 'showTariff'"
     :title="selectedTarif?.name || 'Tarif'" @close="onClose">
     <UiTarifTabs :tarif-id="selectedTarif?.id" />
   </UiSlideOver>
 </template>
+
+<style>
+.preview-modal {
+  z-index: 99999 !important;
+}
+</style>
